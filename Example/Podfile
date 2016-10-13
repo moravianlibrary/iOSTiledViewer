@@ -1,5 +1,6 @@
 use_frameworks!
+source 'https://github.com/Fiser33/iOSTiledViewerSpec.git'
 
 target 'iOSTiledViewer_Example' do
-  pod 'iOSTiledViewer', :path => '../'
+  pod 'iOSTiledViewer'
 end

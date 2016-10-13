@@ -7,23 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		14D493D1CB01A50597811BA20FFB0611 /* IIIFImageDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFB5F7FA6C4D712A9CBAC1758BEF2EB /* IIIFImageDescriptor.swift */; };
-		159034DCE5F710E9E7CF7A1C4D7A1AD4 /* ITVScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69FDDFC1B337B9B211E6C1B7B97DB4EA /* ITVScrollView.swift */; };
-		2160BD7E5A42778AA0E1648F8128CEB4 /* IIIFImageLicense.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE5D87CD6C4FA9BDDCE673D9539149F /* IIIFImageLicense.swift */; };
-		35F20BF804D42FCDD448AC66E2721575 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2A6FF208CEC4C2861F1E9D42D651453 /* Foundation.framework */; };
-		3B379ACF64EEDC7ED80C6DFA80099594 /* ITVDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF791557F06557B78F622AB4F48AA9B /* ITVDelegate.swift */; };
-		3B659EBD1DAFD0D7005A9499 /* ITVScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69FDDFC1B337B9B211E6C1B7B97DB4EA /* ITVScrollView.swift */; };
-		4022AC2A1B5646AC4879C0616123B6C7 /* Pods-iOSTiledViewer_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = AF04F3B0BA7AFAE91319437B920E9C8C /* Pods-iOSTiledViewer_Tests-dummy.m */; };
-		43CDE857AECCAFD21FFDAA83EDD243E7 /* iOSTiledViewer-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = EE170A6FB4BC589490C6814DB2A3BB9C /* iOSTiledViewer-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0EBD3FED5D53FDBEAE7FF8C614CE1E7B /* IIIFImageLicense.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA4066C8A46342CA8F1B2A05ADF05D4 /* IIIFImageLicense.swift */; };
+		3B7C682CE5F93E9545D59E7E50EA014E /* IIIFImageDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328B003B85858DF362DEBCB49FCED421 /* IIIFImageDescriptor.swift */; };
+		43CDE857AECCAFD21FFDAA83EDD243E7 /* iOSTiledViewer-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 037355A6A72C0C83E1CFA5856A3A0297 /* iOSTiledViewer-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		48F4D2B9506E8F1778E7B1A199E43549 /* ITVScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB4A923F5CF19BAF4883A21D171FE94 /* ITVScrollView.swift */; };
 		66F824158235DBC38002D72FD80743CE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E86668F20F252C440D1015B816BE59C5 /* UIKit.framework */; };
 		68CE3F830FEB7353C69E62A0E2D120D9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2A6FF208CEC4C2861F1E9D42D651453 /* Foundation.framework */; };
-		6DD0609982B51E400E1C0569654CA9B1 /* Pods-iOSTiledViewer_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9611A26DB72BE77C44D90610FBC24025 /* Pods-iOSTiledViewer_Example-dummy.m */; };
-		8B77FA9A332EEC951EA33565FBD102AB /* ITVTiledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196E922DB8D2A05585EDBD9EBD987947 /* ITVTiledView.swift */; };
-		A84D8DED8AAC4C8185758B35DDA048C4 /* Pods-iOSTiledViewer_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F4A6FE62D71AD84E487BDB858E372387 /* Pods-iOSTiledViewer_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B652317EECACBBA63F7BDDED86F42A85 /* iOSTiledViewer-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 500FD862C5FDF85240DB7C109DD4C8CC /* iOSTiledViewer-dummy.m */; };
-		CA2E03D12E7151B64C928961EA5374C8 /* IIIFImageTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD526EAF7D5025F079B6AA7E30B425E /* IIIFImageTile.swift */; };
+		6DD0609982B51E400E1C0569654CA9B1 /* Pods-iOSTiledViewer_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 21AA0E1838831B20288D9611275EED35 /* Pods-iOSTiledViewer_Example-dummy.m */; };
+		943FB7BFB358902B784A74246F1A6DDF /* IIIFImageTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE235FD9412A3A11036CA0CB4C5FD473 /* IIIFImageTile.swift */; };
+		A1E43956D17B2702107F0E507EAD395A /* ITVDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E877A6E48CC024278AC99E9D30B6547 /* ITVDelegate.swift */; };
+		A84D8DED8AAC4C8185758B35DDA048C4 /* Pods-iOSTiledViewer_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = EBC07CCF6F5B7492CF76FFF0734CCE10 /* Pods-iOSTiledViewer_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3E21925EB6DC22D67E8BC74BCEEE0A4 /* iOSTiledViewer-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A57BDB8A6BCD100DD509657E3AB0F1 /* iOSTiledViewer-dummy.m */; };
+		C9FC966E68A77A1C6847C8AD9D9715A4 /* ITVTiledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7AB53D8A433F72344176B3FF87C730 /* ITVTiledView.swift */; };
 		D21C56F25127EBC9F42CE4224B6462E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2A6FF208CEC4C2861F1E9D42D651453 /* Foundation.framework */; };
-		D5BA1573126E1D38A833601BC4CC0D74 /* Pods-iOSTiledViewer_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B8F3956F19EDC577D005540E47AEF6F5 /* Pods-iOSTiledViewer_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,44 +33,33 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0EEFA54107F5877C2B3617C52A7ADE5B /* Pods-iOSTiledViewer_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-iOSTiledViewer_Example-resources.sh"; sourceTree = "<group>"; };
-		11308430BC9D219C979C31CB148C057D /* Pods-iOSTiledViewer_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-iOSTiledViewer_Example.modulemap"; sourceTree = "<group>"; };
-		11DC28F3298F2A8E18B3A39FEF86B2AE /* Pods-iOSTiledViewer_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-iOSTiledViewer_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		14B49C1C0FECE5B878004A029171AE90 /* Pods-iOSTiledViewer_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-iOSTiledViewer_Tests-frameworks.sh"; sourceTree = "<group>"; };
-		196E922DB8D2A05585EDBD9EBD987947 /* ITVTiledView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ITVTiledView.swift; sourceTree = "<group>"; };
-		3DD7734DD93FCE2585AFFA7C8673D007 /* Pods-iOSTiledViewer_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iOSTiledViewer_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		46C960ADE4ABCD42D064497FC71DB78B /* Pods-iOSTiledViewer_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iOSTiledViewer_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		4E9E81A6705BA2A6012F972C014E8EEC /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		500FD862C5FDF85240DB7C109DD4C8CC /* iOSTiledViewer-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "iOSTiledViewer-dummy.m"; sourceTree = "<group>"; };
-		5CFB5F7FA6C4D712A9CBAC1758BEF2EB /* IIIFImageDescriptor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IIIFImageDescriptor.swift; sourceTree = "<group>"; };
-		6456BF4F9EF3251D0919D41FC6674A46 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		64D30FAE69503A63DCC9E25A7FF4415E /* iOSTiledViewer.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = iOSTiledViewer.modulemap; sourceTree = "<group>"; };
-		69FDDFC1B337B9B211E6C1B7B97DB4EA /* ITVScrollView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ITVScrollView.swift; sourceTree = "<group>"; };
-		6F312A750D39AE7C97185BAB55BDD402 /* Pods-iOSTiledViewer_Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-iOSTiledViewer_Tests-resources.sh"; sourceTree = "<group>"; };
-		7BA78252F5AA65DEF3B88D2130B55022 /* Pods-iOSTiledViewer_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-iOSTiledViewer_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
-		8C5ADDCF9A64799E288D492C05449921 /* Pods-iOSTiledViewer_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-iOSTiledViewer_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		037355A6A72C0C83E1CFA5856A3A0297 /* iOSTiledViewer-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "iOSTiledViewer-umbrella.h"; sourceTree = "<group>"; };
+		06A57BDB8A6BCD100DD509657E3AB0F1 /* iOSTiledViewer-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "iOSTiledViewer-dummy.m"; sourceTree = "<group>"; };
+		14BC00B6E0BBC692D5EB9A22125FF16B /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1C7AB53D8A433F72344176B3FF87C730 /* ITVTiledView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ITVTiledView.swift; path = iOSTiledViewer/Classes/ITVTiledView.swift; sourceTree = "<group>"; };
+		1D675CC0D83A07432EC0BAFAE39595B5 /* iOSTiledViewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iOSTiledViewer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		21AA0E1838831B20288D9611275EED35 /* Pods-iOSTiledViewer_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-iOSTiledViewer_Example-dummy.m"; sourceTree = "<group>"; };
+		328B003B85858DF362DEBCB49FCED421 /* IIIFImageDescriptor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IIIFImageDescriptor.swift; path = iOSTiledViewer/Classes/IIIFImageDescriptor.swift; sourceTree = "<group>"; };
+		3CA1AFABCAEC74329CA08E95C98BC2EB /* Pods-iOSTiledViewer_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-iOSTiledViewer_Example-frameworks.sh"; sourceTree = "<group>"; };
+		4EAA19DDBA24418643C403D62E2DF8F7 /* iOSTiledViewer.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = iOSTiledViewer.xcconfig; sourceTree = "<group>"; };
+		63B6A12066CE079C94FFAE082B4C66F1 /* Pods-iOSTiledViewer_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-iOSTiledViewer_Example-resources.sh"; sourceTree = "<group>"; };
+		6B6A7DC0147F82B9F634ED30B6A6C504 /* Pods-iOSTiledViewer_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iOSTiledViewer_Example.release.xcconfig"; sourceTree = "<group>"; };
+		7E877A6E48CC024278AC99E9D30B6547 /* ITVDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ITVDelegate.swift; path = iOSTiledViewer/Classes/ITVDelegate.swift; sourceTree = "<group>"; };
+		81568BCFEFAD9D2B0038825DB507218F /* iOSTiledViewer-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "iOSTiledViewer-prefix.pch"; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		9611A26DB72BE77C44D90610FBC24025 /* Pods-iOSTiledViewer_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-iOSTiledViewer_Example-dummy.m"; sourceTree = "<group>"; };
-		9C096C2F1ABF322F89FA089812CA8267 /* Pods-iOSTiledViewer_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iOSTiledViewer_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		9D2BB205F997710A5768027CA2375898 /* iOSTiledViewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iOSTiledViewer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9F7FEEA6FCB6156BC61AFCAF4D8875F1 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9555AEB54CCB4F592ABFDD7954E7386D /* Pods_iOSTiledViewer_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOSTiledViewer_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2A6FF208CEC4C2861F1E9D42D651453 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		A5D29B7CA90C970925573312C10E4D6B /* Pods-iOSTiledViewer_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-iOSTiledViewer_Example-frameworks.sh"; sourceTree = "<group>"; };
-		ABD89BDF4BBFAFA78D9A5A6A15483D50 /* Pods-iOSTiledViewer_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iOSTiledViewer_Example.release.xcconfig"; sourceTree = "<group>"; };
-		AD6807FF26B3B45796626217F2F7A301 /* iOSTiledViewer.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = iOSTiledViewer.xcconfig; sourceTree = "<group>"; };
-		AF04F3B0BA7AFAE91319437B920E9C8C /* Pods-iOSTiledViewer_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-iOSTiledViewer_Tests-dummy.m"; sourceTree = "<group>"; };
-		B2069BF3E8084F9DEB7DE1A3FC024D17 /* Pods_iOSTiledViewer_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOSTiledViewer_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B8F3956F19EDC577D005540E47AEF6F5 /* Pods-iOSTiledViewer_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-iOSTiledViewer_Tests-umbrella.h"; sourceTree = "<group>"; };
-		BAFC6C5417190DF47C96A29F44CD93FC /* Pods-iOSTiledViewer_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-iOSTiledViewer_Example-acknowledgements.plist"; sourceTree = "<group>"; };
-		BEE5D87CD6C4FA9BDDCE673D9539149F /* IIIFImageLicense.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IIIFImageLicense.swift; sourceTree = "<group>"; };
-		CBD526EAF7D5025F079B6AA7E30B425E /* IIIFImageTile.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IIIFImageTile.swift; sourceTree = "<group>"; };
-		D7A4BDE53E472F2446C0C83ED6E63113 /* Pods_iOSTiledViewer_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOSTiledViewer_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BAA4066C8A46342CA8F1B2A05ADF05D4 /* IIIFImageLicense.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IIIFImageLicense.swift; path = iOSTiledViewer/Classes/IIIFImageLicense.swift; sourceTree = "<group>"; };
+		BE235FD9412A3A11036CA0CB4C5FD473 /* IIIFImageTile.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IIIFImageTile.swift; path = iOSTiledViewer/Classes/IIIFImageTile.swift; sourceTree = "<group>"; };
+		C3207F93071F853BAB51E026AAEBBAE9 /* Pods-iOSTiledViewer_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-iOSTiledViewer_Example-acknowledgements.plist"; sourceTree = "<group>"; };
+		E596E96040B77020A2ECF33387F4FF54 /* Pods-iOSTiledViewer_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iOSTiledViewer_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		E730887B90027C4F678CEC5A6D6941D5 /* Pods-iOSTiledViewer_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-iOSTiledViewer_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		E86668F20F252C440D1015B816BE59C5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		EE170A6FB4BC589490C6814DB2A3BB9C /* iOSTiledViewer-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "iOSTiledViewer-umbrella.h"; sourceTree = "<group>"; };
-		EFF791557F06557B78F622AB4F48AA9B /* ITVDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ITVDelegate.swift; sourceTree = "<group>"; };
-		F0B097AD42841E60216C53508A81882F /* iOSTiledViewer-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "iOSTiledViewer-prefix.pch"; sourceTree = "<group>"; };
-		F44A220BAA83BB379788BAFCEC0D059B /* Pods-iOSTiledViewer_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-iOSTiledViewer_Tests.modulemap"; sourceTree = "<group>"; };
-		F4A6FE62D71AD84E487BDB858E372387 /* Pods-iOSTiledViewer_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-iOSTiledViewer_Example-umbrella.h"; sourceTree = "<group>"; };
+		EB665FD7E18F7D483F7EA5F280965BB1 /* iOSTiledViewer.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = iOSTiledViewer.modulemap; sourceTree = "<group>"; };
+		EBB4A923F5CF19BAF4883A21D171FE94 /* ITVScrollView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ITVScrollView.swift; path = iOSTiledViewer/Classes/ITVScrollView.swift; sourceTree = "<group>"; };
+		EBC07CCF6F5B7492CF76FFF0734CCE10 /* Pods-iOSTiledViewer_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-iOSTiledViewer_Example-umbrella.h"; sourceTree = "<group>"; };
+		F233B2D922C1D708AF5363630923BEA9 /* Pods-iOSTiledViewer_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-iOSTiledViewer_Example.modulemap"; sourceTree = "<group>"; };
+		F2B298316BA5D87827392ABDAA1BE6A4 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,50 +80,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D5F653B032938D1E56F29AFE9656BDDF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				35F20BF804D42FCDD448AC66E2721575 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0423E2EABCEAB7C325C5324F8D83E879 /* Classes */ = {
+		3FE15D665032CCF990BDDA5E68962F73 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5CFB5F7FA6C4D712A9CBAC1758BEF2EB /* IIIFImageDescriptor.swift */,
-				BEE5D87CD6C4FA9BDDCE673D9539149F /* IIIFImageLicense.swift */,
-				CBD526EAF7D5025F079B6AA7E30B425E /* IIIFImageTile.swift */,
-				EFF791557F06557B78F622AB4F48AA9B /* ITVDelegate.swift */,
-				69FDDFC1B337B9B211E6C1B7B97DB4EA /* ITVScrollView.swift */,
-				196E922DB8D2A05585EDBD9EBD987947 /* ITVTiledView.swift */,
-			);
-			path = Classes;
-			sourceTree = "<group>";
-		};
-		0A7945E09D5184B90E2CFB5A3A9AB7F6 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				6456BF4F9EF3251D0919D41FC6674A46 /* Info.plist */,
-				64D30FAE69503A63DCC9E25A7FF4415E /* iOSTiledViewer.modulemap */,
-				AD6807FF26B3B45796626217F2F7A301 /* iOSTiledViewer.xcconfig */,
-				500FD862C5FDF85240DB7C109DD4C8CC /* iOSTiledViewer-dummy.m */,
-				F0B097AD42841E60216C53508A81882F /* iOSTiledViewer-prefix.pch */,
-				EE170A6FB4BC589490C6814DB2A3BB9C /* iOSTiledViewer-umbrella.h */,
-			);
-			name = "Support Files";
-			path = "Example/Pods/Target Support Files/iOSTiledViewer";
-			sourceTree = "<group>";
-		};
-		1C08B427D2FA7560F4704B1C0CDC820F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				9D2BB205F997710A5768027CA2375898 /* iOSTiledViewer.framework */,
-				D7A4BDE53E472F2446C0C83ED6E63113 /* Pods_iOSTiledViewer_Example.framework */,
-				B2069BF3E8084F9DEB7DE1A3FC024D17 /* Pods_iOSTiledViewer_Tests.framework */,
+				1D675CC0D83A07432EC0BAFAE39595B5 /* iOSTiledViewer.framework */,
+				9555AEB54CCB4F592ABFDD7954E7386D /* Pods_iOSTiledViewer_Example.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -151,51 +100,77 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		7DB346D0F39D3F0E887471402A8071AB = {
+		45E132F80735AED8BA45C14A2D76E123 /* Pods-iOSTiledViewer_Example */ = {
 			isa = PBXGroup;
 			children = (
-				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
-				C28D27E5B70725754637026523109F33 /* Development Pods */,
-				433CD3331B6C3787F473C941B61FC68F /* Frameworks */,
-				1C08B427D2FA7560F4704B1C0CDC820F /* Products */,
-				F351BF8A73281D1EAAFF35CC56D03CD2 /* Targets Support Files */,
-			);
-			sourceTree = "<group>";
-		};
-		C28D27E5B70725754637026523109F33 /* Development Pods */ = {
-			isa = PBXGroup;
-			children = (
-				E6EC8AC901848FE24D27D562E79399E7 /* iOSTiledViewer */,
-			);
-			name = "Development Pods";
-			sourceTree = "<group>";
-		};
-		D406EBE0C96C3AB98573014EEBFF36F6 /* Pods-iOSTiledViewer_Example */ = {
-			isa = PBXGroup;
-			children = (
-				9F7FEEA6FCB6156BC61AFCAF4D8875F1 /* Info.plist */,
-				11308430BC9D219C979C31CB148C057D /* Pods-iOSTiledViewer_Example.modulemap */,
-				11DC28F3298F2A8E18B3A39FEF86B2AE /* Pods-iOSTiledViewer_Example-acknowledgements.markdown */,
-				BAFC6C5417190DF47C96A29F44CD93FC /* Pods-iOSTiledViewer_Example-acknowledgements.plist */,
-				9611A26DB72BE77C44D90610FBC24025 /* Pods-iOSTiledViewer_Example-dummy.m */,
-				A5D29B7CA90C970925573312C10E4D6B /* Pods-iOSTiledViewer_Example-frameworks.sh */,
-				0EEFA54107F5877C2B3617C52A7ADE5B /* Pods-iOSTiledViewer_Example-resources.sh */,
-				F4A6FE62D71AD84E487BDB858E372387 /* Pods-iOSTiledViewer_Example-umbrella.h */,
-				3DD7734DD93FCE2585AFFA7C8673D007 /* Pods-iOSTiledViewer_Example.debug.xcconfig */,
-				ABD89BDF4BBFAFA78D9A5A6A15483D50 /* Pods-iOSTiledViewer_Example.release.xcconfig */,
+				F2B298316BA5D87827392ABDAA1BE6A4 /* Info.plist */,
+				F233B2D922C1D708AF5363630923BEA9 /* Pods-iOSTiledViewer_Example.modulemap */,
+				E730887B90027C4F678CEC5A6D6941D5 /* Pods-iOSTiledViewer_Example-acknowledgements.markdown */,
+				C3207F93071F853BAB51E026AAEBBAE9 /* Pods-iOSTiledViewer_Example-acknowledgements.plist */,
+				21AA0E1838831B20288D9611275EED35 /* Pods-iOSTiledViewer_Example-dummy.m */,
+				3CA1AFABCAEC74329CA08E95C98BC2EB /* Pods-iOSTiledViewer_Example-frameworks.sh */,
+				63B6A12066CE079C94FFAE082B4C66F1 /* Pods-iOSTiledViewer_Example-resources.sh */,
+				EBC07CCF6F5B7492CF76FFF0734CCE10 /* Pods-iOSTiledViewer_Example-umbrella.h */,
+				E596E96040B77020A2ECF33387F4FF54 /* Pods-iOSTiledViewer_Example.debug.xcconfig */,
+				6B6A7DC0147F82B9F634ED30B6A6C504 /* Pods-iOSTiledViewer_Example.release.xcconfig */,
 			);
 			name = "Pods-iOSTiledViewer_Example";
 			path = "Target Support Files/Pods-iOSTiledViewer_Example";
 			sourceTree = "<group>";
 		};
-		E6EC8AC901848FE24D27D562E79399E7 /* iOSTiledViewer */ = {
+		632EC89414798A239A4417B1D6C7070D /* iOSTiledViewer */ = {
 			isa = PBXGroup;
 			children = (
-				FC7E38CFC162D638F9DE432734CA1729 /* iOSTiledViewer */,
-				0A7945E09D5184B90E2CFB5A3A9AB7F6 /* Support Files */,
+				328B003B85858DF362DEBCB49FCED421 /* IIIFImageDescriptor.swift */,
+				BAA4066C8A46342CA8F1B2A05ADF05D4 /* IIIFImageLicense.swift */,
+				BE235FD9412A3A11036CA0CB4C5FD473 /* IIIFImageTile.swift */,
+				7E877A6E48CC024278AC99E9D30B6547 /* ITVDelegate.swift */,
+				EBB4A923F5CF19BAF4883A21D171FE94 /* ITVScrollView.swift */,
+				1C7AB53D8A433F72344176B3FF87C730 /* ITVTiledView.swift */,
+				BBAA45EAC4621F303110A59F19E66630 /* Support Files */,
 			);
-			name = iOSTiledViewer;
-			path = ../..;
+			path = iOSTiledViewer;
+			sourceTree = "<group>";
+		};
+		6DDBF31BD7324D7AD44CF1A52268A3A9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				632EC89414798A239A4417B1D6C7070D /* iOSTiledViewer */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		7DB346D0F39D3F0E887471402A8071AB = {
+			isa = PBXGroup;
+			children = (
+				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
+				433CD3331B6C3787F473C941B61FC68F /* Frameworks */,
+				6DDBF31BD7324D7AD44CF1A52268A3A9 /* Pods */,
+				3FE15D665032CCF990BDDA5E68962F73 /* Products */,
+				8D4D729934293B0CF03DA3E961DA17C2 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		8D4D729934293B0CF03DA3E961DA17C2 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				45E132F80735AED8BA45C14A2D76E123 /* Pods-iOSTiledViewer_Example */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		BBAA45EAC4621F303110A59F19E66630 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				14BC00B6E0BBC692D5EB9A22125FF16B /* Info.plist */,
+				EB665FD7E18F7D483F7EA5F280965BB1 /* iOSTiledViewer.modulemap */,
+				4EAA19DDBA24418643C403D62E2DF8F7 /* iOSTiledViewer.xcconfig */,
+				06A57BDB8A6BCD100DD509657E3AB0F1 /* iOSTiledViewer-dummy.m */,
+				81568BCFEFAD9D2B0038825DB507218F /* iOSTiledViewer-prefix.pch */,
+				037355A6A72C0C83E1CFA5856A3A0297 /* iOSTiledViewer-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/iOSTiledViewer";
 			sourceTree = "<group>";
 		};
 		F302CD3B306AF1ED96B9AF31FCDBC26C /* iOS */ = {
@@ -207,52 +182,9 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		F351BF8A73281D1EAAFF35CC56D03CD2 /* Targets Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				D406EBE0C96C3AB98573014EEBFF36F6 /* Pods-iOSTiledViewer_Example */,
-				FE41D84C66E307C76DCDDCB0BE47D32A /* Pods-iOSTiledViewer_Tests */,
-			);
-			name = "Targets Support Files";
-			sourceTree = "<group>";
-		};
-		FC7E38CFC162D638F9DE432734CA1729 /* iOSTiledViewer */ = {
-			isa = PBXGroup;
-			children = (
-				0423E2EABCEAB7C325C5324F8D83E879 /* Classes */,
-			);
-			path = iOSTiledViewer;
-			sourceTree = "<group>";
-		};
-		FE41D84C66E307C76DCDDCB0BE47D32A /* Pods-iOSTiledViewer_Tests */ = {
-			isa = PBXGroup;
-			children = (
-				4E9E81A6705BA2A6012F972C014E8EEC /* Info.plist */,
-				F44A220BAA83BB379788BAFCEC0D059B /* Pods-iOSTiledViewer_Tests.modulemap */,
-				8C5ADDCF9A64799E288D492C05449921 /* Pods-iOSTiledViewer_Tests-acknowledgements.markdown */,
-				7BA78252F5AA65DEF3B88D2130B55022 /* Pods-iOSTiledViewer_Tests-acknowledgements.plist */,
-				AF04F3B0BA7AFAE91319437B920E9C8C /* Pods-iOSTiledViewer_Tests-dummy.m */,
-				14B49C1C0FECE5B878004A029171AE90 /* Pods-iOSTiledViewer_Tests-frameworks.sh */,
-				6F312A750D39AE7C97185BAB55BDD402 /* Pods-iOSTiledViewer_Tests-resources.sh */,
-				B8F3956F19EDC577D005540E47AEF6F5 /* Pods-iOSTiledViewer_Tests-umbrella.h */,
-				46C960ADE4ABCD42D064497FC71DB78B /* Pods-iOSTiledViewer_Tests.debug.xcconfig */,
-				9C096C2F1ABF322F89FA089812CA8267 /* Pods-iOSTiledViewer_Tests.release.xcconfig */,
-			);
-			name = "Pods-iOSTiledViewer_Tests";
-			path = "Target Support Files/Pods-iOSTiledViewer_Tests";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		C0FC9B49E0EC5C1D062E6F0845573CCE /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D5BA1573126E1D38A833601BC4CC0D74 /* Pods-iOSTiledViewer_Tests-umbrella.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D6906B3500478873CEBE2BB94CC6812D /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -276,7 +208,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B4199FBE0CDD0798E6992FD90FEF38BF /* Build configuration list for PBXNativeTarget "iOSTiledViewer" */;
 			buildPhases = (
-				8346F0FB7A38F93892D17A22A3B12DA1 /* Sources */,
+				A96AE8F1D81C2EB6E044079F81D25A6E /* Sources */,
 				33F328E0CC409AC5DC4C8568452C68FA /* Frameworks */,
 				D6906B3500478873CEBE2BB94CC6812D /* Headers */,
 			);
@@ -286,24 +218,7 @@
 			);
 			name = iOSTiledViewer;
 			productName = iOSTiledViewer;
-			productReference = 9D2BB205F997710A5768027CA2375898 /* iOSTiledViewer.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		2E154B7FA0B92B4219847DEC24E93002 /* Pods-iOSTiledViewer_Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 97948A811DBD9DB4E85E5D502EF14D3F /* Build configuration list for PBXNativeTarget "Pods-iOSTiledViewer_Tests" */;
-			buildPhases = (
-				50A4BD4E632EFE675E2D80E600058AED /* Sources */,
-				D5F653B032938D1E56F29AFE9656BDDF /* Frameworks */,
-				C0FC9B49E0EC5C1D062E6F0845573CCE /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Pods-iOSTiledViewer_Tests";
-			productName = "Pods-iOSTiledViewer_Tests";
-			productReference = B2069BF3E8084F9DEB7DE1A3FC024D17 /* Pods_iOSTiledViewer_Tests.framework */;
+			productReference = 1D675CC0D83A07432EC0BAFAE39595B5 /* iOSTiledViewer.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		8E3E52ACA9E2342DF4A201C77F922AD9 /* Pods-iOSTiledViewer_Example */ = {
@@ -321,7 +236,7 @@
 			);
 			name = "Pods-iOSTiledViewer_Example";
 			productName = "Pods-iOSTiledViewer_Example";
-			productReference = D7A4BDE53E472F2446C0C83ED6E63113 /* Pods_iOSTiledViewer_Example.framework */;
+			productReference = 9555AEB54CCB4F592ABFDD7954E7386D /* Pods_iOSTiledViewer_Example.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -334,9 +249,7 @@
 				LastUpgradeCheck = 0700;
 				TargetAttributes = {
 					1DDE451F42C83F88BFAE666840C1E942 = {
-						DevelopmentTeam = 873S4GA3KJ;
 						LastSwiftMigration = 0800;
-						ProvisioningStyle = Manual;
 					};
 					8E3E52ACA9E2342DF4A201C77F922AD9 = {
 						LastSwiftMigration = 0800;
@@ -351,37 +264,28 @@
 				en,
 			);
 			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
-			productRefGroup = 1C08B427D2FA7560F4704B1C0CDC820F /* Products */;
+			productRefGroup = 3FE15D665032CCF990BDDA5E68962F73 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				1DDE451F42C83F88BFAE666840C1E942 /* iOSTiledViewer */,
 				8E3E52ACA9E2342DF4A201C77F922AD9 /* Pods-iOSTiledViewer_Example */,
-				2E154B7FA0B92B4219847DEC24E93002 /* Pods-iOSTiledViewer_Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		50A4BD4E632EFE675E2D80E600058AED /* Sources */ = {
+		A96AE8F1D81C2EB6E044079F81D25A6E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4022AC2A1B5646AC4879C0616123B6C7 /* Pods-iOSTiledViewer_Tests-dummy.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8346F0FB7A38F93892D17A22A3B12DA1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				14D493D1CB01A50597811BA20FFB0611 /* IIIFImageDescriptor.swift in Sources */,
-				2160BD7E5A42778AA0E1648F8128CEB4 /* IIIFImageLicense.swift in Sources */,
-				CA2E03D12E7151B64C928961EA5374C8 /* IIIFImageTile.swift in Sources */,
-				B652317EECACBBA63F7BDDED86F42A85 /* iOSTiledViewer-dummy.m in Sources */,
-				3B379ACF64EEDC7ED80C6DFA80099594 /* ITVDelegate.swift in Sources */,
-				159034DCE5F710E9E7CF7A1C4D7A1AD4 /* ITVScrollView.swift in Sources */,
-				8B77FA9A332EEC951EA33565FBD102AB /* ITVTiledView.swift in Sources */,
+				3B7C682CE5F93E9545D59E7E50EA014E /* IIIFImageDescriptor.swift in Sources */,
+				0EBD3FED5D53FDBEAE7FF8C614CE1E7B /* IIIFImageLicense.swift in Sources */,
+				943FB7BFB358902B784A74246F1A6DDF /* IIIFImageTile.swift in Sources */,
+				B3E21925EB6DC22D67E8BC74BCEEE0A4 /* iOSTiledViewer-dummy.m in Sources */,
+				A1E43956D17B2702107F0E507EAD395A /* ITVDelegate.swift in Sources */,
+				48F4D2B9506E8F1778E7B1A199E43549 /* ITVScrollView.swift in Sources */,
+				C9FC966E68A77A1C6847C8AD9D9715A4 /* ITVTiledView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,7 +294,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DD0609982B51E400E1C0569654CA9B1 /* Pods-iOSTiledViewer_Example-dummy.m in Sources */,
-				3B659EBD1DAFD0D7005A9499 /* ITVScrollView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -446,7 +349,7 @@
 		};
 		228D2C6D77C527093CB412399F722977 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ABD89BDF4BBFAFA78D9A5A6A15483D50 /* Pods-iOSTiledViewer_Example.release.xcconfig */;
+			baseConfigurationReference = 6B6A7DC0147F82B9F634ED30B6A6C504 /* Pods-iOSTiledViewer_Example.release.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
@@ -480,13 +383,12 @@
 		};
 		2C40C0CE438FB3022E6FEEE4BA9B16D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AD6807FF26B3B45796626217F2F7A301 /* iOSTiledViewer.xcconfig */;
+			baseConfigurationReference = 4EAA19DDBA24418643C403D62E2DF8F7 /* iOSTiledViewer.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 873S4GA3KJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -499,8 +401,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/iOSTiledViewer/iOSTiledViewer.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = cz.mzk.ios.iiif.iOSTiledViewer;
 				PRODUCT_NAME = iOSTiledViewer;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -512,42 +412,9 @@
 			};
 			name = Debug;
 		};
-		2DC4FC233FB14F5809C57D6DB142C52D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 46C960ADE4ABCD42D064497FC71DB78B /* Pods-iOSTiledViewer_Tests.debug.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "Target Support Files/Pods-iOSTiledViewer_Tests/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-iOSTiledViewer_Tests/Pods-iOSTiledViewer_Tests.modulemap";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = Pods_iOSTiledViewer_Tests;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
 		4455D728F64275C663EEC2A721038CC5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3DD7734DD93FCE2585AFFA7C8673D007 /* Pods-iOSTiledViewer_Example.debug.xcconfig */;
+			baseConfigurationReference = E596E96040B77020A2ECF33387F4FF54 /* Pods-iOSTiledViewer_Example.debug.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
@@ -579,39 +446,6 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
-		};
-		ACE9C3DA66D640F9E25B61E5A8B56D5F /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9C096C2F1ABF322F89FA089812CA8267 /* Pods-iOSTiledViewer_Tests.release.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "Target Support Files/Pods-iOSTiledViewer_Tests/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-iOSTiledViewer_Tests/Pods-iOSTiledViewer_Tests.modulemap";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = Pods_iOSTiledViewer_Tests;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
 		};
 		D3E3D092A3FF7311A98E44BBA36FFD12 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -657,13 +491,12 @@
 		};
 		D488CEF60FF54D72CE3ECAF4575BD762 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AD6807FF26B3B45796626217F2F7A301 /* iOSTiledViewer.xcconfig */;
+			baseConfigurationReference = 4EAA19DDBA24418643C403D62E2DF8F7 /* iOSTiledViewer.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -676,7 +509,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/iOSTiledViewer/iOSTiledViewer.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = cz.mzk.ios.iiif.iOSTiledViewer;
 				PRODUCT_NAME = iOSTiledViewer;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -695,15 +527,6 @@
 			buildConfigurations = (
 				D3E3D092A3FF7311A98E44BBA36FFD12 /* Debug */,
 				0ACDCBCB0B6796575F46FFA2F5410C6B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		97948A811DBD9DB4E85E5D502EF14D3F /* Build configuration list for PBXNativeTarget "Pods-iOSTiledViewer_Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2DC4FC233FB14F5809C57D6DB142C52D /* Debug */,
-				ACE9C3DA66D640F9E25B61E5A8B56D5F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

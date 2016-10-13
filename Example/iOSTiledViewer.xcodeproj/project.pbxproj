@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2755F8AF58259344E4BD5BAF /* Pods_iOSTiledViewer_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11CA875D2898170938464E9 /* Pods_iOSTiledViewer_Tests.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
@@ -41,10 +40,8 @@
 		607FACE51AFB9204008FA782 /* iOSTiledViewer_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSTiledViewer_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
-		70EB5AB11C6DDD46B24811D3 /* Pods-iOSTiledViewer_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSTiledViewer_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOSTiledViewer_Tests/Pods-iOSTiledViewer_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		B1D7B06419592ABA10D2835E /* Pods_iOSTiledViewer_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOSTiledViewer_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6BA0D9ABA54342A967B63F1 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		F027895B26A7C7B5DF470A27 /* Pods-iOSTiledViewer_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSTiledViewer_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iOSTiledViewer_Tests/Pods-iOSTiledViewer_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		F11CA875D2898170938464E9 /* Pods_iOSTiledViewer_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOSTiledViewer_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F66A963237D1C2DF27BF00DB /* Pods-iOSTiledViewer_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSTiledViewer_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iOSTiledViewer_Example/Pods-iOSTiledViewer_Example.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -62,7 +59,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2755F8AF58259344E4BD5BAF /* Pods_iOSTiledViewer_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,8 +149,6 @@
 			children = (
 				F66A963237D1C2DF27BF00DB /* Pods-iOSTiledViewer_Example.debug.xcconfig */,
 				0724C4A134B7D5EBB114EDE7 /* Pods-iOSTiledViewer_Example.release.xcconfig */,
-				F027895B26A7C7B5DF470A27 /* Pods-iOSTiledViewer_Tests.debug.xcconfig */,
-				70EB5AB11C6DDD46B24811D3 /* Pods-iOSTiledViewer_Tests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -186,12 +180,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "iOSTiledViewer_Tests" */;
 			buildPhases = (
-				6CB2E1EB6D29E0DCD8AE3754 /* [CP] Check Pods Manifest.lock */,
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
-				9D635B5FAA41ED56285BC13A /* [CP] Embed Pods Frameworks */,
-				E9B59C94F6444BC71F57EE83 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -281,36 +272,6 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		6CB2E1EB6D29E0DCD8AE3754 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		9D635B5FAA41ED56285BC13A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iOSTiledViewer_Tests/Pods-iOSTiledViewer_Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		B93D72C1C167DD9D7FC4931E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -324,21 +285,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iOSTiledViewer_Example/Pods-iOSTiledViewer_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E9B59C94F6444BC71F57EE83 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iOSTiledViewer_Tests/Pods-iOSTiledViewer_Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F1671228129E5922F7CB9375 /* [CP] Copy Pods Resources */ = {
@@ -538,7 +484,6 @@
 		};
 		607FACF31AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F027895B26A7C7B5DF470A27 /* Pods-iOSTiledViewer_Tests.debug.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -558,7 +503,6 @@
 		};
 		607FACF41AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 70EB5AB11C6DDD46B24811D3 /* Pods-iOSTiledViewer_Tests.release.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
