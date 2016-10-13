@@ -7,12 +7,17 @@
 //
 
 import UIKit
+import iOSTiledViewer
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var scrollView: ITVScrollView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        scrollView.loadImage("https://iiif.ucd.ie/loris/ivrla:29953/full/full/0/default.jpg")
     }
 
     override func didReceiveMemoryWarning() {

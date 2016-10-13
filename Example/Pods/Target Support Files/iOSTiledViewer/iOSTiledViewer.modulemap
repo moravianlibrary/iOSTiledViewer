@@ -1,0 +1,6 @@
+framework module iOSTiledViewer {
+  umbrella header "iOSTiledViewer-umbrella.h"
+
+  export *
+  module * { export * }
+}
