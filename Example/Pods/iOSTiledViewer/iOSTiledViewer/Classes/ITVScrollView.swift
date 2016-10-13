@@ -53,6 +53,13 @@ open class ITVScrollView: UIScrollView {
             ])
     }
 
+    public func isZoomedOut() -> Bool {
+        return self.zoomScale == 1.0
+    }
+    
+    public func loadImage(_ imageUrl: String) {
+        self.url = imageUrl
+    }
 }
 
 /// MARK: UIScrollViewDelegate implementation
@@ -80,17 +87,5 @@ extension ITVScrollView: UIScrollViewDelegate {
     
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return tiledView
-    }
-}
-
-/// MARK: ITVProtocol implementation
-extension ITVScrollView: ITVDelegate {
-    
-    public func isZoomedOut() -> Bool {
-        return self.zoomScale == 1.0
-    }
-    
-    public func loadImage(_ imageUrl: String) {
-        self.url = imageUrl
     }
 }
