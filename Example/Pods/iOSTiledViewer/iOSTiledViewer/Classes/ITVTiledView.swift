@@ -10,8 +10,8 @@ import UIKit
 
 class ITVTiledView: UIView {
 
-    fileprivate let TAG = "ITVTiledView"
-    fileprivate var imageCache = [String:UIImage]()
+    fileprivate;; let TAG = "ITVTiledView"
+    fileprivate;; var imageCache = [String:UIImage]()
     
     internal var imageBaseUrl: String?
     

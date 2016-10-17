@@ -8,12 +8,11 @@
 
 import UIKit
 
-public class ITVScrollView: UIScrollView {
+open class ITVScrollView: UIScrollView {
     
-    // internal to make it visible in extensions
-    internal let tiledView = ITVTiledView()
+    fileprivate let tiledView = ITVTiledView()
     
-    internal var url: String? {
+    fileprivate var url: String? {
         didSet {
             if url != nil {
                 // TODO: implement decision here whether it is IIIF or Zoomify and move the logic in specific classes
@@ -24,7 +23,9 @@ public class ITVScrollView: UIScrollView {
                     if data != nil , let serialization = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) {
                         
                         let imageDescriptor = IIIFImageDescriptor(serialization as! [String : Any])
+                        self.maximumZoomScale = CGFloat(imageDescriptor.tiles?.scaleFactors?.last != nil ? imageDescriptor.tiles!.scaleFactors!.last! : 1)
                         DispatchQueue.main.async {
+                            self.resizeTiledView(image: imageDescriptor)
                             self.tiledView.image = imageDescriptor
                         }
                     }
@@ -33,26 +34,63 @@ public class ITVScrollView: UIScrollView {
         }
     }
     
-    override public func awakeFromNib() {
+    override open func awakeFromNib() {
         super.awakeFromNib()
         
         delegate = self
-        maximumZoomScale = 10 // TODO: will be based on image info
         
-        // We want to have full control of constraints
-        tiledView.translatesAutoresizingMaskIntoConstraints = false
+        NotificationCenter.default.addObserver(self, selector: #selector(ITVScrollView.orientationDidChange), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         
         addSubview(tiledView)
-        addConstraints([
-            NSLayoutConstraint(item: tiledView.superview!, attribute: .leading, relatedBy: .equal, toItem: tiledView, attribute: .leading, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: tiledView.superview!, attribute: .trailing, relatedBy: .equal, toItem: tiledView, attribute: .trailing, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: tiledView.superview!, attribute: .top, relatedBy: .equal, toItem: tiledView, attribute: .top, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: tiledView.superview!, attribute: .bottom, relatedBy: .equal, toItem: tiledView, attribute: .bottom, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: self, attribute: .width, relatedBy: .equal, toItem: tiledView, attribute: .width, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: tiledView, attribute: .height, multiplier: 1, constant: 0)
-            ])
     }
 
+    public func isZoomedOut() -> Bool {
+        return self.zoomScale == 1.0
+    }
+    
+    public func loadImage(_ imageUrl: String) {
+        self.url = imageUrl
+    }
+    
+    public func orientationDidChange() {
+        
+        guard let image = tiledView.image else {
+            return
+        }
+        
+        if isZoomedOut() {
+            // resize tiledView only when not zoomed in
+            resizeTiledView(image: image)
+        }
+        else {
+            // else check only for need of reposition
+            scrollViewDidZoom(self)
+        }
+    }
+    
+    fileprivate func resizeTiledView(image: IIIFImageDescriptor) {
+        var newSize = sizeAspectFit(width: image.width, height: image.height)
+        tiledView.frame = CGRect(origin: CGPoint.zero, size: newSize)
+        scrollViewDidZoom(self)
+    }
+    
+    fileprivate func sizeAspectFit(width: Int, height: Int) -> CGSize {
+        return sizeAspectFit(width: CGFloat(width), height: CGFloat(height))
+    }
+    
+    fileprivate func sizeAspectFit(width: CGFloat, height: CGFloat) -> CGSize {
+        let imageSize = CGSize(width: width, height: height)
+        var aspectFitSize = frame.size
+        let mW = aspectFitSize.width / imageSize.width
+        let mH = aspectFitSize.height / imageSize.height
+        if mH <= mW {
+            aspectFitSize.width = mH * imageSize.width
+        }
+        else if mW <= mH {
+            aspectFitSize.height = mW * imageSize.height
+        }
+        return aspectFitSize
+    }
 }
 
 /// MARK: UIScrollViewDelegate implementation
@@ -60,17 +98,14 @@ extension ITVScrollView: UIScrollViewDelegate {
     
     public func scrollViewDidZoom(_ scrollView: UIScrollView) {
         // center the image as it becomes smaller than the size of the screen
-        let boundsSize = scrollView.bounds.size
-        var frameToCenter = tiledView.frame
+        let boundsSize = bounds.size
+        let f = tiledView.frame
         
         // center horizontally
-        frameToCenter.origin.x = (frameToCenter.size.width < boundsSize.width) ? (boundsSize.width - frameToCenter.size.width) / 2 : 0
+        tiledView.frame.origin.x = (f.size.width < boundsSize.width) ? (boundsSize.width - f.size.width) / 2 : 0
         
         // center vertically
-        frameToCenter.origin.y = (frameToCenter.size.height < boundsSize.height) ? (boundsSize.height - frameToCenter.size.height) / 2 : 0
-        
-        tiledView.frame = frameToCenter
-        self.setNeedsDisplay(scrollView.convert(scrollView.bounds, to: tiledView))
+        tiledView.frame.origin.y = (f.size.height < boundsSize.height) ? (boundsSize.height - f.size.height) / 2 : 0
     }
     
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
@@ -80,17 +115,5 @@ extension ITVScrollView: UIScrollViewDelegate {
     
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return tiledView
-    }
-}
-
-/// MARK: ITVProtocol implementation
-extension ITVScrollView: ITVDelegate {
-    
-    public func isZoomedOut() -> Bool {
-        return self.zoomScale == 1.0
-    }
-    
-    public func loadImage(_ imageUrl: String) {
-        self.url = imageUrl
     }
 }

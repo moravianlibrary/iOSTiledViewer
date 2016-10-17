@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class ITVScrollView: UIScrollView {
+public class ITVScrollView: UIScrollView {
     
     // internal to make it visible in extensions
     internal let tiledView = ITVTiledView()
@@ -33,7 +33,7 @@ open class ITVScrollView: UIScrollView {
         }
     }
     
-    override open func awakeFromNib() {
+    override public func awakeFromNib() {
         super.awakeFromNib()
         
         delegate = self
@@ -53,13 +53,6 @@ open class ITVScrollView: UIScrollView {
             ])
     }
 
-    public func isZoomedOut() -> Bool {
-        return self.zoomScale == 1.0
-    }
-    
-    public func loadImage(_ imageUrl: String) {
-        self.url = imageUrl
-    }
 }
 
 /// MARK: UIScrollViewDelegate implementation
@@ -87,5 +80,17 @@ extension ITVScrollView: UIScrollViewDelegate {
     
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return tiledView
+    }
+}
+
+/// MARK: ITVProtocol implementation
+extension ITVScrollView: ITVDelegate {
+    
+    public func isZoomedOut() -> Bool {
+        return self.zoomScale == 1.0
+    }
+    
+    public func loadImage(_ imageUrl: String) {
+        self.url = imageUrl
     }
 }

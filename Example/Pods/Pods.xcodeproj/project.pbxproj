@@ -15,6 +15,7 @@
 		68CE3F830FEB7353C69E62A0E2D120D9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2A6FF208CEC4C2861F1E9D42D651453 /* Foundation.framework */; };
 		6DD0609982B51E400E1C0569654CA9B1 /* Pods-iOSTiledViewer_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 21AA0E1838831B20288D9611275EED35 /* Pods-iOSTiledViewer_Example-dummy.m */; };
 		943FB7BFB358902B784A74246F1A6DDF /* IIIFImageTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE235FD9412A3A11036CA0CB4C5FD473 /* IIIFImageTile.swift */; };
+		A1E43956D17B2702107F0E507EAD395A /* ITVDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E877A6E48CC024278AC99E9D30B6547 /* ITVDelegate.swift */; };
 		A84D8DED8AAC4C8185758B35DDA048C4 /* Pods-iOSTiledViewer_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = EBC07CCF6F5B7492CF76FFF0734CCE10 /* Pods-iOSTiledViewer_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3E21925EB6DC22D67E8BC74BCEEE0A4 /* iOSTiledViewer-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A57BDB8A6BCD100DD509657E3AB0F1 /* iOSTiledViewer-dummy.m */; };
 		C9FC966E68A77A1C6847C8AD9D9715A4 /* ITVTiledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7AB53D8A433F72344176B3FF87C730 /* ITVTiledView.swift */; };
@@ -43,6 +44,7 @@
 		4EAA19DDBA24418643C403D62E2DF8F7 /* iOSTiledViewer.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = iOSTiledViewer.xcconfig; sourceTree = "<group>"; };
 		63B6A12066CE079C94FFAE082B4C66F1 /* Pods-iOSTiledViewer_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-iOSTiledViewer_Example-resources.sh"; sourceTree = "<group>"; };
 		6B6A7DC0147F82B9F634ED30B6A6C504 /* Pods-iOSTiledViewer_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-iOSTiledViewer_Example.release.xcconfig"; sourceTree = "<group>"; };
+		7E877A6E48CC024278AC99E9D30B6547 /* ITVDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ITVDelegate.swift; path = iOSTiledViewer/Classes/ITVDelegate.swift; sourceTree = "<group>"; };
 		81568BCFEFAD9D2B0038825DB507218F /* iOSTiledViewer-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "iOSTiledViewer-prefix.pch"; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9555AEB54CCB4F592ABFDD7954E7386D /* Pods_iOSTiledViewer_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOSTiledViewer_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,6 +124,7 @@
 				328B003B85858DF362DEBCB49FCED421 /* IIIFImageDescriptor.swift */,
 				BAA4066C8A46342CA8F1B2A05ADF05D4 /* IIIFImageLicense.swift */,
 				BE235FD9412A3A11036CA0CB4C5FD473 /* IIIFImageTile.swift */,
+				7E877A6E48CC024278AC99E9D30B6547 /* ITVDelegate.swift */,
 				EBB4A923F5CF19BAF4883A21D171FE94 /* ITVScrollView.swift */,
 				1C7AB53D8A433F72344176B3FF87C730 /* ITVTiledView.swift */,
 				BBAA45EAC4621F303110A59F19E66630 /* Support Files */,
@@ -280,6 +283,7 @@
 				0EBD3FED5D53FDBEAE7FF8C614CE1E7B /* IIIFImageLicense.swift in Sources */,
 				943FB7BFB358902B784A74246F1A6DDF /* IIIFImageTile.swift in Sources */,
 				B3E21925EB6DC22D67E8BC74BCEEE0A4 /* iOSTiledViewer-dummy.m in Sources */,
+				A1E43956D17B2702107F0E507EAD395A /* ITVDelegate.swift in Sources */,
 				48F4D2B9506E8F1778E7B1A199E43549 /* ITVScrollView.swift in Sources */,
 				C9FC966E68A77A1C6847C8AD9D9715A4 /* ITVTiledView.swift in Sources */,
 			);
@@ -370,7 +374,7 @@
 				PRODUCT_NAME = Pods_iOSTiledViewer_Example;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -401,7 +405,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -436,7 +440,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -508,7 +512,7 @@
 				PRODUCT_NAME = iOSTiledViewer;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 2.3;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
