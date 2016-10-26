@@ -17,7 +17,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        scrollView.loadImage("https://iiif.ucd.ie/loris/ucdlib:43114/full/full/0/default.jpg")
+        scrollView.loadImage("http://mapy.mzk.cz/AA22/0103/ImageProperties.xml")
     }
 
     override func didReceiveMemoryWarning() {

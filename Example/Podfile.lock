@@ -1,12 +1,16 @@
 PODS:
-  - iOSTiledViewer (0.1.1)
+  - iOSTiledViewer (0.1.2)
 
 DEPENDENCIES:
-  - iOSTiledViewer
+  - iOSTiledViewer (from `../`)
+
+EXTERNAL SOURCES:
+  iOSTiledViewer:
+    :path: "../"
 
 SPEC CHECKSUMS:
-  iOSTiledViewer: 56c778a3094ecf99498b3e6d46b4b93dfd22b77f
+  iOSTiledViewer: 72b68dd4f20df427b3473b426f9a548bc7a4c707
 
-PODFILE CHECKSUM: 8e9511978f5d8c4d2dfa95ef56530a9eaa97d805
+PODFILE CHECKSUM: 75e79c18cbe2603003e065b4cce435400151dd81
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.1.1

@@ -13,13 +13,14 @@ class ITVTiledView: UIView {
     fileprivate var imageCache = [String:UIImage]()
     
     // IIIFImageDescriptor -> make abstract class and use that
-    internal var image: IIIFImageDescriptor! {
+    internal var image: ITVImageDescriptor! {
         didSet {
             let l = layer as! CATiledLayer
-            if let tileSize = image.tiles?.size {
-                l.tileSize = tileSize
+            l.tileSize = image.getTileSize(level: level)
+            if let levels = (image as? IIIFImageDescriptor)?.tiles?.scaleFactors?.count {
+                l.levelsOfDetail = levels
             }
-            if let levels = image.tiles?.scaleFactors?.count {
+            else if let levels = (image as? ZoomifyImageDescriptor)?.depth {
                 l.levelsOfDetail = levels
             }
             
@@ -67,18 +68,18 @@ class ITVTiledView: UIView {
         }
         
         let viewScale = self.contentScaleFactor
-        
-        var viewSize = self.frame.size
+        let viewSize = self.frame.size
         
         let scaleW = CGFloat(image.width)/viewSize.width
         let scaleH = CGFloat(image.height)/viewSize.height
         let scale = max(scaleW, scaleH)
         
         let tiledLayer = self.layer as! CATiledLayer
-        var tileSize = tiledLayer.tileSize
+        let tileSize = tiledLayer.tileSize
         
         let column = Int(rect.midX * viewScale / tileSize.width)
         let row = Int(rect.midY * viewScale / tileSize.height)
+        let level = self.level
         
         var requestURL: URL!
         let displayTileBorders = false
@@ -88,13 +89,16 @@ class ITVTiledView: UIView {
             image.draw(in: rect)
         }
         else {
-            requestURL = self.tiledImageView(column, y: row, level: scale)
+            requestURL = image.getUrl(x: column, y: row, level: level, scale: scale)
             URLSession.shared.dataTask(with: requestURL, completionHandler: { (data, response, error) in
                 if data != nil , let image = UIImage(data: data!) {
                     self.imageCache[cacheKey] = image
                     DispatchQueue.main.async {
                         self.setNeedsDisplay(rect)
                     }
+                }
+                else {
+                    print("Error getting image from \(requestURL.absoluteString).")
                 }
             }).resume()
         }
@@ -104,49 +108,6 @@ class ITVTiledView: UIView {
             context.setLineWidth(2)
             context.stroke(rect)
         }
-    }
-    
-    func tiledImageView(_ x: Int, y: Int, level: CGFloat=1.0) -> URL! {
-        
-        // size of full image content
-        let fullSize = CGSize(width: image.width, height: image.height)
-        
-        // tile size
-        let tileSize = (layer as! CATiledLayer).tileSize
-        
-        // scale factor
-        let s = level
-        
-        // tile coordinate (col)
-        let n = CGFloat(x)
-        
-        // tile coordinate (row)
-        let m = CGFloat(y)
-        
-        // Calculate region parameters /xr,yr,wr,hr/
-        let xr = n * tileSize.width * s
-        let yr = m * tileSize.height * s
-        var wr = tileSize.width * s
-        if (xr + wr > fullSize.width) {
-            wr = fullSize.width - xr
-        }
-        var hr = tileSize.height * s
-        if (yr + hr > fullSize.height) {
-            hr = fullSize.height - yr
-        }
-        
-        
-        // TODO: Here we will be using IIIF/Zoomify classes
-        let baseUrl = image.baseUrl
-        let region = "\(Int(xr)),\(Int(yr)),\(Int(wr)),\(Int(hr))"
-        let size = "\(Int(tileSize.width)),\(tileSize.height == tileSize.width ? "" : String(Int(tileSize.height)))"
-        let rotation = "0"
-        let quality = "default"
-        let format = "jpg"
-        
-//        print("USED ALGORITHM for [\(y),\(x)]*\(level):\n\(baseUrl)/\(region)/\(size)/\(rotation)/\(quality).\(format)")
-        
-        return URL(string: "\(baseUrl)/\(region)/\(size)/\(rotation)/\(quality).\(format)")
     }
 
 }

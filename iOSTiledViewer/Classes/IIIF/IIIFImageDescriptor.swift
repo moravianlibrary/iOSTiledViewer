@@ -24,12 +24,9 @@ enum IIIFQuality: String {
 /**
  Class representing all the information about specific image. This class conforms to IIIFImage API of version 2.1.
  */
-class IIIFImageDescriptor: NSObject {
-
-    // Required fields
-    let baseUrl: String
-    let height: Int
-    let width: Int
+class IIIFImageDescriptor: ITVImageDescriptor {
+    
+    static let propertyFile = "info.json"
     
     // Optional fields
     var formats: Set<IIIFFormat>?
@@ -48,9 +45,10 @@ class IIIFImageDescriptor: NSObject {
     init(_ json: [String:Any]) {
         
         // required fields
-        baseUrl = json["@id"] as! String
-        width = json["width"] as! Int
-        height = json["height"] as! Int
+        let bUrl = json["@id"] as! String
+        let w = json["width"] as! Int
+        let h = json["height"] as! Int
+        super.init(baseUrl: bUrl, height: h, width: w)
         
         if let profile = json["profile"] as? [Any] {
             for profileItem in profile {
@@ -106,5 +104,48 @@ class IIIFImageDescriptor: NSObject {
         if json["attribution"] != nil || json["logo"] != nil || json["license"] != nil {
             self.license = IIIFImageLicense(json)
         }
+    }
+    
+    override func getTileSize(level: Int) -> CGSize {
+        return tiles!.size!
+    }
+    
+    override func getUrl(x: Int, y: Int, level: Int, scale: CGFloat) -> URL? {
+        // size of full image content
+        let fullSize = CGSize(width: width, height: height)
+        
+        // tile size
+        let tileSize = getTileSize(level: level)
+        
+        // scale factor
+        let s: CGFloat = scale//pow(2.0, CGFloat(level))
+        
+        // tile coordinate (col)
+        let n = CGFloat(x)
+        
+        // tile coordinate (row)
+        let m = CGFloat(y)
+        
+        // Calculate region parameters /xr,yr,wr,hr/
+        let xr = n * tileSize.width * s
+        let yr = m * tileSize.height * s
+        var wr = tileSize.width * s
+        if (xr + wr > fullSize.width) {
+            wr = fullSize.width - xr
+        }
+        var hr = tileSize.height * s
+        if (yr + hr > fullSize.height) {
+            hr = fullSize.height - yr
+        }
+        
+        let region = "\(Int(xr)),\(Int(yr)),\(Int(wr)),\(Int(hr))"
+        let size = "\(Int(tileSize.width)),\(tileSize.height == tileSize.width ? "" : String(Int(tileSize.height)))"
+        let rotation = "0"
+        let quality = "default"
+        let format = "jpg"
+        
+//        print("USED ALGORITHM for [\(y),\(x)]*\(level):\n\(baseUrl)/\(region)/\(size)/\(rotation)/\(quality).\(format)")
+        
+        return URL(string: "\(baseUrl)/\(region)/\(size)/\(rotation)/\(quality).\(format)")
     }
 }
