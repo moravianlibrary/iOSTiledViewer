@@ -111,7 +111,7 @@ class IIIFImageDescriptor: ITVImageDescriptor {
     }
     
     override func getMaximumZoomScale() -> CGFloat {
-        let maximumScale = tiles?.scaleFactors?.last
+        let maximumScale = tiles?.scaleFactors?.first
         return (maximumScale != nil ? maximumScale! : 1)
     }
     
@@ -141,13 +141,13 @@ class IIIFImageDescriptor: ITVImageDescriptor {
         let tileSize = getTileSize(level: level)
         
         // scale factor
-        let s: CGFloat = scale//pow(2.0, CGFloat(level))
+        let s: CGFloat = scale
         
         // tile coordinate (col)
-        let n = CGFloat(x)
+        let n: CGFloat = CGFloat(x)
         
         // tile coordinate (row)
-        let m = CGFloat(y)
+        let m: CGFloat = CGFloat(y)
         
         // Calculate region parameters /xr,yr,wr,hr/
         let xr = n * tileSize.width * s
@@ -167,7 +167,7 @@ class IIIFImageDescriptor: ITVImageDescriptor {
         let quality = "default"
         let format = "jpg"
         
-//        print("USED ALGORITHM for [\(y),\(x)]*\(level):\n\(baseUrl)/\(region)/\(size)/\(rotation)/\(quality).\(format)")
+//        print("USED ALGORITHM for [\(y),\(x)]*\(level)(\(s)):\n\(baseUrl)/\(region)/\(size)/\(rotation)/\(quality).\(format)")
         
         return URL(string: "\(baseUrl)/\(region)/\(size)/\(rotation)/\(quality).\(format)")
     }

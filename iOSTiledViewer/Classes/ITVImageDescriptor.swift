@@ -7,8 +7,9 @@
 //
 
 /**
- Class representing an image. It should contain all the required information to construct a request for a given zoom level and coordinates.
+ Abstract class representing an image. It should contain all the required information to construct a request for a given zoom level and coordinates. It also contains methods for image related computations, such as initial size to fit screen, minimum and maximum zoom scale, etc.
  */
+/// TODO: There is high probability that this class will be refactored as a protocol.
 class ITVImageDescriptor: NSObject {
 
     // Required fields

@@ -26,6 +26,7 @@ class IIIFImageTile: NSObject {
             for item in scaleFactors {
                 self.scaleFactors!.append(CGFloat(item))
             }
+            self.scaleFactors!.reverse()
         }
     }
 }

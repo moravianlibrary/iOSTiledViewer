@@ -9,9 +9,6 @@
 import UIKit
 
 class ITVLicenceView: UIView {
-
-    fileprivate var maximumWidth: CGFloat!
-    fileprivate var maximumHeight: CGFloat!
     
     var imageDescriptor: ITVImageDescriptor? {
         didSet {
@@ -33,11 +30,6 @@ class ITVLicenceView: UIView {
             return
         }
         
-        // TODO: Get scroll view dimensions
-        let display = UIScreen.main.bounds
-        maximumWidth = display.width
-        maximumHeight = display.height
-        
         var viewsArray:[UIView] = [self]
         if let value = licence.attribution {
             let label = UILabel()
@@ -55,7 +47,7 @@ class ITVLicenceView: UIView {
             viewsArray.append(label)
         }
         if let value = licence.logo {
-            // TODO: logo value does not have to be an url
+            // TODO: logo value does not have to be an url only
             URLSession.shared.dataTask(with: URL(string: value)!, completionHandler: { (data, response, error) in
                 if data != nil {
                     let image = UIImage(data: data!)

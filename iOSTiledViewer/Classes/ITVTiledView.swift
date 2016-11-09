@@ -68,11 +68,9 @@ class ITVTiledView: UIView {
         }
         
         let viewScale = self.contentScaleFactor
-        let viewSize = self.frame.size
+        let viewSize = bounds.width * contentScaleFactor
         
-        let scaleW = CGFloat(image.width)/viewSize.width
-        let scaleH = CGFloat(image.height)/viewSize.height
-        let scale = max(scaleW, scaleH)
+        let scale = CGFloat(image.width)/viewSize//.width
         
         let tiledLayer = self.layer as! CATiledLayer
         let tileSize = tiledLayer.tileSize
@@ -82,7 +80,7 @@ class ITVTiledView: UIView {
         let level = self.level
         
         var requestURL: URL!
-        let displayTileBorders = true
+        let displayTileBorders = false
         
         let cacheKey = "\(level)/\(column)_\(row)"
         if let image = imageCache[cacheKey] {

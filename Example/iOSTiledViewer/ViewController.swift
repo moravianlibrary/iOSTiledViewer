@@ -9,7 +9,7 @@
 import UIKit
 import iOSTiledViewer
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, ITVErrorDelegate {
 
     var urlString: String!
     @IBOutlet weak var scrollView: ITVScrollView!
@@ -18,6 +18,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        scrollView.errorDelegate = self
         scrollView.loadImage(urlString)
     }
 
@@ -26,5 +27,14 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    // Simple example of handling errors from ITV
+    // parameter not relevant for now, since this method is being called only for 1 error currently
+    func errorDidOccur(error: Error) {
+        let alert = UIAlertController(title: "Oops", message: "Error loading image.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (action) in
+            _ = self.navigationController?.popViewController(animated: true)
+        }))
+        present(alert, animated: true, completion: nil)
+    }
 }
 
