@@ -27,11 +27,23 @@ class ITVImageDescriptor: NSObject {
     
     /// Method returns constructed URL address for specific zoom level and x,y coordinates.
     func getUrl(x: Int, y: Int, level: Int, scale: CGFloat) -> URL? {
-        fatalError("getUrl(level:, x:, y:) has not been implemented")
+        fatalError("getUrl(level:, x:, y:) has not been implemented.")
     }
     
     /// Returns tile size for the given zoom level.
     func getTileSize(level: Int) -> CGSize {
-        fatalError("getTileSize(level:) has not been implemented")
+        fatalError("getTileSize(level:) has not been implemented.")
+    }
+    
+    func getMaximumZoomScale() -> CGFloat {
+        fatalError("getMaximumZoomScale() has not been implemented.")
+    }
+    
+    func getMinimumZoomScale(size: CGSize, viewScale: CGFloat) -> CGFloat {
+        fatalError("getMinimumZoomScale() has not been implemented.")
+    }
+    
+    func sizeToFit(size: CGSize, zoomScale: CGFloat) -> CGSize {
+        fatalError("sizeToFit(size:, zoomScale:) has not been implemented.")
     }
 }

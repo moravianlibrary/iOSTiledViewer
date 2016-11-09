@@ -82,7 +82,7 @@ class ITVTiledView: UIView {
         let level = self.level
         
         var requestURL: URL!
-        let displayTileBorders = false
+        let displayTileBorders = true
         
         let cacheKey = "\(level)/\(column)_\(row)"
         if let image = imageCache[cacheKey] {

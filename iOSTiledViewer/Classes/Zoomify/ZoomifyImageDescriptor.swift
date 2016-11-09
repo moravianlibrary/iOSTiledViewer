@@ -76,6 +76,38 @@ class ZoomifyImageDescriptor: ITVImageDescriptor, XMLParserDelegate {
         return tileSize
     }
     
+    override func getMaximumZoomScale() -> CGFloat {
+        return CGFloat(powf(2, Float(depth)))
+    }
+    
+    override func getMinimumZoomScale(size: CGSize, viewScale: CGFloat) -> CGFloat {
+        let minimumSize = sizeToFit(size: size, zoomScale: viewScale)
+        let ratioW = size.width / minimumSize.width
+        let ratioH = size.height / minimumSize.height
+        
+        return min(ratioW, ratioH)
+    }
+    
+    override func sizeToFit(size: CGSize, zoomScale: CGFloat) -> CGSize {
+        let sum = Float(width + height)
+        let totalTiles = Float(numberOfTiles(2) - numberOfTiles(1))
+        let numTilesX = CGFloat(round(totalTiles / (sum / Float(width))))
+        let numTilesY = CGFloat(round(totalTiles / (sum / Float(height))))
+        let tile = tileSize.width / zoomScale
+        
+        let imageSize = CGSize(width: width, height: height)
+        var aspectFitSize = CGSize(width: numTilesX*tile, height: numTilesY*tile)
+        let mW = aspectFitSize.width / imageSize.width
+        let mH = aspectFitSize.height / imageSize.height
+        if mH <= mW {
+            aspectFitSize.width = mH * imageSize.width
+        }
+        else if mW <= mH {
+            aspectFitSize.height = mW * imageSize.height
+        }
+        return aspectFitSize
+    }
+    
     fileprivate func numberOfTiles(_ level: Int) -> Int {
         return tilesForLevel[level]
     }

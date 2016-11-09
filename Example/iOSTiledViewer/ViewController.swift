@@ -11,13 +11,14 @@ import iOSTiledViewer
 
 class ViewController: UIViewController {
 
+    var urlString: String!
     @IBOutlet weak var scrollView: ITVScrollView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        scrollView.loadImage("http://mapy.mzk.cz/AA22/0103/ImageProperties.xml")
+        scrollView.loadImage(urlString)
     }
 
     override func didReceiveMemoryWarning() {

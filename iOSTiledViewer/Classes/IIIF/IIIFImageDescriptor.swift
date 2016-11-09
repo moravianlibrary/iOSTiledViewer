@@ -101,13 +101,36 @@ class IIIFImageDescriptor: ITVImageDescriptor {
             self.tiles = IIIFImageTile(tiles.first!)
         }
         
-        if json["attribution"] != nil || json["logo"] != nil || json["license"] != nil {
+//        if json["attribution"] != nil || json["logo"] != nil || json["license"] != nil {
             self.license = IIIFImageLicense(json)
-        }
+//        }
     }
     
     override func getTileSize(level: Int) -> CGSize {
         return tiles!.size!
+    }
+    
+    override func getMaximumZoomScale() -> CGFloat {
+        let maximumScale = tiles?.scaleFactors?.last
+        return (maximumScale != nil ? maximumScale! : 1)
+    }
+    
+    override func getMinimumZoomScale(size: CGSize, viewScale: CGFloat) -> CGFloat {
+        return 1
+    }
+    
+    override func sizeToFit(size: CGSize, zoomScale: CGFloat) -> CGSize {
+        let imageSize = CGSize(width: width, height: height)
+        var aspectFitSize = size
+        let mW = aspectFitSize.width / imageSize.width
+        let mH = aspectFitSize.height / imageSize.height
+        if mH <= mW {
+            aspectFitSize.width = mH * imageSize.width
+        }
+        else if mW <= mH {
+            aspectFitSize.height = mW * imageSize.height
+        }
+        return aspectFitSize
     }
     
     override func getUrl(x: Int, y: Int, level: Int, scale: CGFloat) -> URL? {

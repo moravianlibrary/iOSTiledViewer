@@ -11,6 +11,7 @@ import UIKit
 open class ITVScrollView: UIScrollView {
     
     fileprivate let tiledView = ITVTiledView()
+    fileprivate let licenseView = ITVLicenceView()
     fileprivate var lastLevel: Int = -1
     
     fileprivate var url: String? {
@@ -21,30 +22,26 @@ open class ITVScrollView: UIScrollView {
                 var block: ((Data?, URLResponse?, Error?) -> Void)? = nil
                 if url!.lowercased().contains(IIIFImageDescriptor.propertyFile.lowercased()) {
                     // IIIF
-                    print("Downloading image as IIIF.")
+                    print("ITV:: Downloading image as IIIF.")
                     block = {(data, response, error) in
                         if data != nil , let serialization = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) {
                             
                             let imageDescriptor = IIIFImageDescriptor(serialization as! [String : Any])
-                            self.maximumZoomScale = CGFloat(imageDescriptor.tiles?.scaleFactors?.last != nil ? imageDescriptor.tiles!.scaleFactors!.last! : 1)
-                            DispatchQueue.main.async {
-                                self.resizeTiledView(image: imageDescriptor)
-                                self.tiledView.image = imageDescriptor
+                            DispatchQueue.main.sync {
+                                self.initWithDescriptor(imageDescriptor)
                             }
                         }
                     }
                 }
                 else if url!.lowercased().contains(ZoomifyImageDescriptor.propertyFile.lowercased()) {
                     // Zoomify
-                    print("Downloading image as Zoomify.")
+                    print("ITV:: Downloading image as Zoomify.")
                     block = {(data, response, error) in
                         if data != nil , let json = ZoomifyXMLParser().parse(data!) {
                             
                             let imageDescriptor = ZoomifyImageDescriptor(json, self.url!)
-                            self.maximumZoomScale = CGFloat(powf(2, Float(imageDescriptor.depth)))
-                            DispatchQueue.main.async {
-                                self.resizeTiledView(image: imageDescriptor)
-                                self.tiledView.image = imageDescriptor
+                            DispatchQueue.main.sync {
+                                self.initWithDescriptor(imageDescriptor)
                             }
                         }
                     }
@@ -69,7 +66,16 @@ open class ITVScrollView: UIScrollView {
         NotificationCenter.default.addObserver(self, selector: #selector(ITVScrollView.orientationDidChange), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         
         addSubview(tiledView)
-        setZoomScale(1.0, animated: false)
+        
+        // add license view
+        superview?.addSubview(licenseView)
+        licenseView.translatesAutoresizingMaskIntoConstraints = false
+        superview?.addConstraints([
+            NSLayoutConstraint(item: self, attribute: .trailing, relatedBy: .equal, toItem: licenseView, attribute: .trailing, multiplier: 1.0, constant: 0),
+            NSLayoutConstraint(item: self, attribute: .bottom, relatedBy: .equal, toItem: licenseView, attribute: .bottom, multiplier: 1.0, constant: 0),
+            NSLayoutConstraint(item: self, attribute: .leading, relatedBy: .lessThanOrEqual, toItem: licenseView, attribute: .leading, multiplier: 1.0, constant: 0),
+            NSLayoutConstraint(item: self, attribute: .top, relatedBy: .lessThanOrEqual, toItem: licenseView, attribute: .top, multiplier: 1.0, constant: 0)
+            ])
     }
 
     public func isZoomedOut() -> Bool {
@@ -147,28 +153,19 @@ open class ITVScrollView: UIScrollView {
         }
     }
     
+    fileprivate func initWithDescriptor(_ imageDescriptor: ITVImageDescriptor) {
+        maximumZoomScale = imageDescriptor.getMaximumZoomScale()
+        minimumZoomScale = imageDescriptor.getMinimumZoomScale(size: frame.size, viewScale: tiledView.contentScaleFactor)
+        resizeTiledView(image: imageDescriptor)
+        zoomScale = minimumZoomScale
+        tiledView.image = imageDescriptor
+        licenseView.imageDescriptor = imageDescriptor
+    }
+    
     fileprivate func resizeTiledView(image: ITVImageDescriptor) {
-        let newSize = sizeAspectFit(width: image.width, height: image.height)
+        let newSize = image.sizeToFit(size: frame.size, zoomScale: tiledView.contentScaleFactor)
         tiledView.frame = CGRect(origin: CGPoint.zero, size: newSize)
         scrollViewDidZoom(self)
-    }
-    
-    fileprivate func sizeAspectFit(width: Int, height: Int) -> CGSize {
-        return sizeAspectFit(width: CGFloat(width), height: CGFloat(height))
-    }
-    
-    fileprivate func sizeAspectFit(width: CGFloat, height: CGFloat) -> CGSize {
-        let imageSize = CGSize(width: width, height: height)
-        var aspectFitSize = frame.size
-        let mW = aspectFitSize.width / imageSize.width
-        let mH = aspectFitSize.height / imageSize.height
-        if mH <= mW {
-            aspectFitSize.width = mH * imageSize.width
-        }
-        else if mW <= mH {
-            aspectFitSize.height = mW * imageSize.height
-        }
-        return aspectFitSize
     }
 }
 
@@ -188,9 +185,7 @@ extension ITVScrollView: UIScrollViewDelegate {
     }
     
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        // redraw image
-//        tiledView.contentScaleFactor = scale
-        
+        // redraw image by setting contentScaleFactor on tiledView
         let level = Int(round(log2(scale)))
         if level != lastLevel {
             tiledView.contentScaleFactor = pow(2.0, CGFloat(level))
