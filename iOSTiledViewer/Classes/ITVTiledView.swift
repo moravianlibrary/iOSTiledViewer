@@ -12,11 +12,11 @@ class ITVTiledView: UIView {
 
     fileprivate var imageCache = [String:UIImage]()
     
-    // IIIFImageDescriptor -> make abstract class and use that
     internal var image: ITVImageDescriptor! {
         didSet {
             let l = layer as! CATiledLayer
             l.tileSize = image.getTileSize(level: level)
+            // TODO: Get number of levels from abstract class
             if let levels = (image as? IIIFImageDescriptor)?.tiles?.scaleFactors?.count {
                 l.levelsOfDetail = levels
             }
@@ -38,10 +38,7 @@ class ITVTiledView: UIView {
     override var contentScaleFactor: CGFloat {
         didSet {
             // keep in cache only images for single level to save some memory
-//            if lastLevel != level {
-//                lastLevel = level
-                self.imageCache.removeAll()
-//            }
+            self.imageCache.removeAll()
         }
     }
     
@@ -80,6 +77,7 @@ class ITVTiledView: UIView {
         let level = self.level
         
         var requestURL: URL!
+        /// make borders setting modifiable to user as well
         let displayTileBorders = false
         
         let cacheKey = "\(level)/\(column)_\(row)"

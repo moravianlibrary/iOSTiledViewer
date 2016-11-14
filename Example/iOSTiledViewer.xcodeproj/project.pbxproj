@@ -463,7 +463,7 @@
 					"$(PROJECT_DIR)/**",
 				);
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "cz.mzk.ios.iiif.iOSTiledViewer-Example";
+				PRODUCT_BUNDLE_IDENTIFIER = cz.mzk.ios.iiif.presenter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7a270d4e-8a9e-44bc-bfa6-b5b4235feffc";
 				PROVISIONING_PROFILE_SPECIFIER = "IIIF Development";
@@ -477,7 +477,8 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 873S4GA3KJ;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/**",
@@ -489,8 +490,10 @@
 					"$(PROJECT_DIR)/**",
 				);
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "cz.mzk.ios.iiif.iOSTiledViewer-Example";
+				PRODUCT_BUNDLE_IDENTIFIER = cz.mzk.ios.iiif.presenter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "e97c827d-2581-4145-ae4f-2fcd5ed68ce0";
+				PROVISIONING_PROFILE_SPECIFIER = "IIIF Distribution";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

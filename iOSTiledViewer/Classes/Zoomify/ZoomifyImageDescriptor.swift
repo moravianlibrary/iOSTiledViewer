@@ -88,6 +88,14 @@ class ZoomifyImageDescriptor: ITVImageDescriptor, XMLParserDelegate {
         return min(ratioW, ratioH)
     }
     
+    override func getImageFormats() -> [String] {
+        return ["jpg"]
+    }
+    
+    override func getImageQualities() -> [String] {
+        return ["default"]
+    }
+    
     override func sizeToFit(size: CGSize, zoomScale: CGFloat) -> CGSize {
         let sum = Float(width + height)
         let totalTiles = Float(numberOfTiles(2) - numberOfTiles(1))

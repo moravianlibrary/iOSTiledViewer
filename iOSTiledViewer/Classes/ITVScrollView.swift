@@ -19,15 +19,30 @@ open class ITVScrollView: UIScrollView {
     fileprivate let licenseView = ITVLicenceView()
     fileprivate var lastLevel: Int = -1
     
+    /// ITVErrorDelegate for receiving errors
+    public var itvDelegate: ITVScrollViewDelegate?
+    
+    /// Returns true only if content is not scaled.
+    public var isZoomedOut: Bool {
+        return self.zoomScale == 1.0
+    }
+    
+    /// Returns an array of image formats as Strings.
+    public var imageFormats: [String]! {
+        return tiledView.image.getImageFormats()
+    }
+    
+    /// Returns an array of image qualities as Strings.
+    public var imageQualities: [String]! {
+        return tiledView.image.getImageQualities()
+    }
+    
     fileprivate var url: String? {
         didSet {
             if url != nil {
-                // TODO: implement decision here whether it is IIIF or Zoomify and move the logic in specific classes
-                
                 var block: ((Data?, URLResponse?, Error?) -> Void)? = nil
-                if url!.lowercased().contains(IIIFImageDescriptor.propertyFile.lowercased()) {
+                if url!.contains(IIIFImageDescriptor.propertyFile) {
                     // IIIF
-                    print("\(TAG):: Downloading image as IIIF.")
                     block = {(data, response, error) in
                         if data != nil , let serialization = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) {
                             
@@ -38,9 +53,8 @@ open class ITVScrollView: UIScrollView {
                         }
                     }
                 }
-                else if url!.lowercased().contains(ZoomifyImageDescriptor.propertyFile.lowercased()) {
+                else if url!.contains(ZoomifyImageDescriptor.propertyFile) {
                     // Zoomify
-                    print("\(TAG):: Downloading image as Zoomify.")
                     block = {(data, response, error) in
                         if data != nil , let json = ZoomifyXMLParser().parse(data!) {
                             
@@ -55,7 +69,7 @@ open class ITVScrollView: UIScrollView {
                 guard block != nil else {
                     // unsupported image API, should never happen here
                     let error = NSError(domain: TAG, code: 100, userInfo: ["message":"Unsupported image API."])
-                    errorDelegate?.errorDidOccur(error: error)
+                    itvDelegate?.didFinishLoading(error: error)
                     return
                 }
                 
@@ -63,14 +77,6 @@ open class ITVScrollView: UIScrollView {
                         block!).resume()
             }
         }
-    }
-    
-    /// ITVErrorDelegate for receiving errors
-    public var errorDelegate: ITVErrorDelegate?
-    
-    /// Returns true only if content is completely visible
-    public var isZoomedOut: Bool {
-        return self.zoomScale == 1.0
     }
     
     override open func awakeFromNib() {
@@ -131,9 +137,8 @@ open class ITVScrollView: UIScrollView {
                 self.url = testUrl + IIIFImageDescriptor.propertyFile
             }
             else {
-                print("Url \(imageUrl) does not support IIIF or Zoomify API.")
-                let error = NSError(domain: "ITV", code: 100, userInfo: nil)
-                errorDelegate?.errorDidOccur(error: error)
+                let error = NSError(domain: TAG, code: 100, userInfo: ["message":"Url \(imageUrl) does not support IIIF or Zoomify API."])
+                itvDelegate?.didFinishLoading(error: error)
             }
         }
     }
@@ -182,8 +187,11 @@ open class ITVScrollView: UIScrollView {
         zoomScale = minimumZoomScale
         tiledView.image = imageDescriptor
         licenseView.imageDescriptor = imageDescriptor
+        
+        itvDelegate?.didFinishLoading(error: nil)
     }
     
+    // Resizin tiled view to fit in scroll view
     fileprivate func resizeTiledView(image: ITVImageDescriptor) {
         let newSize = image.sizeToFit(size: frame.size, zoomScale: tiledView.contentScaleFactor)
         tiledView.frame = CGRect(origin: CGPoint.zero, size: newSize)

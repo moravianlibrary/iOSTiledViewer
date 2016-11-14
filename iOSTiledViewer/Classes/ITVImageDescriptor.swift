@@ -44,6 +44,14 @@ class ITVImageDescriptor: NSObject {
         fatalError("getMinimumZoomScale() has not been implemented.")
     }
     
+    func getImageFormats() -> [String] {
+        fatalError("getImageFormats() has not been implemented.")
+    }
+    
+    func getImageQualities() -> [String] {
+        fatalError("getImageQualities() has not been implemented.")
+    }
+    
     func sizeToFit(size: CGSize, zoomScale: CGFloat) -> CGSize {
         fatalError("sizeToFit(size:, zoomScale:) has not been implemented.")
     }

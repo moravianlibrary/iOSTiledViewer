@@ -7,9 +7,12 @@
 //
 
 enum IIIFFormat: String {
-    case JPG = "jpg"
-    case PNG = "png"
     case GIF = "gif"
+    case JPG = "jpg"
+    case JP2 = "jp2"
+    case PDF = "pdf"
+    case PNG = "png"
+    case TIF = "tif"
     case WEBP = "webp"
 }
 
@@ -101,9 +104,9 @@ class IIIFImageDescriptor: ITVImageDescriptor {
             self.tiles = IIIFImageTile(tiles.first!)
         }
         
-//        if json["attribution"] != nil || json["logo"] != nil || json["license"] != nil {
+        if json["attribution"] != nil || json["logo"] != nil || json["license"] != nil {
             self.license = IIIFImageLicense(json)
-//        }
+        }
     }
     
     override func getTileSize(level: Int) -> CGSize {
@@ -117,6 +120,14 @@ class IIIFImageDescriptor: ITVImageDescriptor {
     
     override func getMinimumZoomScale(size: CGSize, viewScale: CGFloat) -> CGFloat {
         return 1
+    }
+    
+    override func getImageFormats() -> [String] {
+        return (formats != nil ? formats!.map({ (item) -> String in return item.rawValue }) : [])
+    }
+    
+    override func getImageQualities() -> [String] {
+        return (qualities != nil ? qualities!.map({ (item) -> String in return item.rawValue }) : [])
     }
     
     override func sizeToFit(size: CGSize, zoomScale: CGFloat) -> CGSize {
