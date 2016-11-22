@@ -10,25 +10,22 @@ import UIKit
 
 class ITVTiledView: UIView {
 
-    fileprivate var imageCache = [String:UIImage]()
-    
     internal var image: ITVImageDescriptor! {
         didSet {
             let l = layer as! CATiledLayer
-            l.tileSize = image.getTileSize(level: level)
-            // TODO: Get number of levels from abstract class
-            if let levels = (image as? IIIFImageDescriptor)?.tiles?.scaleFactors?.count {
-                l.levelsOfDetail = levels
+            if let size = image.tileSize?[level] {
+                l.tileSize = size
             }
-            else if let levels = (image as? ZoomifyImageDescriptor)?.depth {
-                l.levelsOfDetail = levels
-            }
+            l.levelsOfDetail = image.zoomScales.count
+            
+            initBackground()
             
             // must be on main thread
             self.setNeedsLayout()
         }
     }
     
+    fileprivate var imageCache = [String:UIImage]()
     fileprivate var lastLevel: Int = -1
     fileprivate var level: Int {
         get {
@@ -77,8 +74,8 @@ class ITVTiledView: UIView {
         let level = self.level
         
         var requestURL: URL!
-        /// make borders setting modifiable to user as well
-        let displayTileBorders = false
+        /// TODO: make borders setting modifiable to user as well
+        let displayTileBorders = true
         
         let cacheKey = "\(level)/\(column)_\(row)"
         if let image = imageCache[cacheKey] {
@@ -105,5 +102,27 @@ class ITVTiledView: UIView {
             context.stroke(rect)
         }
     }
-
+    
+    // Download and set background image as color pattern.
+    fileprivate func initBackground() {
+        if let imageUrl = image.getBackgroundUrl() {
+            URLSession.shared.dataTask(with: imageUrl, completionHandler: { (data, response, error) in
+                if data != nil, let image = UIImage(data: data!) {
+                    DispatchQueue.main.sync {
+                        self.backgroundColor = UIColor(patternImage: self.scaledImage(image: image, newSize: self.bounds.size))
+                        self.setNeedsLayout()
+                    }
+                }
+            }).resume()
+        }
+    }
+    
+    // Resize UIImage to fit given size.
+    fileprivate func scaledImage(image: UIImage, newSize: CGSize) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
+        image.draw(in: CGRect(origin: CGPoint.zero, size: newSize))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
+    }
 }

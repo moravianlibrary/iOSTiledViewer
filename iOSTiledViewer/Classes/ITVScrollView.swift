@@ -8,18 +8,23 @@
 
 import UIKit
 
+/// Enum of supported image apis.
+public enum ITVImageAPI {
+    /// IIIF Image API
+    case IIIF
+    /// Zoomify API
+    case Zoomify
+    /// Some other API
+    case Unknown
+}
+
 /**
  The main class of the iOSTiledViewer library. All communication is done throught this class. See example project to see how to set correctly the class. It has to be initialized through storyboard.
- Assign ITVErrorDelegate to receive errors related to displaying images. The assignment should be done before calling ITVScrollView.loadImage(:) method to ensure you receive all errors.
+ Assign ITVErrorDelegate to receive errors related to displaying images. The assignment should be done before calling `loadImage(_:)` or `loadImage(_:api:)` method to ensure you receive all errors. Test link: `ITVScrollView.itvDelegate`
  */
 open class ITVScrollView: UIScrollView {
     
-    fileprivate let TAG = String(describing: ITVScrollView.self)
-    fileprivate let tiledView = ITVTiledView()
-    fileprivate let licenseView = ITVLicenceView()
-    fileprivate var lastLevel: Int = -1
-    
-    /// ITVErrorDelegate for receiving errors
+    /// Delegate for receiving errors and some important events.
     public var itvDelegate: ITVScrollViewDelegate?
     
     /// Returns true only if content is not scaled.
@@ -28,15 +33,23 @@ open class ITVScrollView: UIScrollView {
     }
     
     /// Returns an array of image formats as Strings.
-    public var imageFormats: [String]! {
-        return tiledView.image.getImageFormats()
+    public var imageFormats: [String]? {
+        return tiledView.image.formats
     }
     
     /// Returns an array of image qualities as Strings.
-    public var imageQualities: [String]! {
-        return tiledView.image.getImageQualities()
+    public var imageQualities: [String]? {
+        return tiledView.image.qualities
     }
     
+    /// Returns array of possible zoom scales.
+    public var zoomScales: [CGFloat] {
+        return tiledView.image.zoomScales
+    }
+    
+    fileprivate let tiledView = ITVTiledView()
+    fileprivate let licenseView = ITVLicenceView()
+    fileprivate var lastLevel: Int = -1
     fileprivate var url: String? {
         didSet {
             if url != nil {
@@ -46,7 +59,7 @@ open class ITVScrollView: UIScrollView {
                     block = {(data, response, error) in
                         if data != nil , let serialization = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) {
                             
-                            let imageDescriptor = IIIFImageDescriptor(serialization as! [String : Any])
+                            let imageDescriptor = IIIFImageDescriptor.versionedDescriptor(serialization as! [String : Any])
                             DispatchQueue.main.sync {
                                 self.initWithDescriptor(imageDescriptor)
                             }
@@ -56,7 +69,7 @@ open class ITVScrollView: UIScrollView {
                 else if url!.contains(ZoomifyImageDescriptor.propertyFile) {
                     // Zoomify
                     block = {(data, response, error) in
-                        if data != nil , let json = ZoomifyXMLParser().parse(data!) {
+                        if data != nil , let json = SynchronousZoomifyXMLParser().parse(data!) {
                             
                             let imageDescriptor = ZoomifyImageDescriptor(json, self.url!)
                             DispatchQueue.main.sync {
@@ -68,7 +81,7 @@ open class ITVScrollView: UIScrollView {
                 
                 guard block != nil else {
                     // unsupported image API, should never happen here
-                    let error = NSError(domain: TAG, code: 100, userInfo: ["message":"Unsupported image API."])
+                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Unsupported image API."])
                     itvDelegate?.didFinishLoading(error: error)
                     return
                 }
@@ -106,7 +119,7 @@ open class ITVScrollView: UIScrollView {
      Method for loading image.
      - parameter imageUrl: URL of image to load. Currently only IIIF and Zoomify images are supported. For IIIF images, pass in URL to property file or containing "/full/full/0/default.jpg". For Zoomify images, pass in URL to property file or url containing "TileGroup". All other urls won't be recognized and ITVErrorDelegate will be noticed.
      */
-    public func loadImage(_ imageUrl: String) {
+    fileprivate func loadImage(_ imageUrl: String) {
 
         if imageUrl.contains(IIIFImageDescriptor.propertyFile) ||
             imageUrl.contains(ZoomifyImageDescriptor.propertyFile) {
@@ -137,10 +150,62 @@ open class ITVScrollView: UIScrollView {
                 self.url = testUrl + IIIFImageDescriptor.propertyFile
             }
             else {
-                let error = NSError(domain: TAG, code: 100, userInfo: ["message":"Url \(imageUrl) does not support IIIF or Zoomify API."])
+                let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Url \(imageUrl) does not support IIIF or Zoomify API."])
                 itvDelegate?.didFinishLoading(error: error)
             }
         }
+    }
+    
+    /**
+     Call this method to rotate an image.
+     
+     - parameter angle: Number in range <-360, 360>
+     */
+    public func rotateImage(angle: CGFloat) {
+        guard case -360...360 = angle else {
+            print("Invalid rotation with angle: \(angle).")
+            return
+        }
+        print("Rotate function has not been implemented yet.")
+    }
+    
+    /**
+     Method for loading image.
+     
+     - parameter imageUrl: URL of image to load.
+     - parameter api: Specify image api. Currently can be of values IIIF, Zoomify and Unknown.
+     */
+    public func loadImage(_ imageUrl: String, api: ITVImageAPI) {
+        switch api {
+            case .IIIF:
+                if !imageUrl.contains(IIIFImageDescriptor.propertyFile) {
+                    url = imageUrl + (imageUrl.characters.last != "/" ? "/" : "") + IIIFImageDescriptor.propertyFile
+                }
+                else {
+                    url = imageUrl
+                }
+                
+            case .Zoomify:
+                if !imageUrl.contains(ZoomifyImageDescriptor.propertyFile) {
+                    url = imageUrl + (imageUrl.characters.last != "/" ? "/" : "") + ZoomifyImageDescriptor.propertyFile
+                }
+                else {
+                    url = imageUrl
+                }
+            
+            case .Unknown:
+                loadImage(imageUrl)
+        }
+    }
+    
+    /**
+     Method for zooming.
+     
+     - parameter scale: Scale to zoom.
+     - parameter animated: Animation flag.
+     */
+    public func zoomToScale(_ scale: CGFloat, animated: Bool) {
+        setZoomScale(scale, animated: animated)
     }
     
     // Resizing image on orientation changes.
@@ -158,6 +223,37 @@ open class ITVScrollView: UIScrollView {
             // else check only for need of reposition
             scrollViewDidZoom(self)
         }
+    }
+}
+
+fileprivate extension ITVScrollView {
+    
+    // Resizin tiled view to fit in scroll view
+    fileprivate func resizeTiledView(image: ITVImageDescriptor) -> ITVImageDescriptor {
+        var mutableImage = image
+        let newSize = mutableImage.sizeToFit(size: frame.size, zoomScale: tiledView.contentScaleFactor)
+        tiledView.frame = CGRect(origin: CGPoint.zero, size: newSize)
+        scrollViewDidZoom(self)
+        return mutableImage
+    }
+    
+    // Initializing tiled view and scroll view's zooming
+    fileprivate func initWithDescriptor(_ imageDescriptor: ITVImageDescriptor?) {
+        guard var image = imageDescriptor, image.error == nil else {
+            let error = imageDescriptor?.error != nil ? imageDescriptor!.error! : NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Error getting image information."])
+            itvDelegate?.didFinishLoading(error: error)
+            return
+        }
+        
+        image = resizeTiledView(image: image) // mutating func is called here
+        let scales = image.zoomScales
+        maximumZoomScale = scales.last!
+        minimumZoomScale = scales.first!
+        zoomScale = minimumZoomScale
+        tiledView.image = image
+        licenseView.imageDescriptor = image
+        
+        itvDelegate?.didFinishLoading(error: nil)
     }
     
     // Synchronous test for url content download
@@ -177,25 +273,6 @@ open class ITVScrollView: UIScrollView {
         
         semaphore.wait()
         return result
-    }
-    
-    // Initializing tiled view and scroll view's zooming
-    fileprivate func initWithDescriptor(_ imageDescriptor: ITVImageDescriptor) {
-        maximumZoomScale = imageDescriptor.getMaximumZoomScale()
-        minimumZoomScale = imageDescriptor.getMinimumZoomScale(size: frame.size, viewScale: tiledView.contentScaleFactor)
-        resizeTiledView(image: imageDescriptor)
-        zoomScale = minimumZoomScale
-        tiledView.image = imageDescriptor
-        licenseView.imageDescriptor = imageDescriptor
-        
-        itvDelegate?.didFinishLoading(error: nil)
-    }
-    
-    // Resizin tiled view to fit in scroll view
-    fileprivate func resizeTiledView(image: ITVImageDescriptor) {
-        let newSize = image.sizeToFit(size: frame.size, zoomScale: tiledView.contentScaleFactor)
-        tiledView.frame = CGRect(origin: CGPoint.zero, size: newSize)
-        scrollViewDidZoom(self)
     }
 }
 

@@ -25,7 +25,7 @@ class ITVLicenceView: UIView {
     }
     
     fileprivate func setup(_ image: ITVImageDescriptor) {
-        guard let licence = (image as? IIIFImageDescriptor)?.license else {
+        guard let licence = (image as? IIIFImageDescriptorV2)?.license else {
             // The licence information can currently be only on IIIF Image
             return
         }

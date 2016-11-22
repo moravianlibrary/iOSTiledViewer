@@ -1,5 +1,5 @@
 //
-//  ZoomifyXMLParser.swift
+//  SynchronousZoomifyXMLParser
 //  Pods
 //
 //  Created by Jakub Fiser on 21/10/2016.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ZoomifyXMLParser: NSObject, XMLParserDelegate {
+class SynchronousZoomifyXMLParser: NSObject, XMLParserDelegate {
 
     fileprivate let parserSemaphore = DispatchSemaphore(value: 0)
     fileprivate var json: [String:String]?

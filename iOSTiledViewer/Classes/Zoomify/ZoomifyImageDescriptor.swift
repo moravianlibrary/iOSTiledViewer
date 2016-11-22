@@ -8,25 +8,30 @@
 
 import UIKit
 
-class ZoomifyImageDescriptor: ITVImageDescriptor, XMLParserDelegate {
+struct ZoomifyImageDescriptor {
     
     static let propertyFile = "ImageProperties.xml"
     
-    var tileSize: CGSize!
-    var depth: Int!
-    var numberOfTiles: Int?
+    fileprivate let _baseUrl: String
+    fileprivate let _height: Int
+    fileprivate let _width: Int
+    fileprivate var _zoomScales: [CGFloat]!
+    fileprivate var _error: NSError?
     
+    fileprivate var _tileSize: CGSize!
+    fileprivate var depth: Int!
+    fileprivate var numberOfTiles: Int?
     fileprivate var tilesForLevel = [0,1]
+    
     
     init(_ json: [String:String], _ url: String) {
         
-        let bUrl = url.replacingOccurrences(of: "/\(ZoomifyImageDescriptor.propertyFile)", with: "")
-        let h = Int(json["HEIGHT"]!)!
-        let w = Int(json["WIDTH"]!)!
-        super.init(baseUrl: bUrl, height: h, width: w)
+        _baseUrl = url.replacingOccurrences(of: "/\(ZoomifyImageDescriptor.propertyFile)", with: "")
+        _height = Int(json["HEIGHT"]!)!
+        _width = Int(json["WIDTH"]!)!
         
         let tileW = Int(json["TILESIZE"]!)!
-        tileSize = CGSize(width: tileW, height: tileW)
+        _tileSize = CGSize(width: tileW, height: tileW)
         numberOfTiles = Int(json["NUMTILES"]!)
         
         // maximum image depth
@@ -56,10 +61,67 @@ class ZoomifyImageDescriptor: ITVImageDescriptor, XMLParserDelegate {
         }
     }
     
-    override func getUrl(x: Int, y: Int, level: Int, scale: CGFloat) -> URL? {
+    fileprivate func numberOfTiles(_ level: Int) -> Int {
+        return tilesForLevel[level]
+    }
+    
+    fileprivate mutating func saveZoomScales(_ originalSize: CGSize, _ aspectFitSize: CGSize, _ viewScale: CGFloat) {
+        let ratioW = originalSize.width / aspectFitSize.width
+        let ratioH = originalSize.height / aspectFitSize.height
+        _zoomScales = [min(ratioW, ratioH)]
+        for i in 1...depth {
+            _zoomScales.append(CGFloat(powf(2, Float(i))))
+        }
+    }
+}
+
+extension ZoomifyImageDescriptor: ITVImageDescriptor {
+    
+    var baseUrl: String {
+        return _baseUrl
+    }
+    
+    var height: Int {
+        return _height
+    }
+    
+    var width: Int {
+        return _width
+    }
+    
+    var tileSize: [CGSize]? {
+        return Array(repeating: _tileSize, count: depth)
+    }
+    
+    var zoomScales: [CGFloat] {
+        return _zoomScales
+    }
+    
+    var formats: [String]? {
+        return nil
+    }
+    
+    var qualities: [String]? {
+        return nil
+    }
+    
+    var error: NSError? {
+        get {
+            return _error
+        }
+        set {
+            _error = error
+        }
+    }
+    
+    func getBackgroundUrl() -> URL? {
+        return getUrl(x: 0, y: 0, level: 0, scale: 0)
+    }
+    
+    func getUrl(x: Int, y: Int, level: Int, scale: CGFloat) -> URL? {
         
         let exponent = powf(2, Float(depth - level))
-        let tileWidth = Float(getTileSize(level: level).width)
+        let tileWidth = Float(_tileSize.width)
         let indexY = Int(ceil(floor(Float(width)/exponent)/tileWidth))
         let index = x + y * indexY + numberOfTiles(level)
         
@@ -72,36 +134,12 @@ class ZoomifyImageDescriptor: ITVImageDescriptor, XMLParserDelegate {
         return URL(string: "\(baseUrl)/\(group)/\(file).\(format)")
     }
     
-    override func getTileSize(level: Int) -> CGSize {
-        return tileSize
-    }
-    
-    override func getMaximumZoomScale() -> CGFloat {
-        return CGFloat(powf(2, Float(depth)))
-    }
-    
-    override func getMinimumZoomScale(size: CGSize, viewScale: CGFloat) -> CGFloat {
-        let minimumSize = sizeToFit(size: size, zoomScale: viewScale)
-        let ratioW = size.width / minimumSize.width
-        let ratioH = size.height / minimumSize.height
-        
-        return min(ratioW, ratioH)
-    }
-    
-    override func getImageFormats() -> [String] {
-        return ["jpg"]
-    }
-    
-    override func getImageQualities() -> [String] {
-        return ["default"]
-    }
-    
-    override func sizeToFit(size: CGSize, zoomScale: CGFloat) -> CGSize {
+    mutating func sizeToFit(size: CGSize, zoomScale: CGFloat) -> CGSize {
         let sum = Float(width + height)
         let totalTiles = Float(numberOfTiles(2) - numberOfTiles(1))
         let numTilesX = CGFloat(round(totalTiles / (sum / Float(width))))
         let numTilesY = CGFloat(round(totalTiles / (sum / Float(height))))
-        let tile = tileSize.width / zoomScale
+        let tile = _tileSize.width / zoomScale
         
         let imageSize = CGSize(width: width, height: height)
         var aspectFitSize = CGSize(width: numTilesX*tile, height: numTilesY*tile)
@@ -113,10 +151,8 @@ class ZoomifyImageDescriptor: ITVImageDescriptor, XMLParserDelegate {
         else if mW <= mH {
             aspectFitSize.height = mW * imageSize.height
         }
+        
+        saveZoomScales(size, aspectFitSize, zoomScale)
         return aspectFitSize
-    }
-    
-    fileprivate func numberOfTiles(_ level: Int) -> Int {
-        return tilesForLevel[level]
     }
 }

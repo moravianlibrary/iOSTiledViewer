@@ -9,50 +9,33 @@
 /**
  Abstract class representing an image. It should contain all the required information to construct a request for a given zoom level and coordinates. It also contains methods for image related computations, such as initial size to fit screen, minimum and maximum zoom scale, etc.
  */
-/// TODO: There is high probability that this class will be refactored as a protocol.
-class ITVImageDescriptor: NSObject {
+protocol ITVImageDescriptor {
 
     // Required fields
     /// Base image url address. It is used to build an url for specific tile requests.
-    let baseUrl: String
+    var baseUrl: String { get }
     /// Full image height.
-    let height: Int
+    var height: Int { get }
     /// Full image width.
-    let width: Int
+    var width: Int { get }
+    /// Tile size for each level.
+    var tileSize: [CGSize]? { get }
+    /// Zoom scales.
+    var zoomScales: [CGFloat] { get }
+    /// Image formats.
+    var formats: [String]? { get }
+    /// Image qualities.
+    var qualities: [String]? { get }
+    /// Error description or nil.
+    var error: NSError? { get set }
     
-    init(baseUrl: String, height: Int, width: Int) {
-        self.baseUrl = baseUrl
-        self.height = height
-        self.width = width
-    }
     
     /// Method returns constructed URL address for specific zoom level and x,y coordinates.
-    func getUrl(x: Int, y: Int, level: Int, scale: CGFloat) -> URL? {
-        fatalError("getUrl(level:, x:, y:) has not been implemented.")
-    }
+    func getUrl(x: Int, y: Int, level: Int, scale: CGFloat) -> URL?
     
-    /// Returns tile size for the given zoom level.
-    func getTileSize(level: Int) -> CGSize {
-        fatalError("getTileSize(level:) has not been implemented.")
-    }
+    ///
+    func getBackgroundUrl() -> URL?
     
-    func getMaximumZoomScale() -> CGFloat {
-        fatalError("getMaximumZoomScale() has not been implemented.")
-    }
-    
-    func getMinimumZoomScale(size: CGSize, viewScale: CGFloat) -> CGFloat {
-        fatalError("getMinimumZoomScale() has not been implemented.")
-    }
-    
-    func getImageFormats() -> [String] {
-        fatalError("getImageFormats() has not been implemented.")
-    }
-    
-    func getImageQualities() -> [String] {
-        fatalError("getImageQualities() has not been implemented.")
-    }
-    
-    func sizeToFit(size: CGSize, zoomScale: CGFloat) -> CGSize {
-        fatalError("sizeToFit(size:, zoomScale:) has not been implemented.")
-    }
+    /// Note - Protocol may be implemented by struct, that would need to store size and scale values for further computations. To allow that, function has to be marked as mutating.
+    mutating func sizeToFit(size: CGSize, zoomScale: CGFloat) -> CGSize
 }

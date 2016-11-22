@@ -8,25 +8,23 @@
 
 class IIIFImageTile: NSObject {
 
-    var size: CGSize?
-    var scaleFactors: [CGFloat]?
+    var size: CGSize!
+    var scaleFactors: [CGFloat]!
     
-    init(_ json: [String:Any]) {
+    init?(_ json: [String:Any]) {
+        
+        guard let width = json["width"] as? Int,
+              let scaleFactors = json["scaleFactors"] as? [Int] else {
+            return nil
+        }
         
         if let height = json["height"] as? Int {
-            let width = json["width"] as! Int
             self.size = CGSize(width: width, height: height)
         }
-        else if let width = json["width"] as? Int {
+        else {
             self.size = CGSize(width: width, height: width)
         }
         
-        if let scaleFactors = json["scaleFactors"] as? [Int] {
-            self.scaleFactors = Array<CGFloat>()
-            for item in scaleFactors {
-                self.scaleFactors!.append(CGFloat(item))
-            }
-            self.scaleFactors!.reverse()
-        }
+        self.scaleFactors = scaleFactors.map({ CGFloat($0) })
     }
 }

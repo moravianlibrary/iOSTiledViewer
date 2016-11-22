@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         scrollView.itvDelegate = self
-        scrollView.loadImage(urlString)
+        scrollView.loadImage(urlString, api: .Unknown)
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,5 +41,10 @@ extension ViewController: ITVScrollViewDelegate {
         else {
             // hide loading indicator for example
         }
+    }
+    
+    func errorDidOccur(error: NSError) {
+        let alert = UIAlertController(title: "Oops", message: error.userInfo["message"] as? String, preferredStyle: .alert)
+        present(alert, animated: true, completion: nil)
     }
 }
