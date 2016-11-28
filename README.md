@@ -1,9 +1,11 @@
 # iOSTiledViewer
 
-[![CI Status](http://img.shields.io/travis/Jakub Fiser/iOSTiledViewer.svg?style=flat)](https://travis-ci.org/Jakub Fiser/iOSTiledViewer)
-#[![Version](https://img.shields.io/cocoapods/v/iOSTiledViewer.svg?style=flat)](http://cocoapods.org/pods/iOSTiledViewer)
-#[![License](https://img.shields.io/cocoapods/l/iOSTiledViewer.svg?style=flat)](http://cocoapods.org/pods/iOSTiledViewer)
-#[![Platform](https://img.shields.io/cocoapods/p/iOSTiledViewer.svg?style=flat)](http://cocoapods.org/pods/iOSTiledViewer)
+[![CI Status](http://img.shields.io/travis/Jakub Fiser/iOSTiledViewer.svg?style=flat)](https://travis-ci.org/moravianlibrary/iOSTiledViewer)
+<!---
+[![Version](https://img.shields.io/cocoapods/v/iOSTiledViewer.svg?style=flat)](http://cocoapods.org/pods/iOSTiledViewer)
+[![License](https://img.shields.io/cocoapods/l/iOSTiledViewer.svg?style=flat)](http://cocoapods.org/pods/iOSTiledViewer)
+[![Platform](https://img.shields.io/cocoapods/p/iOSTiledViewer.svg?style=flat)](http://cocoapods.org/pods/iOSTiledViewer)
+-->
 
 ## Example
 

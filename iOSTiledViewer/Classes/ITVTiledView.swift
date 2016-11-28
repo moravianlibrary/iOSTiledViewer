@@ -75,7 +75,7 @@ class ITVTiledView: UIView {
         
         var requestURL: URL!
         /// TODO: make borders setting modifiable to user as well
-        let displayTileBorders = true
+        let displayTileBorders = false
         
         let cacheKey = "\(level)/\(column)_\(row)"
         if let image = imageCache[cacheKey] {
