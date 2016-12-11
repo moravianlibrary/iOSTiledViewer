@@ -468,6 +468,7 @@
 				PROVISIONING_PROFILE = "7a270d4e-8a9e-44bc-bfa6-b5b4235feffc";
 				PROVISIONING_PROFILE_SPECIFIER = "IIIF Development";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -495,6 +496,7 @@
 				PROVISIONING_PROFILE = "e97c827d-2581-4145-ae4f-2fcd5ed68ce0";
 				PROVISIONING_PROFILE_SPECIFIER = "IIIF Distribution";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

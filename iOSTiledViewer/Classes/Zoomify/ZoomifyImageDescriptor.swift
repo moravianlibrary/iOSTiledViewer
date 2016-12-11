@@ -65,12 +65,20 @@ struct ZoomifyImageDescriptor {
         return tilesForLevel[level]
     }
     
-    fileprivate mutating func saveZoomScales(_ originalSize: CGSize, _ aspectFitSize: CGSize, _ viewScale: CGFloat) {
+    fileprivate func numberOfTiles(_ level: CGFloat) -> Int {
+        return numberOfTiles(Int(level))
+    }
+    
+    fileprivate mutating func saveZoomScales(_ originalSize: CGSize, _ aspectFitSize: CGSize) {
         let ratioW = originalSize.width / aspectFitSize.width
         let ratioH = originalSize.height / aspectFitSize.height
-        _zoomScales = [min(ratioW, ratioH)]
+        let minimumScale = min(ratioW, ratioH)
+        _zoomScales = [minimumScale]
         for i in 1...depth {
-            _zoomScales.append(CGFloat(powf(2, Float(i))))
+            let scale = CGFloat(powf(2, Float(i)))
+            if scale > minimumScale {
+                _zoomScales.append(scale)
+            }
         }
     }
 }
@@ -134,12 +142,14 @@ extension ZoomifyImageDescriptor: ITVImageDescriptor {
         return URL(string: "\(baseUrl)/\(group)/\(file).\(format)")
     }
     
-    mutating func sizeToFit(size: CGSize, zoomScale: CGFloat) -> CGSize {
-        let sum = Float(width + height)
-        let totalTiles = Float(numberOfTiles(2) - numberOfTiles(1))
-        let numTilesX = CGFloat(round(totalTiles / (sum / Float(width))))
-        let numTilesY = CGFloat(round(totalTiles / (sum / Float(height))))
-        let tile = _tileSize.width / zoomScale
+    mutating func sizeToFit(size: CGSize) -> CGSize {
+        // We have to
+        let area = Float(width * height)
+        let totalTiles = Float(tilesForLevel.last! - tilesForLevel[tilesForLevel.count-2])
+        let coeficient = sqrt(area / totalTiles)
+        let numTilesX = CGFloat( Float(width)/coeficient )
+        let numTilesY = CGFloat( Float(height)/coeficient )
+        let tile = _tileSize.width / Constants.SCREEN_SCALE
         
         let imageSize = CGSize(width: width, height: height)
         var aspectFitSize = CGSize(width: numTilesX*tile, height: numTilesY*tile)
@@ -152,7 +162,10 @@ extension ZoomifyImageDescriptor: ITVImageDescriptor {
             aspectFitSize.height = mW * imageSize.height
         }
         
-        saveZoomScales(size, aspectFitSize, zoomScale)
+        let trasnformation = Constants.SCREEN_SCALE/CGFloat(powf(2.0, Float(depth)))
+        aspectFitSize = aspectFitSize.applying(CGAffineTransform(scaleX: trasnformation, y: trasnformation))
+        
+        saveZoomScales(size, aspectFitSize)
         return aspectFitSize
     }
 }

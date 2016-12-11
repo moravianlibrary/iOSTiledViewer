@@ -57,14 +57,14 @@ class ITVTiledView: UIView {
     
     override func draw(_ rect: CGRect) {
         
-        guard image != nil, let context = UIGraphicsGetCurrentContext() else {
+        guard image != nil, let context = UIGraphicsGetCurrentContext(), !rect.isInfinite, !rect.isNull else {
             return
         }
         
         let viewScale = self.contentScaleFactor
         let viewSize = bounds.width * contentScaleFactor
         
-        let scale = CGFloat(image.width)/viewSize//.width
+        let scale = CGFloat(image.width)/viewSize
         
         let tiledLayer = self.layer as! CATiledLayer
         let tileSize = tiledLayer.tileSize
@@ -73,16 +73,14 @@ class ITVTiledView: UIView {
         let row = Int(rect.midY * viewScale / tileSize.height)
         let level = self.level
         
-        var requestURL: URL!
         /// TODO: make borders setting modifiable to user as well
         let displayTileBorders = false
         
-        let cacheKey = "\(level)/\(column)_\(row)"
+        let cacheKey = "\(level)-\(column)-\(row)"
         if let image = imageCache[cacheKey] {
             image.draw(in: rect)
         }
-        else {
-            requestURL = image.getUrl(x: column, y: row, level: level, scale: scale)
+        else if let requestURL = image.getUrl(x: column, y: row, level: level, scale: scale) {
             URLSession.shared.dataTask(with: requestURL, completionHandler: { (data, response, error) in
                 if data != nil , let image = UIImage(data: data!) {
                     self.imageCache[cacheKey] = image
@@ -98,7 +96,7 @@ class ITVTiledView: UIView {
         
         if displayTileBorders {
             UIColor.green.set()
-            context.setLineWidth(2)
+            context.setLineWidth(1)
             context.stroke(rect)
         }
     }
@@ -107,9 +105,13 @@ class ITVTiledView: UIView {
     fileprivate func initBackground() {
         if let imageUrl = image.getBackgroundUrl() {
             URLSession.shared.dataTask(with: imageUrl, completionHandler: { (data, response, error) in
-                if data != nil, let image = UIImage(data: data!) {
+                if data != nil,
+                    let image = UIImage(data: data!),
+                    let scaledImage = self.scaledImage(image: image, newSize: self.bounds.size) {
                     DispatchQueue.main.sync {
-                        self.backgroundColor = UIColor(patternImage: self.scaledImage(image: image, newSize: self.bounds.size))
+                        let originalScaleFactor = self.contentScaleFactor
+                        self.backgroundColor = UIColor(patternImage: scaledImage)
+                        self.contentScaleFactor = originalScaleFactor
                         self.setNeedsLayout()
                     }
                 }
@@ -118,11 +120,11 @@ class ITVTiledView: UIView {
     }
     
     // Resize UIImage to fit given size.
-    fileprivate func scaledImage(image: UIImage, newSize: CGSize) -> UIImage {
+    fileprivate func scaledImage(image: UIImage, newSize: CGSize) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
         image.draw(in: CGRect(origin: CGPoint.zero, size: newSize))
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return newImage!
+        return newImage
     }
 }

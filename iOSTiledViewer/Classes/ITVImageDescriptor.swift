@@ -37,5 +37,5 @@ protocol ITVImageDescriptor {
     func getBackgroundUrl() -> URL?
     
     /// Note - Protocol may be implemented by struct, that would need to store size and scale values for further computations. To allow that, function has to be marked as mutating.
-    mutating func sizeToFit(size: CGSize, zoomScale: CGFloat) -> CGSize
+    mutating func sizeToFit(size: CGSize) -> CGSize
 }

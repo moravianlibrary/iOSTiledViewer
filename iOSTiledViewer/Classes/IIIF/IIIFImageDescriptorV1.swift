@@ -98,7 +98,7 @@ extension IIIFImageDescriptorV1: ITVImageDescriptor {
     }
 
     // Methods
-    mutating func sizeToFit(size: CGSize, zoomScale: CGFloat) -> CGSize {
+    mutating func sizeToFit(size: CGSize) -> CGSize {
         let imageSize = CGSize(width: width, height: height)
         var aspectFitSize = size
         let mW = aspectFitSize.width / imageSize.width

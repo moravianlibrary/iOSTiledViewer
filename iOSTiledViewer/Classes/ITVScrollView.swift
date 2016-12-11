@@ -228,10 +228,10 @@ open class ITVScrollView: UIScrollView {
 
 fileprivate extension ITVScrollView {
     
-    // Resizin tiled view to fit in scroll view
+    // Resizing tiled view to fit in scroll view
     fileprivate func resizeTiledView(image: ITVImageDescriptor) -> ITVImageDescriptor {
         var mutableImage = image
-        let newSize = mutableImage.sizeToFit(size: frame.size, zoomScale: tiledView.contentScaleFactor)
+        let newSize = mutableImage.sizeToFit(size: frame.size)
         tiledView.frame = CGRect(origin: CGPoint.zero, size: newSize)
         scrollViewDidZoom(self)
         return mutableImage
@@ -250,6 +250,7 @@ fileprivate extension ITVScrollView {
         maximumZoomScale = scales.last!
         minimumZoomScale = scales.first!
         zoomScale = minimumZoomScale
+        changeLevel(forScale: minimumZoomScale)
         tiledView.image = image
         licenseView.imageDescriptor = image
         
@@ -274,6 +275,15 @@ fileprivate extension ITVScrollView {
         semaphore.wait()
         return result
     }
+    
+    fileprivate func changeLevel(forScale scale: CGFloat) {
+        // redraw image by setting contentScaleFactor on tiledView
+        let level = Int(round(log2(scale)))
+        if level != lastLevel {
+            tiledView.contentScaleFactor = pow(2.0, CGFloat(level))
+            lastLevel = level
+        }
+    }
 }
 
 /// MARK: UIScrollViewDelegate implementation
@@ -292,12 +302,7 @@ extension ITVScrollView: UIScrollViewDelegate {
     }
     
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        // redraw image by setting contentScaleFactor on tiledView
-        let level = Int(round(log2(scale)))
-        if level != lastLevel {
-            tiledView.contentScaleFactor = pow(2.0, CGFloat(level))
-            lastLevel = level
-        }
+        changeLevel(forScale: scale)
     }
     
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
