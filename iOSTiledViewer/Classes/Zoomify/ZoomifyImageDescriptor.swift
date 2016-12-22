@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct ZoomifyImageDescriptor {
+class ZoomifyImageDescriptor {
     
     static let propertyFile = "ImageProperties.xml"
     
@@ -61,6 +61,10 @@ struct ZoomifyImageDescriptor {
         }
     }
     
+    fileprivate func tilesOnLevel(_ lvl: Int) -> Int {
+        return tilesForLevel[lvl+1] - tilesForLevel[lvl]
+    }
+    
     fileprivate func numberOfTiles(_ level: Int) -> Int {
         return tilesForLevel[level]
     }
@@ -69,7 +73,7 @@ struct ZoomifyImageDescriptor {
         return numberOfTiles(Int(level))
     }
     
-    fileprivate mutating func saveZoomScales(_ originalSize: CGSize, _ aspectFitSize: CGSize) {
+    fileprivate func saveZoomScales(_ originalSize: CGSize, _ aspectFitSize: CGSize) {
         let ratioW = originalSize.width / aspectFitSize.width
         let ratioH = originalSize.height / aspectFitSize.height
         let minimumScale = min(ratioW, ratioH)
@@ -142,13 +146,11 @@ extension ZoomifyImageDescriptor: ITVImageDescriptor {
         return URL(string: "\(baseUrl)/\(group)/\(file).\(format)")
     }
     
-    mutating func sizeToFit(size: CGSize) -> CGSize {
+    func sizeToFit(size: CGSize) -> CGSize {
         // We have to
-        let area = Float(width * height)
-        let totalTiles = Float(tilesForLevel.last! - tilesForLevel[tilesForLevel.count-2])
-        let coeficient = sqrt(area / totalTiles)
-        let numTilesX = CGFloat( Float(width)/coeficient )
-        let numTilesY = CGFloat( Float(height)/coeficient )
+        let totalTiles = Float(tilesOnLevel(depth))
+        let numTilesX = CGFloat(width) / _tileSize.width
+        let numTilesY = CGFloat(height) / _tileSize.height
         let tile = _tileSize.width / Constants.SCREEN_SCALE
         
         let imageSize = CGSize(width: width, height: height)

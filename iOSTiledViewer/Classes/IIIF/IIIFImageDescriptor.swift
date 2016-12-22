@@ -9,7 +9,7 @@
 /**
  Class representing all the information about specific image. This class conforms to IIIFImage API of version 2.1.
  */
-struct IIIFImageDescriptor {
+class IIIFImageDescriptor {
     
     static let propertyFile = "info.json"
     fileprivate static let version1Context = "http://library.stanford.edu/iiif/image-api/1.1/context.json"
@@ -29,4 +29,6 @@ struct IIIFImageDescriptor {
             return nil
         }
     }
+    
+    fileprivate init() {}
 }

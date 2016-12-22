@@ -35,7 +35,11 @@ class ITVTiledView: UIView {
     override var contentScaleFactor: CGFloat {
         didSet {
             // keep in cache only images for single level to save some memory
-            self.imageCache.removeAll()
+//            self.imageCache.removeAll()
+            
+            // reset cache of CATiledLayer
+            layer.contents = nil
+            layer.setNeedsDisplay()
         }
     }
     
@@ -45,7 +49,7 @@ class ITVTiledView: UIView {
     }
     
     init() {
-        super.init(frame: UIScreen.main.bounds)
+        super.init(frame: CGRect.zero)
         
         // provide transparent background for easy customization in storyboard
         backgroundColor = UIColor.clear
@@ -53,6 +57,10 @@ class ITVTiledView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func clearCache() {
+        imageCache.removeAll()
     }
     
     override func draw(_ rect: CGRect) {

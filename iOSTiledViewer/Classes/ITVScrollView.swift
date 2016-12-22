@@ -116,47 +116,6 @@ open class ITVScrollView: UIScrollView {
     }
     
     /**
-     Method for loading image.
-     - parameter imageUrl: URL of image to load. Currently only IIIF and Zoomify images are supported. For IIIF images, pass in URL to property file or containing "/full/full/0/default.jpg". For Zoomify images, pass in URL to property file or url containing "TileGroup". All other urls won't be recognized and ITVErrorDelegate will be noticed.
-     */
-    fileprivate func loadImage(_ imageUrl: String) {
-
-        if imageUrl.contains(IIIFImageDescriptor.propertyFile) ||
-            imageUrl.contains(ZoomifyImageDescriptor.propertyFile) {
-            // address is prepared for loading
-            self.url = imageUrl
-        }
-        else if imageUrl.lowercased().contains("/full/full/0/default.jpg") {
-            // IIIF image, but url needs to be modified in order to download image information first
-            self.url = imageUrl.replacingOccurrences(of: "full/full/0/default.jpg", with: IIIFImageDescriptor.propertyFile, options: .caseInsensitive, range: imageUrl.startIndex..<imageUrl.endIndex)
-        }
-        else if imageUrl.contains("TileGroup") {
-            // Zoomify image, but url needs to be modified in order to download image information first
-            let endIndex = imageUrl.range(of: "TileGroup")!.lowerBound
-            let startIndex = imageUrl.startIndex
-            self.url = imageUrl.substring(with: startIndex..<endIndex) + ZoomifyImageDescriptor.propertyFile
-        }
-        else {
-            // try one and decide by result
-            var testUrl = imageUrl
-            if testUrl.characters.last != "/" {
-                testUrl += "/"
-            }
-           
-            if testUrlContent(testUrl + ZoomifyImageDescriptor.propertyFile) {
-                self.url = testUrl + ZoomifyImageDescriptor.propertyFile
-            }
-            else if testUrlContent(testUrl + IIIFImageDescriptor.propertyFile) {
-                self.url = testUrl + IIIFImageDescriptor.propertyFile
-            }
-            else {
-                let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Url \(imageUrl) does not support IIIF or Zoomify API."])
-                itvDelegate?.didFinishLoading(error: error)
-            }
-        }
-    }
-    
-    /**
      Call this method to rotate an image.
      
      - parameter angle: Number in range <-360, 360>
@@ -224,17 +183,19 @@ open class ITVScrollView: UIScrollView {
             scrollViewDidZoom(self)
         }
     }
+    
+    public func didRecieveMemoryWarning() {
+        tiledView.clearCache()
+    }
 }
 
 fileprivate extension ITVScrollView {
     
     // Resizing tiled view to fit in scroll view
-    fileprivate func resizeTiledView(image: ITVImageDescriptor) -> ITVImageDescriptor {
-        var mutableImage = image
-        let newSize = mutableImage.sizeToFit(size: frame.size)
+    fileprivate func resizeTiledView(image: ITVImageDescriptor) {
+        let newSize = image.sizeToFit(size: frame.size)
         tiledView.frame = CGRect(origin: CGPoint.zero, size: newSize)
         scrollViewDidZoom(self)
-        return mutableImage
     }
     
     // Initializing tiled view and scroll view's zooming
@@ -245,7 +206,7 @@ fileprivate extension ITVScrollView {
             return
         }
         
-        image = resizeTiledView(image: image) // mutating func is called here
+        resizeTiledView(image: image)
         let scales = image.zoomScales
         maximumZoomScale = scales.last!
         minimumZoomScale = scales.first!
@@ -282,6 +243,47 @@ fileprivate extension ITVScrollView {
         if level != lastLevel {
             tiledView.contentScaleFactor = pow(2.0, CGFloat(level))
             lastLevel = level
+        }
+    }
+    
+    /**
+     Method for loading image.
+     - parameter imageUrl: URL of image to load. Currently only IIIF and Zoomify images are supported. For IIIF images, pass in URL to property file or containing "/full/full/0/default.jpg". For Zoomify images, pass in URL to property file or url containing "TileGroup". All other urls won't be recognized and ITVErrorDelegate will be noticed.
+     */
+    fileprivate func loadImage(_ imageUrl: String) {
+        
+        if imageUrl.contains(IIIFImageDescriptor.propertyFile) ||
+            imageUrl.contains(ZoomifyImageDescriptor.propertyFile) {
+            // address is prepared for loading
+            self.url = imageUrl
+        }
+        else if imageUrl.lowercased().contains("/full/full/0/default.jpg") {
+            // IIIF image, but url needs to be modified in order to download image information first
+            self.url = imageUrl.replacingOccurrences(of: "full/full/0/default.jpg", with: IIIFImageDescriptor.propertyFile, options: .caseInsensitive, range: imageUrl.startIndex..<imageUrl.endIndex)
+        }
+        else if imageUrl.contains("TileGroup") {
+            // Zoomify image, but url needs to be modified in order to download image information first
+            let endIndex = imageUrl.range(of: "TileGroup")!.lowerBound
+            let startIndex = imageUrl.startIndex
+            self.url = imageUrl.substring(with: startIndex..<endIndex) + ZoomifyImageDescriptor.propertyFile
+        }
+        else {
+            // try one and decide by result
+            var testUrl = imageUrl
+            if testUrl.characters.last != "/" {
+                testUrl += "/"
+            }
+            
+            if testUrlContent(testUrl + ZoomifyImageDescriptor.propertyFile) {
+                self.url = testUrl + ZoomifyImageDescriptor.propertyFile
+            }
+            else if testUrlContent(testUrl + IIIFImageDescriptor.propertyFile) {
+                self.url = testUrl + IIIFImageDescriptor.propertyFile
+            }
+            else {
+                let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Url \(imageUrl) does not support IIIF or Zoomify API."])
+                itvDelegate?.didFinishLoading(error: error)
+            }
         }
     }
 }

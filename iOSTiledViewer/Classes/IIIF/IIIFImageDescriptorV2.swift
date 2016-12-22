@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct IIIFImageDescriptorV2 {
+class IIIFImageDescriptorV2 {
     
     fileprivate let _baseUrl: String
     fileprivate let _height: Int
@@ -143,7 +143,7 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
     }
     
     
-    mutating func sizeToFit(size: CGSize) -> CGSize {
+    func sizeToFit(size: CGSize) -> CGSize {
         let imageSize = CGSize(width: width, height: height)
         var aspectFitSize = size
         let mW = aspectFitSize.width / imageSize.width
