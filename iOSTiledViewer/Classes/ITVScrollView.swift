@@ -209,6 +209,7 @@ open class ITVScrollView: UIScrollView {
         }
     }
     
+    /// Method for releasing cached images when device runs low on memory. Should be called by UIViewController when needed.
     public func didRecieveMemoryWarning() {
         tiledView.clearCache()
         backTiledView.clearCache()
