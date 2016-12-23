@@ -1,19 +1,17 @@
 //
-//  ITVTiledView.swift
+//  ITVBackgroundView.swift
 //  Pods
 //
-//  Created by Jakub Fiser on 13/10/2016.
+//  Created by Jakub Fiser on 22/12/2016.
 //
 //
 
 import UIKit
 
-class ITVTiledView: UIView {
+class ITVBackgroundView: UIView {
 
     internal var image: ITVImageDescriptor! {
         didSet {
-            backgroundView?.image = image
-            
             let l = layer as! CATiledLayer
             if let size = image.tileSize?[level] {
                 l.tileSize = size
@@ -25,8 +23,7 @@ class ITVTiledView: UIView {
         }
     }
     
-    internal var backgroundView: ITVBackgroundView?
-    
+    //    fileprivate let urlSession = URLSession(configuration: .default)
     fileprivate var imageCache = [String:UIImage]()
     fileprivate var lastLevel: Int = -1
     fileprivate var level: Int {
@@ -36,11 +33,6 @@ class ITVTiledView: UIView {
     }
     override var contentScaleFactor: CGFloat {
         didSet {
-            // keep in cache only images for single level to save some memory
-//            self.imageCache.removeAll()
-            backgroundView?.addToCache(dict: imageCache)
-            backgroundView?.setScaleFor(level: level)
-            
             // reset cache of CATiledLayer
             layer.contents = nil
             layer.setNeedsDisplay()
@@ -67,6 +59,36 @@ class ITVTiledView: UIView {
         imageCache.removeAll()
     }
     
+    /**
+     Method searches cache by level for existing records. Once an record for level is found, that level is set as a background level to display.
+     */
+    func setScaleFor(level: Int) {
+        var lvl = level - 1
+        
+        let allKeys = imageCache.keys.joined(separator: ",")
+        let allKeysRange = NSRange(location: 0, length: allKeys.characters.count)
+        while lvl > 0 {
+            if let regex = try? NSRegularExpression(pattern: "\(lvl)-[0-9]+-[0-9]+"),
+                regex.numberOfMatches(in: allKeys, range: allKeysRange) > 0 {
+                break
+            }
+            
+            lvl -= 1
+        }
+        
+        if lvl < 1 {
+            contentScaleFactor = 1.0
+        } else {
+            contentScaleFactor = pow(2.0, CGFloat(lvl))
+        }
+    }
+    
+    func addToCache(dict: [String: UIImage]) {
+        for (key, value) in dict {
+            imageCache[key] = value
+        }
+    }
+    
     override func draw(_ rect: CGRect) {
         
         guard image != nil, let context = UIGraphicsGetCurrentContext(), !rect.isInfinite, !rect.isNull else {
@@ -85,24 +107,11 @@ class ITVTiledView: UIView {
         let row = Int(rect.midY * viewScale / tileSize.height)
         let level = self.level
         
-        /// TODO: make borders setting modifiable to user as well
         let displayTileBorders = false
         
         let cacheKey = "\(level)-\(column)-\(row)"
         if let image = imageCache[cacheKey] {
             image.draw(in: rect)
-        }
-        else if let requestURL = image.getUrl(x: column, y: row, level: level, scale: scale) {
-            URLSession.shared.dataTask(with: requestURL, completionHandler: { (data, response, error) in
-                if data != nil , let image = UIImage(data: data!) {
-                    self.imageCache[cacheKey] = image
-                    DispatchQueue.main.async {
-                        self.setNeedsDisplay(rect)
-                    }
-                } else {
-                    print("Error getting image from \(requestURL.absoluteString).")
-                }
-            }).resume()
         }
         
         if displayTileBorders {

@@ -26,7 +26,7 @@ class ITVLicenceView: UIView {
     
     fileprivate func setup(_ image: ITVImageDescriptor) {
         guard let licence = (image as? IIIFImageDescriptorV2)?.license else {
-            // The licence information can currently be only on IIIF Image
+            // The licence information can currently be only on IIIF Image v2 or higher
             return
         }
         
@@ -49,8 +49,7 @@ class ITVLicenceView: UIView {
         if let value = licence.logo {
             // TODO: logo value does not have to be an url only
             URLSession.shared.dataTask(with: URL(string: value)!, completionHandler: { (data, response, error) in
-                if data != nil {
-                    let image = UIImage(data: data!)
+                if data != nil, let image = UIImage(data: data!) {
                     let imageView = UIImageView(image: image)
                     imageView.contentMode = .scaleAspectFit
                     self.insertStacked(view: imageView, stack: viewsArray)

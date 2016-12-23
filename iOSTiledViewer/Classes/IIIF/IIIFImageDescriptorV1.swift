@@ -110,6 +110,19 @@ extension IIIFImageDescriptorV1: ITVImageDescriptor {
             aspectFitSize.height = mW * imageSize.height
         }
         _canvasSize = aspectFitSize
+        
+        if _scaleFactors != nil {
+            var modifiedScales = [CGFloat]()
+            let maxScale = CGFloat(width) / aspectFitSize.width
+            for var scale in _scaleFactors! where scale < maxScale {
+                modifiedScales.append(scale)
+            }
+            if !modifiedScales.contains(maxScale) {
+                modifiedScales.append(maxScale)
+            }
+            _scaleFactors = modifiedScales
+        }
+        
         return aspectFitSize
     }
     
