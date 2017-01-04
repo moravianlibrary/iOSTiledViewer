@@ -100,7 +100,7 @@ class ITVTiledView: UIView {
                         self.setNeedsDisplay(rect)
                     }
                 } else {
-                    print("Error getting image from \(requestURL.absoluteString).")
+                    print("Error getting image from \(requestURL.absoluteString).") // nemel by se zde zavolat error delegate?
                 }
             }).resume()
         }
