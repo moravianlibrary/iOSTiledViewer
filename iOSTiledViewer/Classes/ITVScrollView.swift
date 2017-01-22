@@ -34,23 +34,20 @@ open class ITVScrollView: UIScrollView {
     
     /// Returns an array of image formats as Strings.
     public var imageFormats: [String]? {
-        return tiledView.image.formats
+        return containerView.image?.formats
     }
     
     /// Returns an array of image qualities as Strings.
     public var imageQualities: [String]? {
-        return tiledView.image.qualities
+        return containerView.image?.qualities
     }
     
     /// Returns array of possible zoom scales.
     public var zoomScales: [CGFloat] {
-        return tiledView.image.zoomScales
+        return containerView.image != nil ? containerView.image!.zoomScales : [1]
     }
     
-    fileprivate let containerView = UIView()
-    fileprivate let backgroundImage = UIImageView()
-    fileprivate let backTiledView = ITVBackgroundView()
-    fileprivate let tiledView = ITVTiledView()
+    fileprivate let containerView = ITVContainerView()
     fileprivate let licenseView = ITVLicenceView()
     fileprivate var lastLevel: Int = -1
     fileprivate var url: String? {
@@ -116,18 +113,11 @@ open class ITVScrollView: UIScrollView {
         showsHorizontalScrollIndicator = false
         
         // register to receive notifications about orientation changes
-        NotificationCenter.default.addObserver(self, selector: #selector(ITVScrollView.orientationDidChange), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(ITVScrollView.orientationDidChange), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         
-        // add tiled and background views
-        tiledView.backgroundView = backTiledView
-        containerView.backgroundColor = UIColor.clear
-        backgroundImage.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        backTiledView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        tiledView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        containerView.addSubview(backgroundImage)
-        containerView.addSubview(backTiledView)
-        containerView.addSubview(tiledView)
+        // add container view with tiled and background views
         addSubview(containerView)
+        containerView.initTiledView()
         
         // add license view
         superview?.addSubview(licenseView)
@@ -195,7 +185,7 @@ open class ITVScrollView: UIScrollView {
     // Resizing image on orientation changes.
     public func orientationDidChange() {
         
-        guard let image = tiledView.image else {
+        guard let image = containerView.image else {
             return
         }
         
@@ -211,8 +201,7 @@ open class ITVScrollView: UIScrollView {
     
     /// Method for releasing cached images when device runs low on memory. Should be called by UIViewController when needed.
     public func didRecieveMemoryWarning() {
-        tiledView.clearCache()
-        backTiledView.clearCache()
+        containerView.clearCache()
     }
 }
 
@@ -244,8 +233,7 @@ fileprivate extension ITVScrollView {
         minimumZoomScale = scales.first!
         zoomScale = minimumZoomScale
         changeLevel(forScale: minimumZoomScale)
-        loadBackground(image.getBackgroundUrl())
-        tiledView.image = image
+        containerView.image = image
         licenseView.imageDescriptor = image
         
         itvDelegate?.didFinishLoading(error: nil)
@@ -274,27 +262,9 @@ fileprivate extension ITVScrollView {
         // redraw image by setting contentScaleFactor on tiledView
         let level = Int(round(log2(scale)))
         if level != lastLevel {
-            tiledView.contentScaleFactor = pow(2.0, CGFloat(level))
+            containerView.tiledView.contentScaleFactor = pow(2.0, CGFloat(level))
             lastLevel = level
         }
-    }
-
-    /**
-    */
-    fileprivate func loadBackground(_ backgroundUrl: URL?) {
-        backgroundImage.backgroundColor = UIColor.clear
-        
-        guard let url = backgroundUrl else {
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if data != nil, let image = UIImage(data: data!) {
-                DispatchQueue.main.async {
-                    self.backgroundImage.image = image
-                }
-            }
-        }.resume()
     }
 
     /**
