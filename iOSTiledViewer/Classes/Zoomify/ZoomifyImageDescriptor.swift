@@ -15,14 +15,14 @@ class ZoomifyImageDescriptor {
     fileprivate let _baseUrl: String
     fileprivate let _height: Int
     fileprivate let _width: Int
+    fileprivate let _pyramid: [ZoomifyLevel]
     fileprivate var _zoomScales: [CGFloat]!
     fileprivate var _error: NSError?
     
-    fileprivate var _tileSize: CGSize!
-    fileprivate var depth: Int!
-    fileprivate var numberOfTiles: Int?
-    fileprivate var tilesForLevel = [0,1]
-    
+    fileprivate let _tileSize: CGSize
+    fileprivate let depth: Int
+    fileprivate let numTiles: Int
+    fileprivate var _tilesUpToLevel = [0]
     
     init(_ json: [String:String], _ url: String) {
         
@@ -32,45 +32,41 @@ class ZoomifyImageDescriptor {
         
         let tileW = Int(json["TILESIZE"]!)!
         _tileSize = CGSize(width: tileW, height: tileW)
-        numberOfTiles = Int(json["NUMTILES"]!)
+        numTiles = Int(json["NUMTILES"]!)!
+        
+        // pyramid
+        var pyramid = [ZoomifyLevel]()
+        var level = ZoomifyLevel(_width, _height, tileW)
+        while level.width > tileW || level.height > tileW {
+            pyramid.append(level)
+            level = ZoomifyLevel( level.width / 2, level.height / 2, tileW )
+        }
+        pyramid.append(level)
+        _pyramid = pyramid.reversed()
         
         // maximum image depth
-        var depth = 1
-        var size = max(height, width)/tileW
-        while size != 1 {
-            size /= 2
-            depth += 1
-        }
-        self.depth = depth
+        self.depth = _pyramid.count
         
         // count tile numbers for each level
-        let floatW = Float(width)
-        let floatH = Float(height)
-        let tile = Float(tileW)
-        var count = 0
-        var tilesX = 0
-        var tilesY = 0
-        var exponent: Float = 0
-        for i in 1...depth {
-            exponent = powf(2.0, Float(depth - i))
-            tilesX = Int(ceil(floor(floatW/exponent)/tile))
-            tilesY = Int(ceil(floor(floatH/exponent)/tile))
-            count = tilesX * tilesY
-            count += tilesForLevel.last!
-            tilesForLevel.append(count)
+        var count: Int
+        for level in _pyramid {
+            count = level.tilesX * level.tilesY
+            count += _tilesUpToLevel.last!
+            _tilesUpToLevel.append(count)
         }
     }
     
     fileprivate func tilesOnLevel(_ lvl: Int) -> Int {
-        return tilesForLevel[lvl+1] - tilesForLevel[lvl]
+        let level = _pyramid[lvl - 1]
+        return level.tilesX * level.tilesY
     }
     
-    fileprivate func numberOfTiles(_ level: Int) -> Int {
-        return tilesForLevel[level]
+    fileprivate func tilesUpToLevel(_ level: Int) -> Int {
+        return _tilesUpToLevel[level]
     }
     
-    fileprivate func numberOfTiles(_ level: CGFloat) -> Int {
-        return numberOfTiles(Int(level))
+    fileprivate func tilesUpToLevel(_ level: CGFloat) -> Int {
+        return tilesUpToLevel(Int(level))
     }
     
     fileprivate func saveZoomScales(_ originalSize: CGSize, _ aspectFitSize: CGSize) {
@@ -78,7 +74,7 @@ class ZoomifyImageDescriptor {
         let ratioH = originalSize.height / aspectFitSize.height
         let minimumScale = min(ratioW, ratioH)
         _zoomScales = [minimumScale]
-        for i in 1...depth {
+        for i in 1...depth-1 {
             let scale = CGFloat(powf(2, Float(i)))
             if scale > minimumScale {
                 _zoomScales.append(scale)
@@ -132,40 +128,33 @@ extension ZoomifyImageDescriptor: ITVImageDescriptor {
     
     func getUrl(x: Int, y: Int, level: Int, scale: CGFloat) -> URL? {
         
+        guard case 0...depth-1 = level else {
+            return nil
+        }
+        let zoomifyLevel = _pyramid[level]
+        guard case 0...zoomifyLevel.tilesX = x,
+            case 0...zoomifyLevel.tilesY = y else {
+            return nil
+        }
+        
         let exponent = powf(2, Float(depth - level))
         let tileWidth = Float(_tileSize.width)
-        let indexY = Int(ceil(floor(Float(width)/exponent)/tileWidth))
-        let index = x + y * indexY + numberOfTiles(level)
+        let indexY = zoomifyLevel.tilesX
+        let index = x + y * indexY + tilesUpToLevel(level)
         
         let group = "TileGroup\(index/256)"
         let file = "\(level)-\(x)-\(y)"
         let format = "jpg"
         
 //        print("USED ALGORITHM for [\(y),\(x)]*\(level):\n\(baseUrl)/\(group)/\(file).\(format)")
-        
         return URL(string: "\(baseUrl)/\(group)/\(file).\(format)")
     }
     
     func sizeToFit(size: CGSize) -> CGSize {
-        // We have to
-        let totalTiles = Float(tilesOnLevel(depth))
-        let numTilesX = CGFloat(width) / _tileSize.width
-        let numTilesY = CGFloat(height) / _tileSize.height
-        let tile = _tileSize.width / Constants.SCREEN_SCALE
-        
+        // scale full image size to level zero
         let imageSize = CGSize(width: width, height: height)
-        var aspectFitSize = CGSize(width: numTilesX*tile, height: numTilesY*tile)
-        let mW = aspectFitSize.width / imageSize.width
-        let mH = aspectFitSize.height / imageSize.height
-        if mH <= mW {
-            aspectFitSize.width = mH * imageSize.width
-        }
-        else if mW <= mH {
-            aspectFitSize.height = mW * imageSize.height
-        }
-        
         let trasnformation = Constants.SCREEN_SCALE/CGFloat(powf(2.0, Float(depth)))
-        aspectFitSize = aspectFitSize.applying(CGAffineTransform(scaleX: trasnformation, y: trasnformation))
+        let aspectFitSize = imageSize.applying(CGAffineTransform(scaleX: trasnformation, y: trasnformation))
         
         saveZoomScales(size, aspectFitSize)
         return aspectFitSize

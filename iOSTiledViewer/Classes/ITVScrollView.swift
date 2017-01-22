@@ -25,7 +25,11 @@ public enum ITVImageAPI {
 open class ITVScrollView: UIScrollView {
     
     /// Delegate for receiving errors and some important events.
-    public var itvDelegate: ITVScrollViewDelegate?
+    public var itvDelegate: ITVScrollViewDelegate? {
+        didSet {
+            containerView.itvDelegate = itvDelegate
+        }
+    }
     
     /// Returns true only if content is not scaled.
     public var isZoomedOut: Bool {
@@ -61,7 +65,7 @@ open class ITVScrollView: UIScrollView {
                         if code == 200, data != nil , let serialization = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) {
                             
                             let imageDescriptor = IIIFImageDescriptor.versionedDescriptor(serialization as! [String : Any])
-                            DispatchQueue.main.sync {
+                            DispatchQueue.main.async {
                                 self.initWithDescriptor(imageDescriptor)
                             }
                         } else {
@@ -79,7 +83,7 @@ open class ITVScrollView: UIScrollView {
                         if code == 200, data != nil , let json = SynchronousZoomifyXMLParser().parse(data!) {
                             
                             let imageDescriptor = ZoomifyImageDescriptor(json, self.url!)
-                            DispatchQueue.main.sync {
+                            DispatchQueue.main.async {
                                 self.initWithDescriptor(imageDescriptor)
                             }
                         } else {
@@ -113,7 +117,7 @@ open class ITVScrollView: UIScrollView {
         showsHorizontalScrollIndicator = false
         
         // register to receive notifications about orientation changes
-//        NotificationCenter.default.addObserver(self, selector: #selector(ITVScrollView.orientationDidChange), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ITVScrollView.orientationDidChange), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         
         // add container view with tiled and background views
         addSubview(containerView)
@@ -210,11 +214,6 @@ fileprivate extension ITVScrollView {
     // Resizing tiled view to fit in scroll view
     fileprivate func resizeTiledView(image: ITVImageDescriptor) {
         var newSize = image.sizeToFit(size: frame.size)
-        
-        // round with precision to 0.1 to prevent blank space at right and bottom edge because of autoresizing masks
-        newSize.width = round(newSize.width * 10.0) / 10.0
-        newSize.height = round(newSize.height * 10.0) / 10.0
-        
         containerView.frame = CGRect(origin: CGPoint.zero, size: newSize)
         scrollViewDidZoom(self)
     }

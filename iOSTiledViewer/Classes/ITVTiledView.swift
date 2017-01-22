@@ -27,6 +27,7 @@ class ITVTiledView: UIView {
     
     internal var backgroundView: ITVBackgroundView?
     
+    fileprivate var itvDelegate: ITVScrollViewDelegate?
     fileprivate var imageCache = [String:UIImage]()
     fileprivate var lastLevel: Int = -1
     fileprivate var level: Int {
@@ -36,8 +37,7 @@ class ITVTiledView: UIView {
     }
     override var contentScaleFactor: CGFloat {
         didSet {
-            // keep in cache only images for single level to save some memory
-//            self.imageCache.removeAll()
+            // pass cache with new images to background tiled view
             backgroundView?.addToCache(dict: imageCache)
             backgroundView?.setScaleFor(level: level)
             
@@ -100,9 +100,14 @@ class ITVTiledView: UIView {
                         self.setNeedsDisplay(rect)
                     }
                 } else {
-                    print("Error getting image from \(requestURL.absoluteString).")
+                    print("Error downloading image from \(requestURL.absoluteString).")
+                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY: "Error downloading image from \(requestURL.absoluteString)."])
+                    self.itvDelegate?.errorDidOccur(error: error)
                 }
             }).resume()
+        } else {
+            // probably out of image's bounds
+            print("Error loading image for \(level):[\(column),\(row)].")
         }
         
         if displayTileBorders {

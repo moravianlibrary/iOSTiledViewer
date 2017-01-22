@@ -22,6 +22,12 @@ class ITVContainerView: UIView {
         }
     }
     
+    var itvDelegate: ITVScrollViewDelegate? {
+        didSet {
+            tiledView
+        }
+    }
+    
     var image: ITVImageDescriptor? {
         didSet {
             if image != nil {
