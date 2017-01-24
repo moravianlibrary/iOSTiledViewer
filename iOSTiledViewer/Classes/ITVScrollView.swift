@@ -33,7 +33,7 @@ open class ITVScrollView: UIScrollView {
     
     /// Returns true only if content is not scaled.
     public var isZoomedOut: Bool {
-        return self.zoomScale == 1.0
+        return self.zoomScale == self.minimumZoomScale
     }
     
     /// Returns an array of image formats as Strings.
@@ -193,13 +193,15 @@ open class ITVScrollView: UIScrollView {
             return
         }
         
-        if isZoomedOut {
-            // resize tiledView only when not zoomed in
-            resizeTiledView(image: image)
-        }
-        else {
-            // else check only for need of reposition
-            scrollViewDidZoom(self)
+        let wasZoomedOut = isZoomedOut
+        var newSize = image.sizeToFit(size: frame.size)
+        self.minimumZoomScale = image.zoomScales.first!
+        scrollViewDidZoom(self)
+        
+        // compare to 1 because sometimes origin contains values like 2.27373675443232e-13
+        if wasZoomedOut || (containerView.frame.minX > 1 && containerView.frame.minY > 1) {
+            zoomScale = minimumZoomScale
+            changeLevel(forScale: minimumZoomScale)
         }
     }
     
