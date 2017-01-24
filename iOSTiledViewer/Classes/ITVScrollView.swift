@@ -51,6 +51,15 @@ open class ITVScrollView: UIScrollView {
         return containerView.image != nil ? containerView.image!.zoomScales : [1]
     }
     
+    open override var bounds: CGRect {
+        didSet {
+            // update scales when bounds change
+            if isZoomedOut && (!isZooming || !isZoomBouncing), let img = containerView.image {
+                recomputeScales(image: img, setMinimumScale: true)
+            }
+        }
+    }
+    
     fileprivate let containerView = ITVContainerView()
     fileprivate let licenseView = ITVLicenceView()
     fileprivate var lastLevel: Int = -1
@@ -194,8 +203,7 @@ open class ITVScrollView: UIScrollView {
         }
         
         let wasZoomedOut = isZoomedOut
-        var newSize = image.sizeToFit(size: frame.size)
-        self.minimumZoomScale = image.zoomScales.first!
+        recomputeScales(image: image, setMinimumScale: false)
         scrollViewDidZoom(self)
         
         // compare to 1 because sometimes origin contains values like 2.27373675443232e-13
@@ -222,6 +230,15 @@ fileprivate extension ITVScrollView {
         var newSize = image.sizeToFit(size: frame.size)
         containerView.frame = CGRect(origin: CGPoint.zero, size: newSize)
         scrollViewDidZoom(self)
+    }
+    
+    // Recompute scales by actual frame size and set minimumZoomScale
+    fileprivate func recomputeScales(image: ITVImageDescriptor, setMinimumScale: Bool) {
+        image.sizeToFit(size: frame.size)
+        minimumZoomScale = image.zoomScales.first!
+        if setMinimumScale {
+            zoomScale = minimumZoomScale
+        }
     }
     
     // Initializing tiled view and scroll view's zooming

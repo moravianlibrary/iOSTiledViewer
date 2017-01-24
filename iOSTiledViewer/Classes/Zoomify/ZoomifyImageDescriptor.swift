@@ -32,7 +32,6 @@ class ZoomifyImageDescriptor {
         
         let tileW = Int(json["TILESIZE"]!)!
         _tileSize = CGSize(width: tileW, height: tileW)
-        numTiles = Int(json["NUMTILES"]!)!
         
         // pyramid
         var pyramid = [ZoomifyLevel]()
@@ -45,7 +44,7 @@ class ZoomifyImageDescriptor {
         _pyramid = pyramid.reversed()
         
         // maximum image depth
-        self.depth = _pyramid.count
+        depth = _pyramid.count
         
         // count tile numbers for each level
         var count: Int
@@ -54,6 +53,7 @@ class ZoomifyImageDescriptor {
             count += _tilesUpToLevel.last!
             _tilesUpToLevel.append(count)
         }
+        numTiles = _tilesUpToLevel.last!
     }
     
     fileprivate func tilesOnLevel(_ lvl: Int) -> Int {
