@@ -52,6 +52,10 @@ class ITVContainerView: UIView {
         tiledView.clearCache()
         backTiledView.clearCache()
     }
+    
+    func refreshTiles() {
+        tiledView.refreshLayout()
+    }
 }
 
 

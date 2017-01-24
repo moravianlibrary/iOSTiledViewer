@@ -42,8 +42,7 @@ class ITVTiledView: UIView {
             backgroundView?.setScaleFor(level: level)
             
             // reset cache of CATiledLayer
-            layer.contents = nil
-            layer.setNeedsDisplay()
+            refreshLayout()
         }
     }
     
@@ -65,6 +64,11 @@ class ITVTiledView: UIView {
     
     func clearCache() {
         imageCache.removeAll()
+    }
+    
+    func refreshLayout() {
+        layer.contents = nil
+        layer.setNeedsDisplay()
     }
     
     override func draw(_ rect: CGRect) {

@@ -209,6 +209,10 @@ open class ITVScrollView: UIScrollView {
     public func didRecieveMemoryWarning() {
         containerView.clearCache()
     }
+    
+    public func refreshTiles() {
+        containerView.refreshTiles()
+    }
 }
 
 fileprivate extension ITVScrollView {
