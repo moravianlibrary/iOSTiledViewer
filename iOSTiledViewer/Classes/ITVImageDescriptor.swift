@@ -24,8 +24,12 @@ protocol ITVImageDescriptor {
     var zoomScales: [CGFloat] { get }
     /// Image formats.
     var formats: [String]? { get }
+    /// Returns current format
+    var format: String? { get set }
     /// Image qualities.
     var qualities: [String]? { get }
+    /// Returns current quality
+    var quality: String? { get set }
     /// Error description or nil.
     var error: NSError? { get set }
     

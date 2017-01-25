@@ -36,14 +36,40 @@ open class ITVScrollView: UIScrollView {
         return self.zoomScale == self.minimumZoomScale
     }
     
-    /// Returns an array of image formats as Strings.
+    /// Returns an array of possible image formats as Strings.
     public var imageFormats: [String]? {
         return containerView.image?.formats
     }
     
-    /// Returns an array of image qualities as Strings.
+    /// Returns and sets current image format
+    public var currentFormat: String? {
+        get {
+            return containerView.image?.format
+        }
+        set {
+            containerView.image?.format = newValue
+            containerView.loadBackground()
+            containerView.clearCache()
+            containerView.refreshTiles()
+        }
+    }
+    
+    /// Returns an array of possible image qualities as Strings.
     public var imageQualities: [String]? {
         return containerView.image?.qualities
+    }
+    
+    /// Returns and sets current image quality
+    public var currentQuality: String? {
+        get {
+            return containerView.image?.quality
+        }
+        set {
+            containerView.image?.quality = newValue
+            containerView.loadBackground()
+            containerView.clearCache()
+            containerView.refreshTiles()
+        }
     }
     
     /// Returns array of possible zoom scales.

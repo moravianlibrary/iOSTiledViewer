@@ -34,8 +34,7 @@ class ITVBackgroundView: UIView {
     override var contentScaleFactor: CGFloat {
         didSet {
             // reset cache of CATiledLayer
-            layer.contents = nil
-            layer.setNeedsDisplay()
+            refreshLayout()
         }
     }
     
@@ -57,6 +56,11 @@ class ITVBackgroundView: UIView {
     
     func clearCache() {
         imageCache.removeAll()
+    }
+    
+    func refreshLayout() {
+        layer.contents = nil
+        layer.setNeedsDisplay()
     }
     
     /**

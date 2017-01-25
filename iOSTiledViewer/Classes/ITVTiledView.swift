@@ -27,7 +27,7 @@ class ITVTiledView: UIView {
     
     internal var backgroundView: ITVBackgroundView?
     
-    fileprivate var itvDelegate: ITVScrollViewDelegate?
+    internal var itvDelegate: ITVScrollViewDelegate?
     fileprivate var imageCache = [String:UIImage]()
     fileprivate var lastLevel: Int = -1
     fileprivate var level: Int {
@@ -105,8 +105,8 @@ class ITVTiledView: UIView {
                     }
                 } else {
                     print("Error downloading image from \(requestURL.absoluteString).")
-                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY: "Error downloading image from \(requestURL.absoluteString)."])
-                    self.itvDelegate?.errorDidOccur(error: error)
+//                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY: "Error downloading image from \(requestURL.absoluteString)."])
+//                    self.itvDelegate?.errorDidOccur(error: error)
                 }
             }).resume()
         } else {

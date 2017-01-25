@@ -16,8 +16,10 @@ class IIIFImageDescriptorV1 {
     
     fileprivate var _tileSize: CGSize?
     fileprivate var _scaleFactors: [CGFloat]?
-    fileprivate var _formats: Set<String>?
-    fileprivate var _qualities: Set<String>?
+    fileprivate var _formats: Set<String> = ["jpg"]
+    fileprivate var _currentFormat = "jpg"
+    fileprivate var _qualities: Set<String> = ["native"]
+    fileprivate var _currentQuality = "native"
     fileprivate var _error: NSError?
     
     // Optional fields
@@ -34,11 +36,11 @@ class IIIFImageDescriptorV1 {
         _complianceUrl = json["profile"] as? String
         
         if let qualities = json["qualities"] as? [String] {
-            _qualities = Set<String>(qualities)
+            _qualities.formUnion(Set<String>(qualities))
         }
         
         if let format = json["formats"] as? [String] {
-            _formats = Set<String>(format)
+            _formats.formUnion(Set<String>(format))
         }
         
         if let scaleFactors = json["scale_factors"] as? [Int] {
@@ -81,11 +83,33 @@ extension IIIFImageDescriptorV1: ITVImageDescriptor {
     }
     
     var formats: [String]? {
-        return _formats?.map({ $0 })
+        return _formats.map({ $0 })
+    }
+    
+    var format: String? {
+        set {
+            if newValue != nil && _formats.contains(newValue!) {
+                _currentFormat = newValue!
+            }
+        }
+        get {
+            return _currentFormat
+        }
     }
     
     var qualities: [String]? {
-        return _qualities?.map({ $0 })
+        return _qualities.map({ $0 })
+    }
+    
+    var quality: String? {
+        set {
+            if newValue != nil && _qualities.contains(newValue!) {
+                _currentQuality = newValue!
+            }
+        }
+        get {
+            return _currentQuality
+        }
     }
     
     var error: NSError? {
@@ -114,7 +138,7 @@ extension IIIFImageDescriptorV1: ITVImageDescriptor {
         if _scaleFactors != nil {
             var modifiedScales = [CGFloat]()
             let maxScale = CGFloat(width) / aspectFitSize.width
-            for var scale in _scaleFactors! where scale < maxScale {
+            for scale in _scaleFactors! where scale < maxScale {
                 modifiedScales.append(scale)
             }
             if !modifiedScales.contains(maxScale) {
@@ -130,10 +154,8 @@ extension IIIFImageDescriptorV1: ITVImageDescriptor {
         let region = "full"
         let size = "\(Int(_canvasSize.width)),\(Int(_canvasSize.height))"
         let rotation = "0"
-        let quality = _qualities != nil ? _qualities!.first! : "native"
-        let format = _formats != nil ? _formats!.first! : "jpg"
         
-        return URL(string: "\(baseUrl)/\(region)/\(size)/\(rotation)/\(quality).\(format)")
+        return URL(string: "\(baseUrl)/\(region)/\(size)/\(rotation)/\(_currentQuality).\(_currentFormat)")
     }
     
     func getUrl(x: Int, y: Int, level: Int, scale: CGFloat) -> URL? {
@@ -174,11 +196,9 @@ extension IIIFImageDescriptorV1: ITVImageDescriptor {
         let region = "\(Int(xr)),\(Int(yr)),\(Int(wr)),\(Int(hr))"
         let size = "\(Int(tileSize.width)),\(tileSize.height == tileSize.width ? "" : String(Int(tileSize.height)))"
         let rotation = "0"
-        let quality = _qualities != nil ? _qualities!.first! : "native"
-        let format = _formats != nil ? _formats!.first! : "jpg"
         
-//        print("USED ALGORITHM for [\(y),\(x)]*\(level)(\(s)):\n\(baseUrl)/\(region)/\(size)/\(rotation)/\(quality).\(format)")
+//        print("USED ALGORITHM for [\(y),\(x)]*\(level)(\(s)):\n\(baseUrl)/\(region)/\(size)/\(rotation)/\(_currentQuality).\(_currentFormat)")
         
-        return URL(string: "\(baseUrl)/\(region)/\(size)/\(rotation)/\(quality).\(format)")
+        return URL(string: "\(baseUrl)/\(region)/\(size)/\(rotation)/\(_currentQuality).\(_currentFormat)")
     }
 }

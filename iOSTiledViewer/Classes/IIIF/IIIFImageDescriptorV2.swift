@@ -14,15 +14,12 @@ class IIIFImageDescriptorV2 {
     fileprivate let _height: Int
     fileprivate let _width: Int
     fileprivate var _tiles: [IIIFImageTile]?
-    fileprivate var _formats: Set<String>?
-    fileprivate var _qualities: Set<String>?
+    fileprivate var _currentFormat = "jpg"
+    fileprivate var _currentQuality = "default"
     fileprivate var _error: NSError?
     
     // Optional fields
-    fileprivate var maxArea: Int?
-    fileprivate var maxWidth: Int?
-    fileprivate var maxHeight: Int?
-    fileprivate var supports: Set<String>?
+    fileprivate var _profile = IIIFImageProfileV2()
     fileprivate var sizes: Array<CGSize>?
     fileprivate var _canvasSize: CGSize!
     var license: IIIFImageLicense?
@@ -37,34 +34,20 @@ class IIIFImageDescriptorV2 {
         if let profile = json["profile"] as? [Any] {
             for profileItem in profile {
                 if let profileObj = profileItem as? [String: Any] {
-                    if let format = profileObj["formats"] as? [String] {
-                        _formats = Set<String>(format)
-                    }
-                    if let maxArea = profileObj["maxArea"] as? Int {
-                        self.maxArea = maxArea
-                    }
-                    if let maxHeight = profileObj["maxHeight"] as? Int {
-                        self.maxHeight = maxHeight
-                    }
-                    if let maxWidth = profileObj["maxWidth"] as? Int {
-                        self.maxWidth = maxWidth
-                        if self.maxHeight == nil {
-                            self.maxHeight = self.maxWidth
+                    // parse additional info in profile
+                    _profile.append(json: profileObj)
+                } else if let profileUrl = profileItem as? String, let url = URL(string: profileUrl) {
+                    // download additional info from profile url
+                    // is not synchronized yet as completion handler is currently being called on the same thread and it causes deadlock
+                    URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
+                        if data != nil, let serialization = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) {
+                            let profileObj = serialization as! [String: Any]
+                            self._profile.append(json: profileObj)
                         }
-                    }
-                    if let qualities = profileObj["qualities"] as? [String] {
-                        _qualities = Set<String>(qualities)
-                    }
-                    if let supports = profileObj["supports"] as? [String] {
-                        self.supports = Set<String>()
-                        for item in supports {
-                            self.supports?.insert(item)
-                        }
-                    }
+                    }).resume()
                 }
             }
         }
-        
         
         if let sizes = json["sizes"] as? [[String:Int]] {
             self.sizes = Array<CGSize>()
@@ -126,11 +109,33 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
     }
     
     var formats: [String]? {
-        return _formats?.map({ $0 })
+        return _profile.formats.map({ $0 })
+    }
+    
+    var format: String? {
+        set {
+            if newValue != nil && _profile.formats.contains(newValue!) {
+                _currentFormat = newValue!
+            }
+        }
+        get {
+            return _currentFormat
+        }
     }
     
     var qualities: [String]? {
-        return _qualities?.map({ $0 })
+        return _profile.qualities.map({ $0 })
+    }
+    
+    var quality: String? {
+        set {
+            if newValue != nil && _profile.qualities.contains(newValue!) {
+                _currentQuality = newValue!
+            }
+        }
+        get {
+            return _currentQuality
+        }
     }
     
     var error: NSError? {
@@ -177,10 +182,8 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
         let region = "full"
         let size = "\(Int(_canvasSize.width)),\(Int(_canvasSize.height))"
         let rotation = "0"
-        let quality = _qualities != nil ? _qualities!.first! : "default"
-        let format = _formats != nil ? _formats!.first! : "jpg"
         
-        return URL(string: "\(baseUrl)/\(region)/\(size)/\(rotation)/\(quality).\(format)")
+        return URL(string: "\(baseUrl)/\(region)/\(size)/\(rotation)/\(_currentQuality).\(_currentFormat)")
     }
     
     func getUrl(x: Int, y: Int, level: Int, scale: CGFloat) -> URL? {
@@ -214,11 +217,9 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
         let region = "\(Int(xr)),\(Int(yr)),\(Int(wr)),\(Int(hr))"
         let size = "\(Int(tileSize.width)),\(tileSize.height == tileSize.width ? "" : String(Int(tileSize.height)))"
         let rotation = "0"
-        let quality = _qualities != nil ? _qualities!.first! : "default"
-        let format = _formats != nil ? _formats!.first! : "jpg"
         
-//        print("USED ALGORITHM for [\(y),\(x)]*\(level)(\(s)):\n\(baseUrl)/\(region)/\(size)/\(rotation)/\(quality).\(format)")
+//        print("USED ALGORITHM for [\(y),\(x)]*\(level)(\(s)):\n\(baseUrl)/\(region)/\(size)/\(rotation)/\(_currentQuality).\(_currentFormat)")
         
-        return URL(string: "\(baseUrl)/\(region)/\(size)/\(rotation)/\(quality).\(format)")
+        return URL(string: "\(baseUrl)/\(region)/\(size)/\(rotation)/\(_currentQuality).\(_currentFormat)")
     }
 }

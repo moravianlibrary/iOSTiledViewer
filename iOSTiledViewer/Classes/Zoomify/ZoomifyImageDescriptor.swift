@@ -109,8 +109,22 @@ extension ZoomifyImageDescriptor: ITVImageDescriptor {
         return nil
     }
     
+    var format: String? {
+        get {
+            return nil
+        }
+        set {}
+    }
+    
     var qualities: [String]? {
         return nil
+    }
+    
+    var quality: String? {
+        get {
+            return nil
+        }
+        set {}
     }
     
     var error: NSError? {

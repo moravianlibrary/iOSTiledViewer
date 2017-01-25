@@ -24,14 +24,14 @@ class ITVContainerView: UIView {
     
     var itvDelegate: ITVScrollViewDelegate? {
         didSet {
-            tiledView
+            tiledView.itvDelegate = itvDelegate
         }
     }
     
     var image: ITVImageDescriptor? {
         didSet {
             if image != nil {
-                self.loadBackground(image?.getBackgroundUrl())
+                self.loadBackground()
                 self.tiledView.image = image
             }
         }
@@ -54,6 +54,7 @@ class ITVContainerView: UIView {
     }
     
     func refreshTiles() {
+        backTiledView.refreshLayout()
         tiledView.refreshLayout()
     }
 }
@@ -62,10 +63,11 @@ class ITVContainerView: UIView {
 extension ITVContainerView {
     /**
      */
-    fileprivate func loadBackground(_ backgroundUrl: URL?) {
+    func loadBackground() {
         backgroundImage.backgroundColor = UIColor.clear
+        backgroundImage.image = nil
         
-        guard let url = backgroundUrl else {
+        guard let url = image?.getBackgroundUrl() else {
             return
         }
         
