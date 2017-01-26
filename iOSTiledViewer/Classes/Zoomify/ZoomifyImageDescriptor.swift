@@ -20,6 +20,7 @@ class ZoomifyImageDescriptor {
     fileprivate var _error: NSError?
     
     fileprivate let _tileSize: CGSize
+    fileprivate var _canvasSize: CGSize!
     fileprivate let depth: Int
     fileprivate let numTiles: Int
     fileprivate var _tilesUpToLevel = [0]
@@ -97,7 +98,7 @@ extension ZoomifyImageDescriptor: ITVImageDescriptor {
         return _width
     }
     
-    var tileSize: [CGSize]? {
+    var tileSize: [CGSize] {
         return Array(repeating: _tileSize, count: depth)
     }
     
@@ -146,8 +147,8 @@ extension ZoomifyImageDescriptor: ITVImageDescriptor {
             return nil
         }
         let zoomifyLevel = _pyramid[level]
-        guard case 0...zoomifyLevel.tilesX = x,
-            case 0...zoomifyLevel.tilesY = y else {
+        guard case 0...zoomifyLevel.tilesX-1 = x,
+            case 0...zoomifyLevel.tilesY-1 = y else {
             return nil
         }
         
@@ -167,10 +168,14 @@ extension ZoomifyImageDescriptor: ITVImageDescriptor {
     func sizeToFit(size: CGSize) -> CGSize {
         // scale full image size to level zero
         let imageSize = CGSize(width: width, height: height)
-        let trasnformation = Constants.SCREEN_SCALE/CGFloat(powf(2.0, Float(depth)))
-        let aspectFitSize = imageSize.applying(CGAffineTransform(scaleX: trasnformation, y: trasnformation))
+        let trasnformation = 2/CGFloat(powf(2.0, Float(depth)))
+        _canvasSize = imageSize.applying(CGAffineTransform(scaleX: trasnformation, y: trasnformation))
         
-        saveZoomScales(size, aspectFitSize)
-        return aspectFitSize
+        saveZoomScales(size, _canvasSize)
+        return _canvasSize
+    }
+    
+    func adjustToFit(size: CGSize) {
+        saveZoomScales(size, _canvasSize)
     }
 }

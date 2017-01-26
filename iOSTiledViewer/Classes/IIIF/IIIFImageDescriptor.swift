@@ -31,4 +31,41 @@ class IIIFImageDescriptor {
     }
     
     fileprivate init() {}
+    
+    static func sizeToFit(size: CGSize, imageW width: Int, imageH height: Int) -> CGSize {
+        let imageSize = CGSize(width: width, height: height)
+        var aspectFitSize = size
+        let mW = aspectFitSize.width / imageSize.width
+        let mH = aspectFitSize.height / imageSize.height
+        if mH <= mW {
+            aspectFitSize.width = mH * imageSize.width
+        }
+        else {
+            aspectFitSize.height = mW * imageSize.height
+        }
+        return aspectFitSize
+    }
+    
+    static func getUrl(x: Int, y: Int, scale: CGFloat, tile: CGSize, fullSize: CGSize) -> (String, String) {
+        return getUrl(x: CGFloat(x), y: CGFloat(y), scale: scale, tile: tile, fullSize: fullSize)
+    }
+    
+    static func getUrl(x: CGFloat, y: CGFloat, scale: CGFloat, tile: CGSize, fullSize: CGSize) -> (String, String) {
+        // Calculate region parameters /xr,yr,wr,hr/
+        let xr = x * tile.width * scale
+        let yr = y * tile.height * scale
+        var wr = tile.width * scale
+        if (xr + wr > fullSize.width) {
+            wr = fullSize.width - xr
+        }
+        var hr = tile.height * scale
+        if (yr + hr > fullSize.height) {
+            hr = fullSize.height - yr
+        }
+        
+        let region = "\(Int(xr)),\(Int(yr)),\(Int(wr)),\(Int(hr))"
+        let size = "\(Int(tile.width)),\(tile.height == tile.width ? "" : String(Int(tile.height)))"
+        
+        return (region, size)
+    }
 }

@@ -57,12 +57,7 @@ class ITVContainerView: UIView {
         backTiledView.refreshLayout()
         tiledView.refreshLayout()
     }
-}
-
-
-extension ITVContainerView {
-    /**
-     */
+    
     func loadBackground() {
         backgroundImage.backgroundColor = UIColor.clear
         backgroundImage.image = nil

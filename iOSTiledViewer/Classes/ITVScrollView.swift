@@ -33,7 +33,7 @@ open class ITVScrollView: UIScrollView {
     
     /// Returns true only if content is not scaled.
     public var isZoomedOut: Bool {
-        return self.zoomScale == self.minimumZoomScale
+        return self.zoomScale <= self.minimumZoomScale
     }
     
     /// Returns an array of possible image formats as Strings.
@@ -80,8 +80,8 @@ open class ITVScrollView: UIScrollView {
     open override var bounds: CGRect {
         didSet {
             // update scales when bounds change
-            if isZoomedOut && (!isZooming || !isZoomBouncing), let img = containerView.image {
-                recomputeScales(image: img, setMinimumScale: true)
+            if let img = containerView.image {
+                recomputeSize(image: img)
             }
         }
     }
@@ -89,6 +89,9 @@ open class ITVScrollView: UIScrollView {
     fileprivate let containerView = ITVContainerView()
     fileprivate let licenseView = ITVLicenceView()
     fileprivate var lastLevel: Int = -1
+    fileprivate var minBounceScale: CGFloat = 0
+    fileprivate var maxBounceScale: CGFloat = 0
+    
     fileprivate var url: String? {
         didSet {
             if url != nil {
@@ -151,9 +154,6 @@ open class ITVScrollView: UIScrollView {
         showsVerticalScrollIndicator = false
         showsHorizontalScrollIndicator = false
         
-        // register to receive notifications about orientation changes
-        NotificationCenter.default.addObserver(self, selector: #selector(ITVScrollView.orientationDidChange), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
-        
         // add container view with tiled and background views
         addSubview(containerView)
         containerView.initTiledView()
@@ -173,6 +173,7 @@ open class ITVScrollView: UIScrollView {
      Call this method to rotate an image.
      
      - parameter angle: Number in range <-360, 360>
+     - note: Rotation has not been implemented yet.
      */
     public func rotateImage(angle: CGFloat) {
         guard case -360...360 = angle else {
@@ -221,29 +222,12 @@ open class ITVScrollView: UIScrollView {
         setZoomScale(scale, animated: animated)
     }
     
-    // Resizing image on orientation changes.
-    public func orientationDidChange() {
-        
-        guard let image = containerView.image else {
-            return
-        }
-        
-        let wasZoomedOut = isZoomedOut
-        recomputeScales(image: image, setMinimumScale: false)
-        scrollViewDidZoom(self)
-        
-        // compare to 1 because sometimes origin contains values like 2.27373675443232e-13
-        if wasZoomedOut || (containerView.frame.minX > 1 && containerView.frame.minY > 1) {
-            zoomScale = minimumZoomScale
-            changeLevel(forScale: minimumZoomScale)
-        }
-    }
-    
     /// Method for releasing cached images when device runs low on memory. Should be called by UIViewController when needed.
     public func didRecieveMemoryWarning() {
         containerView.clearCache()
     }
     
+    /// Use to immediately refresh layout
     public func refreshTiles() {
         containerView.refreshTiles()
     }
@@ -259,12 +243,30 @@ fileprivate extension ITVScrollView {
     }
     
     // Recompute scales by actual frame size and set minimumZoomScale
-    fileprivate func recomputeScales(image: ITVImageDescriptor, setMinimumScale: Bool) {
-        image.sizeToFit(size: frame.size)
-        minimumZoomScale = image.zoomScales.first!
-        if setMinimumScale {
+    fileprivate func recomputeSize(image: ITVImageDescriptor) {
+        guard !isZooming, !isZoomBouncing else {
+            return
+        }
+        
+        image.adjustToFit(size: frame.size)
+        let wasZoomedOut = isZoomedOut
+        setScaleLimits(image: image)
+        if wasZoomedOut {
             zoomScale = minimumZoomScale
         }
+        
+        scrollViewDidZoom(self)
+    }
+    
+    fileprivate func setScaleLimits(image: ITVImageDescriptor) {
+        let scales = image.zoomScales
+        maximumZoomScale = scales.max()!
+        minimumZoomScale = scales.min()!
+        
+        let minLevel = Int(round(log2(minimumZoomScale)))
+        let maxLevel = Int(round(log2(maximumZoomScale)))
+        minBounceScale = pow(2.0, CGFloat(minLevel - 1)) + 0.2
+        maxBounceScale = pow(2.0, CGFloat(maxLevel + 1)) - 0.2
     }
     
     // Initializing tiled view and scroll view's zooming
@@ -276,9 +278,7 @@ fileprivate extension ITVScrollView {
         }
         
         resizeTiledView(image: image)
-        let scales = image.zoomScales
-        maximumZoomScale = scales.last!
-        minimumZoomScale = scales.first!
+        setScaleLimits(image: image)
         zoomScale = minimumZoomScale
         changeLevel(forScale: minimumZoomScale)
         containerView.image = image
@@ -361,14 +361,17 @@ fileprivate extension ITVScrollView {
 extension ITVScrollView: UIScrollViewDelegate {
     
     public func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        // limit bounce scale to prevent incorrect placed tiles
+        if zoomScale < minBounceScale {
+            zoomScale = minBounceScale
+        } else if zoomScale > maxBounceScale {
+            zoomScale = maxBounceScale
+        }
+        
         // center the image as it becomes smaller than the size of the screen
         let boundsSize = bounds.size
         let f = containerView.frame
-        
-        // center horizontally
         containerView.frame.origin.x = (f.size.width < boundsSize.width) ? (boundsSize.width - f.size.width) / 2 : 0
-        
-        // center vertically
         containerView.frame.origin.y = (f.size.height < boundsSize.height) ? (boundsSize.height - f.size.height) / 2 : 0
     }
     

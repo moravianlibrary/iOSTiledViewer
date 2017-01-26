@@ -22,6 +22,8 @@ class IIIFImageDescriptorV2 {
     fileprivate var _profile = IIIFImageProfileV2()
     fileprivate var sizes: Array<CGSize>?
     fileprivate var _canvasSize: CGSize!
+    fileprivate var _maxScale: CGFloat = 0
+    fileprivate var _minScale: CGFloat = 0
     var license: IIIFImageLicense?
     
     init(_ json: [String:Any]) {
@@ -88,24 +90,30 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
         return _width
     }
     
-    var tileSize: [CGSize]? {
-        var result = [CGSize]()
+    var tileSize: [CGSize] {
         if _tiles != nil {
-            for _tile in _tiles! {
-                result.append(contentsOf: Array<CGSize>(repeating: _tile.size, count: _tile.scaleFactors.count))
+            var result = [CGSize]()
+            for tile in _tiles! {
+                result.append(contentsOf: Array<CGSize>(repeating: tile.size, count: tile.scaleFactors.count))
             }
+            return result
+        } else {
+            return [CATiledLayer().tileSize]
         }
-        return result.isEmpty ? nil : result
     }
     
     var zoomScales: [CGFloat] {
-        var result = [CGFloat]()
         if _tiles != nil {
-            for _tile in _tiles! {
-                result.append(contentsOf: _tile.scaleFactors)
+            var result = [_minScale]
+            for tile in _tiles! {
+                for s in tile.scaleFactors where _minScale < s && s <= _maxScale {
+                    result.append(s)
+                }
             }
+            return result
+        } else {
+            return [1]
         }
-        return result.isEmpty ? [1] : result
     }
     
     var formats: [String]? {
@@ -148,34 +156,27 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
     }
     
     
+    // Methods
     func sizeToFit(size: CGSize) -> CGSize {
+        var tile = tileSize.first!
+        while tile.width > size.width || tile.height > size.height {
+            tile.width /= 2
+            tile.height /= 2
+        }
+        _canvasSize = IIIFImageDescriptor.sizeToFit(size: tile, imageW: width, imageH: height)
+        
+        adjustToFit(size: size)
+        return _canvasSize
+    }
+    
+    func adjustToFit(size: CGSize) {
         let imageSize = CGSize(width: width, height: height)
-        var aspectFitSize = size
-        let mW = aspectFitSize.width / imageSize.width
-        let mH = aspectFitSize.height / imageSize.height
-        if mH <= mW {
-            aspectFitSize.width = mH * imageSize.width
-        }
-        else if mW <= mH {
-            aspectFitSize.height = mW * imageSize.height
-        }
-        _canvasSize = aspectFitSize
-        
-        if _tiles != nil {
-            let maxScale = CGFloat(width) / aspectFitSize.width
-            for tile in _tiles! {
-                var modifiedScale = [CGFloat]()
-                for scale in tile.scaleFactors where scale < maxScale {
-                    modifiedScale.append(scale)
-                }
-                if !tile.scaleFactors.elementsEqual(modifiedScale) && !modifiedScale.contains(maxScale) {
-                    modifiedScale.append(maxScale)
-                }
-                tile.scaleFactors = modifiedScale
-            }
-        }
-        
-        return aspectFitSize
+        let minRatioW = size.width / _canvasSize.width
+        let minRatioH = size.height / _canvasSize.height
+        let maxRatioW = imageSize.width / _canvasSize.width
+        let maxRatioH = imageSize.height / _canvasSize.height
+        _maxScale = max(maxRatioW, maxRatioH)
+        _minScale = min(min(minRatioW, minRatioH), _maxScale)
     }
     
     func getBackgroundUrl() -> URL? {
@@ -188,34 +189,12 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
     
     func getUrl(x: Int, y: Int, level: Int, scale: CGFloat) -> URL? {
         // size of full image content
-        let fullSize = CGSize(width: width, height: height)
+        let fullSize = CGSize(width: _width, height: _height)
         
         // tile size
-        let tileSize = self.tileSize![level]
+        let tile = tileSize[level]
         
-        // scale factor
-        let s: CGFloat = scale
-        
-        // tile coordinate (col)
-        let n: CGFloat = CGFloat(x)
-        
-        // tile coordinate (row)
-        let m: CGFloat = CGFloat(y)
-        
-        // Calculate region parameters /xr,yr,wr,hr/
-        let xr = n * tileSize.width * s
-        let yr = m * tileSize.height * s
-        var wr = tileSize.width * s
-        if (xr + wr > fullSize.width) {
-            wr = fullSize.width - xr
-        }
-        var hr = tileSize.height * s
-        if (yr + hr > fullSize.height) {
-            hr = fullSize.height - yr
-        }
-        
-        let region = "\(Int(xr)),\(Int(yr)),\(Int(wr)),\(Int(hr))"
-        let size = "\(Int(tileSize.width)),\(tileSize.height == tileSize.width ? "" : String(Int(tileSize.height)))"
+        let (region, size) = IIIFImageDescriptor.getUrl(x: x, y: y, scale: scale, tile: tile, fullSize: fullSize)
         let rotation = "0"
         
 //        print("USED ALGORITHM for [\(y),\(x)]*\(level)(\(s)):\n\(baseUrl)/\(region)/\(size)/\(rotation)/\(_currentQuality).\(_currentFormat)")

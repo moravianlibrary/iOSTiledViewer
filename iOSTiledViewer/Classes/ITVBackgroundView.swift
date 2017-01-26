@@ -13,7 +13,7 @@ class ITVBackgroundView: UIView {
     internal var image: ITVImageDescriptor! {
         didSet {
             let l = layer as! CATiledLayer
-            if let size = image.tileSize?[level] {
+            if let size = try? image.tileSize[level] {
                 l.tileSize = size
             }
             l.levelsOfDetail = image.zoomScales.count

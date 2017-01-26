@@ -19,7 +19,7 @@ protocol ITVImageDescriptor {
     /// Full image width.
     var width: Int { get }
     /// Tile size for each level.
-    var tileSize: [CGSize]? { get }
+    var tileSize: [CGSize] { get }
     /// Zoom scales.
     var zoomScales: [CGFloat] { get }
     /// Image formats.
@@ -37,9 +37,17 @@ protocol ITVImageDescriptor {
     /// Method returns constructed URL address for specific zoom level and x,y coordinates.
     func getUrl(x: Int, y: Int, level: Int, scale: CGFloat) -> URL?
     
-    ///
+    /// Returns an Url for background image
     func getBackgroundUrl() -> URL?
     
-    /// Note - Protocol may be implemented by struct, that would need to store size and scale values for further computations. To allow that, function has to be marked as mutating.
+    /// Returns new size for the image according its metadata
     func sizeToFit(size: CGSize) -> CGSize
+    
+    /** 
+     Method for recomputing some important informations for resizing
+     - returns: new size for the image when maximum scale has been modified, or CGSize.zero when only minimum scale was modified
+     
+     TODO: Not the best way to do resizing, should return for example tuple like (size, minScale, maxScale). But could the minimum scale be 1.0 or screen scale when resizing IIIF images?
+     */
+    func adjustToFit(size: CGSize)
 }
