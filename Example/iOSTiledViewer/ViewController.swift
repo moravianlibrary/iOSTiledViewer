@@ -17,6 +17,8 @@ class ViewController: UIViewController {
     var pickerType: String?
     let titles = ["Quality","Format"]
     
+    var alert: UIAlertController?
+
     var urlString: String!
     @IBOutlet weak var scrollView: ITVScrollView!
     @IBOutlet weak var optionsView: UITableView!
@@ -59,23 +61,40 @@ extension ViewController: ITVScrollViewDelegate {
     
     func didFinishLoading(error: NSError?) {
         if error != nil {
-            let alert = UIAlertController(title: "Oops", message: error!.userInfo["message"] as? String, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (action) in
+            guard alert == nil else {
+                return
+            }
+            
+            alert = UIAlertController(title: "Oops", message: error!.userInfo["message"] as? String, preferredStyle: .alert)
+            alert?.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (action) in
                 _ = self.navigationController?.popViewController(animated: true)
             }))
-            present(alert, animated: true, completion: nil)
+            present(alert!, animated: true, completion: nil)
         }
         else {
             // hide loading indicator for example
         }
     }
     
+    
     func errorDidOccur(error: NSError) {
-//        let alert = UIAlertController(title: "Oops", message: error.userInfo["message"] as? String, preferredStyle: .alert)
-//        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (action) in
-//            alert.dismiss(animated: true, completion: nil)
-//        }))
-//        present(alert, animated: true, completion: nil)
+        guard alert == nil else {
+            return
+        }
+        
+        if !Thread.current.isMainThread {
+            DispatchQueue.main.async {
+                self.errorDidOccur(error: error)
+            }
+            return
+        }
+        
+        alert = UIAlertController(title: "Oops", message: error.userInfo["message"] as? String, preferredStyle: .alert)
+        alert?.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (action) in
+            self.alert?.dismiss(animated: true, completion: nil)
+            self.alert = nil
+        }))
+        present(alert!, animated: true, completion: nil)
     }
 }
 

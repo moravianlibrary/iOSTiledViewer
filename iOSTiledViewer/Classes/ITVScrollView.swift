@@ -167,6 +167,11 @@ open class ITVScrollView: UIScrollView {
             NSLayoutConstraint(item: self, attribute: .leading, relatedBy: .lessThanOrEqual, toItem: licenseView, attribute: .leading, multiplier: 1.0, constant: 0),
             NSLayoutConstraint(item: self, attribute: .top, relatedBy: .lessThanOrEqual, toItem: licenseView, attribute: .top, multiplier: 1.0, constant: 0)
             ])
+        
+        // add double tap to zoom
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(ITVScrollView.didTap))
+        doubleTap.numberOfTapsRequired = 2
+        addGestureRecognizer(doubleTap)
     }
     
     /**
@@ -230,6 +235,18 @@ open class ITVScrollView: UIScrollView {
     /// Use to immediately refresh layout
     public func refreshTiles() {
         containerView.refreshTiles()
+    }
+    
+    fileprivate var lastZoomScale: CGFloat = 0
+    fileprivate var doubleTapToZoom = true
+    // Listener on double tap gesture that changes zoom accordingly:
+    // - if last zoom was equal to minimal zoom, then zoom will be increased
+    // - if last zoom was equal to maximal zoom, then zoom will be necreased
+    // - if last zoom was in, then zoom will be increased
+    // - if last zoom was out, then zoom will be decreased
+    public func didTap() {
+        let level = lastLevel + (doubleTapToZoom ? 1 : -1)
+        zoomToScale(pow(2.0, CGFloat(level)), animated: true)
     }
 }
 
@@ -361,6 +378,16 @@ fileprivate extension ITVScrollView {
 extension ITVScrollView: UIScrollViewDelegate {
     
     public func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        // decide the way of double tap zoom
+        if zoomScale >= maximumZoomScale {
+            doubleTapToZoom = false
+        } else if zoomScale <= minimumZoomScale {
+            doubleTapToZoom = true
+        } else if lastZoomScale != zoomScale {
+            doubleTapToZoom = (lastZoomScale < zoomScale)
+        }
+        lastZoomScale = zoomScale
+        
         // limit bounce scale to prevent incorrect placed tiles
         if zoomScale < minBounceScale {
             zoomScale = minBounceScale

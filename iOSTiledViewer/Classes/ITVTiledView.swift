@@ -98,20 +98,27 @@ class ITVTiledView: UIView {
         }
         else if let requestURL = image.getUrl(x: column, y: row, level: level, scale: scale) {
             URLSession.shared.dataTask(with: requestURL, completionHandler: { (data, response, error) in
-                if data != nil , let image = UIImage(data: data!) {
-                    self.imageCache[cacheKey] = image
-                    DispatchQueue.main.async {
-                        self.setNeedsDisplay(rect)
+                if data != nil {
+                    if let img = UIImage(data: data!) {
+                        self.imageCache[cacheKey] = img
+                        DispatchQueue.main.async {
+                            self.setNeedsDisplay(rect)
+                        }
+                    } else {
+                        let msg = "Error decoding image from \(requestURL.absoluteString)."
+                        let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY: msg])
+                        self.itvDelegate?.errorDidOccur(error: error)
                     }
                 } else {
-                    print("Error downloading image from \(requestURL.absoluteString).")
-//                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY: "Error downloading image from \(requestURL.absoluteString)."])
-//                    self.itvDelegate?.errorDidOccur(error: error)
+                    let errorCode = (response as! HTTPURLResponse).statusCode
+                    let msg = "Error \(errorCode) downloading image from \(requestURL.absoluteString)."
+                    let error = NSError(domain: Constants.TAG, code: errorCode, userInfo: [Constants.USERINFO_KEY: msg])
+                    self.itvDelegate?.errorDidOccur(error: error)
                 }
             }).resume()
         } else {
             // probably out of image's bounds
-            print("Error loading image for \(level):[\(column),\(row)].")
+            print("Request for non-existing tile at \(level):[\(column),\(row)].")
         }
         
         if displayTileBorders {
