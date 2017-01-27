@@ -78,9 +78,6 @@ class ITVTiledView: UIView {
         }
         
         let viewScale = self.contentScaleFactor
-        let viewSize = bounds.width * contentScaleFactor
-        
-        let scale = CGFloat(image.width)/viewSize
         
         let tiledLayer = self.layer as! CATiledLayer
         let tileSize = tiledLayer.tileSize
@@ -96,7 +93,7 @@ class ITVTiledView: UIView {
         if let image = imageCache[cacheKey] {
             image.draw(in: rect)
         }
-        else if let requestURL = image.getUrl(x: column, y: row, level: level, scale: scale) {
+        else if let requestURL = image.getUrl(x: column, y: row, level: level) {
             URLSession.shared.dataTask(with: requestURL, completionHandler: { (data, response, error) in
                 if data != nil {
                     if let img = UIImage(data: data!) {

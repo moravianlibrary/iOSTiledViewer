@@ -34,23 +34,24 @@ class IIIFImageDescriptor {
     
     static func sizeToFit(size: CGSize, imageW width: Int, imageH height: Int) -> CGSize {
         let imageSize = CGSize(width: width, height: height)
-        var aspectFitSize = size
-        let mW = aspectFitSize.width / imageSize.width
-        let mH = aspectFitSize.height / imageSize.height
-        if mH <= mW {
-            aspectFitSize.width = mH * imageSize.width
+        var aspectFitSize = imageSize
+        
+        let t = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        while aspectFitSize.width > size.width || aspectFitSize.height > size.height {
+            // while the scaled image size doesn't fit in given size, continue reducing it
+            aspectFitSize = aspectFitSize.applying(t)
         }
-        else {
-            aspectFitSize.height = mW * imageSize.height
-        }
+        
+        // return image size that fully fits in the given size
         return aspectFitSize
     }
     
-    static func getUrl(x: Int, y: Int, scale: CGFloat, tile: CGSize, fullSize: CGSize) -> (String, String) {
+    static func getUrl(x: Int, y: Int, scale: CGFloat, tile: CGSize, fullSize: CGSize) -> (String, String)? {
         return getUrl(x: CGFloat(x), y: CGFloat(y), scale: scale, tile: tile, fullSize: fullSize)
     }
     
-    static func getUrl(x: CGFloat, y: CGFloat, scale: CGFloat, tile: CGSize, fullSize: CGSize) -> (String, String) {
+    static func getUrl(x: CGFloat, y: CGFloat, scale: CGFloat, tile: CGSize, fullSize: CGSize) -> (String, String)? {
+        
         // Calculate region parameters /xr,yr,wr,hr/
         let xr = x * tile.width * scale
         let yr = y * tile.height * scale
@@ -61,6 +62,14 @@ class IIIFImageDescriptor {
         var hr = tile.height * scale
         if (yr + hr > fullSize.height) {
             hr = fullSize.height - yr
+        }
+        
+        guard case 0...fullSize.width = xr,
+              case 0...fullSize.width = wr,
+              case 0...fullSize.height = yr,
+              case 0...fullSize.height = hr else {
+                // return nil when computed coordinates lay beyond the image bounds
+            return nil
         }
         
         let region = "\(Int(xr)),\(Int(yr)),\(Int(wr)),\(Int(hr))"

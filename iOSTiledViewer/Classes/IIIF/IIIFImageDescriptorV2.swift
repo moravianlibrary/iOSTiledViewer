@@ -24,6 +24,7 @@ class IIIFImageDescriptorV2 {
     fileprivate var _canvasSize: CGSize!
     fileprivate var _maxScale: CGFloat = 0
     fileprivate var _minScale: CGFloat = 0
+    fileprivate var _maxLevel: Int = 0
     var license: IIIFImageLicense?
     
     init(_ json: [String:Any]) {
@@ -177,6 +178,7 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
         let maxRatioH = imageSize.height / _canvasSize.height
         _maxScale = max(maxRatioW, maxRatioH)
         _minScale = min(min(minRatioW, minRatioH), _maxScale)
+        _maxLevel = Int(round(log2(_maxScale)))
     }
     
     func getBackgroundUrl() -> URL? {
@@ -187,15 +189,18 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
         return URL(string: "\(baseUrl)/\(region)/\(size)/\(rotation)/\(_currentQuality).\(_currentFormat)")
     }
     
-    func getUrl(x: Int, y: Int, level: Int, scale: CGFloat) -> URL? {
+    func getUrl(x: Int, y: Int, level: Int) -> URL? {
         // size of full image content
         let fullSize = CGSize(width: _width, height: _height)
         
         // tile size
         let tile = tileSize[level]
+        let s: CGFloat = pow(2.0, CGFloat(_maxLevel - level))
         
-        let (region, size) = IIIFImageDescriptor.getUrl(x: x, y: y, scale: scale, tile: tile, fullSize: fullSize)
         let rotation = "0"
+        guard let (region, size) = IIIFImageDescriptor.getUrl(x: x, y: y, scale: s, tile: tile, fullSize: fullSize) else {
+            return nil
+        }
         
 //        print("USED ALGORITHM for [\(y),\(x)]*\(level)(\(s)):\n\(baseUrl)/\(region)/\(size)/\(rotation)/\(_currentQuality).\(_currentFormat)")
         

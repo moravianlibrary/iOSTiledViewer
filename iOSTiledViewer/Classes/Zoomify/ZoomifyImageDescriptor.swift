@@ -138,10 +138,10 @@ extension ZoomifyImageDescriptor: ITVImageDescriptor {
     }
     
     func getBackgroundUrl() -> URL? {
-        return getUrl(x: 0, y: 0, level: 0, scale: 0)
+        return getUrl(x: 0, y: 0, level: 0)
     }
     
-    func getUrl(x: Int, y: Int, level: Int, scale: CGFloat) -> URL? {
+    func getUrl(x: Int, y: Int, level: Int) -> URL? {
         
         guard case 0...depth-1 = level else {
             return nil

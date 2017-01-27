@@ -35,7 +35,7 @@ protocol ITVImageDescriptor {
     
     
     /// Method returns constructed URL address for specific zoom level and x,y coordinates.
-    func getUrl(x: Int, y: Int, level: Int, scale: CGFloat) -> URL?
+    func getUrl(x: Int, y: Int, level: Int) -> URL?
     
     /// Returns an Url for background image
     func getBackgroundUrl() -> URL?
