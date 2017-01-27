@@ -6,7 +6,7 @@
 //
 //
 
-class IIIFImageTile: NSObject {
+struct IIIFImageTile {
 
     var size: CGSize!
     var scaleFactors: [CGFloat]!

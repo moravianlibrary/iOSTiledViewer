@@ -30,7 +30,7 @@ class ITVLicenceView: UIView {
             return
         }
         
-        var viewsArray:[UIView] = [self]
+        var viewsArray: ContiguousArray<UIView> = [self]
         if let value = licence.attribution {
             let label = UILabel()
             let attributedOptions: [String:Any] = [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: String.Encoding.utf8.rawValue]
@@ -58,7 +58,7 @@ class ITVLicenceView: UIView {
         }
     }
     
-    fileprivate func insertStacked(view: UIView, stack: [UIView]) {
+    fileprivate func insertStacked(view: UIView, stack: ContiguousArray<UIView>) {
         if !Thread.current.isMainThread {
             DispatchQueue.main.async {
                 self.insertStacked(view: view, stack: stack)
