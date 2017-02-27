@@ -95,6 +95,9 @@ open class ITVScrollView: UIScrollView {
     fileprivate var url: String? {
         didSet {
             if url != nil {
+                // clear previous image's information
+                initVariables()
+                
                 var block: ((Data?, URLResponse?, Error?) -> Void)? = nil
                 if url!.contains(IIIFImageDescriptor.propertyFile) {
                     // IIIF
@@ -251,6 +254,27 @@ open class ITVScrollView: UIScrollView {
 }
 
 fileprivate extension ITVScrollView {
+    
+    // Reinitialize all important variables to their defaults
+    fileprivate func initVariables() {
+        // reset double tap to zoom variables
+        lastZoomScale = 0
+        doubleTapToZoom = true
+        
+        // reset bouncing
+        minBounceScale = 0.2
+        maxBounceScale = 1.8
+        
+        // default scale
+        lastLevel = -1
+        minimumZoomScale = 1.0
+        maximumZoomScale = 1.0
+        zoomScale = minimumZoomScale
+        
+        // clear container view
+        containerView.clearViews()
+        containerView.frame = CGRect(origin: CGPoint.zero, size: frame.size)
+    }
     
     // Resizing tiled view to fit in scroll view
     fileprivate func resizeTiledView(image: ITVImageDescriptor) {

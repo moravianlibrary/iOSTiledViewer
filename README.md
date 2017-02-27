@@ -18,7 +18,7 @@ it, simply add the following lines to your Podfile:
 
 ```ruby
 source 'https://github.com/Fiser33/iOSTiledViewerSpec.git'
-pod "iOSTiledViewer"
+pod 'iOSTiledViewer'
 ```
 
 ## Author

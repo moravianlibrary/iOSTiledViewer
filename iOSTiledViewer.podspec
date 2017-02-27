@@ -10,31 +10,18 @@ Pod::Spec.new do |s|
   s.name             = 'iOSTiledViewer'
   s.version          = '0.2.2'
   s.summary          = 'High-resolution images Viewer.'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
-
   s.description      = <<-DESC
                         The library can be used to display high-resolution images with usage of IIIFImage API or Zoomify standards.
                        DESC
 
   s.homepage         = 'https://github.com/moravianlibrary/iOSTiledViewer'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Jakub Fiser' => 'fiser33@seznam.cz' }
+
   s.source           = { :git => 'https://github.com/moravianlibrary/iOSTiledViewer.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.source_files     = 'iOSTiledViewer/Classes/**/*'
+  s.frameworks       = 'UIKit', 'Foundation'
 
   s.ios.deployment_target = '8.0'
-
-  s.source_files = 'iOSTiledViewer/Classes/**/*'
   
-  # s.resource_bundles = {
-  #   'iOSTiledViewer' => ['iOSTiledViewer/Assets/*.png']
-  # }
-
-  s.frameworks = 'UIKit', 'Foundation'
 end

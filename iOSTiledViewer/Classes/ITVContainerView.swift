@@ -10,6 +10,7 @@ import UIKit
 
 class ITVContainerView: UIView {
     
+    fileprivate var backgroundTask: URLSessionDataTask?
     fileprivate let backgroundImage = UIImageView()
     let backTiledView = ITVBackgroundView()
     let tiledView = ITVTiledView()
@@ -45,6 +46,7 @@ class ITVContainerView: UIView {
         addSubview(backTiledView)
         addSubview(tiledView)
         
+        backgroundImage.backgroundColor = UIColor.clear
         tiledView.backgroundView = backTiledView
     }
     
@@ -53,25 +55,32 @@ class ITVContainerView: UIView {
         backTiledView.clearCache()
     }
     
+    func clearViews() {
+        clearBackground()
+        tiledView.image = nil
+    }
+    
+    func clearBackground() {
+        backgroundTask?.cancel()
+        backgroundImage.image = nil
+    }
+    
     func refreshTiles() {
         backTiledView.refreshLayout()
         tiledView.refreshLayout()
     }
     
     func loadBackground() {
-        backgroundImage.backgroundColor = UIColor.clear
-        backgroundImage.image = nil
-        
-        guard let url = image?.getBackgroundUrl() else {
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if data != nil, let image = UIImage(data: data!) {
-                DispatchQueue.main.async {
-                    self.backgroundImage.image = image
+        clearBackground()
+        if let url = image?.getBackgroundUrl() {
+            backgroundTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                if data != nil, let image = UIImage(data: data!) {
+                    DispatchQueue.main.async {
+                        self.backgroundImage.image = image
+                    }
                 }
             }
-        }.resume()
+            backgroundTask?.resume()
+        }
     }
 }

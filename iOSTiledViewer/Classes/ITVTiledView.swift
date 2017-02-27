@@ -14,14 +14,19 @@ class ITVTiledView: UIView {
         didSet {
             backgroundView?.image = image
             
-            let l = layer as! CATiledLayer
-            if let size = try? image.tileSize[level] {
-                l.tileSize = size
+            if image == nil {
+                clearCache()
+                refreshLayout()
+            } else {
+                let l = layer as! CATiledLayer
+                if let size = try? image.tileSize[level] {
+                    l.tileSize = size
+                }
+                l.levelsOfDetail = image.zoomScales.count
+                
+                // must be on main thread
+                self.setNeedsLayout()
             }
-            l.levelsOfDetail = image.zoomScales.count
-            
-            // must be on main thread
-            self.setNeedsLayout()
         }
     }
     
