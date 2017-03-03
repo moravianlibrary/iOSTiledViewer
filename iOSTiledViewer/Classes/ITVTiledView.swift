@@ -15,6 +15,7 @@ class ITVTiledView: UIView {
             backgroundView?.image = image
             
             if image == nil {
+                invalidateSession()
                 clearCache()
                 refreshLayout()
             } else {
@@ -32,6 +33,7 @@ class ITVTiledView: UIView {
     
     internal var backgroundView: ITVBackgroundView?
     
+    fileprivate var session = URLSession(configuration: .default)
     internal var itvDelegate: ITVScrollViewDelegate?
     fileprivate var imageCache = [String:UIImage]()
     fileprivate var lastLevel: Int = -1
@@ -76,6 +78,11 @@ class ITVTiledView: UIView {
         layer.setNeedsDisplay()
     }
     
+    fileprivate func invalidateSession() {
+        session.invalidateAndCancel()
+        session = URLSession(configuration: .default)
+    }
+    
     override func draw(_ rect: CGRect) {
         
         guard image != nil, let context = UIGraphicsGetCurrentContext(), !rect.isInfinite, !rect.isNull else {
@@ -99,7 +106,7 @@ class ITVTiledView: UIView {
             image.draw(in: rect)
         }
         else if let requestURL = image.getUrl(x: column, y: row, level: level) {
-            URLSession.shared.dataTask(with: requestURL, completionHandler: { (data, response, error) in
+            session.dataTask(with: requestURL, completionHandler: { (data, response, error) in
                 if data != nil {
                     if let img = UIImage(data: data!) {
                         self.imageCache[cacheKey] = img
@@ -111,10 +118,18 @@ class ITVTiledView: UIView {
                         let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY: msg])
                         self.itvDelegate?.errorDidOccur(error: error)
                     }
-                } else {
-                    let errorCode = (response as! HTTPURLResponse).statusCode
+                } else if (error as? NSError)?.code == NSURLErrorCancelled {
+                    // task was cancelled
+                    return
+                } else if let errorCode = (response as? HTTPURLResponse)?.statusCode {
                     let msg = "Error \(errorCode) downloading image from \(requestURL.absoluteString)."
                     let error = NSError(domain: Constants.TAG, code: errorCode, userInfo: [Constants.USERINFO_KEY: msg])
+                    self.itvDelegate?.errorDidOccur(error: error)
+                } else if let err = error as? NSError {
+                    self.itvDelegate?.errorDidOccur(error: err)
+                } else {
+                    let msg = "Unknown error while downloading image from \(requestURL.absoluteString)."
+                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY: msg])
                     self.itvDelegate?.errorDidOccur(error: error)
                 }
             }).resume()
