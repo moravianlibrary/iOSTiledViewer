@@ -53,7 +53,7 @@ class IIIFImageDescriptorV1 {
         let height = json["tile_height"] as? Int
         let width = json["tile_width"] as? Int
         if width != nil {
-            _tileSize = CGSize(width: width!, height: (height != nil ? height! : width!))
+            _tileSize = CGSize(width: width!, height: (height ?? width!))
         } else if height != nil {
             _tileSize = CGSize(width: height!, height: height!)
         } else {
@@ -79,7 +79,7 @@ extension IIIFImageDescriptorV1: ITVImageDescriptor {
     }
     
     var tileSize: [CGSize] {
-        let levelCount = _scaleFactors != nil ? _scaleFactors!.count : 1
+        let levelCount = _scaleFactors?.count ?? 1
         return Array<CGSize>(repeating: _tileSize, count: levelCount)
     }
     

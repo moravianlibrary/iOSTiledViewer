@@ -119,12 +119,12 @@ extension ViewController: UITableViewDataSource {
             let value = tableView.cellForRow(at: valueIndex)!.detailTextLabel!.text!
             let array = pickerType == titles[0] ? scrollView.imageQualities : scrollView.imageFormats
             let selectionIndex = array!.index(of: value)
-            picker.selectRow(selectionIndex != nil ? selectionIndex! : 0, inComponent: 0, animated: false)
+            picker.selectRow(selectionIndex ?? 0, inComponent: 0, animated: false)
             picker.reloadAllComponents()
         } else {
             cell.textLabel?.text = titles[indexPath.row]
             let value = indexPath.row == 0 ? scrollView.currentQuality : scrollView.currentFormat
-            cell.detailTextLabel?.text = value != nil ? value : "none"
+            cell.detailTextLabel?.text = value ?? "none"
         }
         
         return cell
@@ -172,7 +172,7 @@ extension ViewController: UIPickerViewDataSource {
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         let array = pickerType == titles[0] ? scrollView.imageQualities : scrollView.imageFormats
-        return array != nil ? array!.count : 0
+        return array?.count ?? 0
     }
 }
 

@@ -118,14 +118,14 @@ class ITVTiledView: UIView {
                         let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY: msg])
                         self.itvDelegate?.errorDidOccur(error: error)
                     }
-                } else if (error as? NSError)?.code == NSURLErrorCancelled {
+                } else if (error as NSError?)?.code == NSURLErrorCancelled {
                     // task was cancelled
                     return
                 } else if let errorCode = (response as? HTTPURLResponse)?.statusCode {
                     let msg = "Error \(errorCode) downloading image from \(requestURL.absoluteString)."
                     let error = NSError(domain: Constants.TAG, code: errorCode, userInfo: [Constants.USERINFO_KEY: msg])
                     self.itvDelegate?.errorDidOccur(error: error)
-                } else if let err = error as? NSError {
+                } else if let err = error as NSError? {
                     self.itvDelegate?.errorDidOccur(error: err)
                 } else {
                     let msg = "Unknown error while downloading image from \(requestURL.absoluteString)."

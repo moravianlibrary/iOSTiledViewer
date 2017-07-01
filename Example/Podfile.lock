@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  iOSTiledViewer: 41aabb84f716d8b79d2257957da7a492a7eb16c9
+  iOSTiledViewer: f0c92e3355cee9ef092498af55ec2442a2b4aea8
 
 PODFILE CHECKSUM: 97fe134b44b562a71974f1de7e9fbd3cf10bd053
 

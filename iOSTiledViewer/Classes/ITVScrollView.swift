@@ -74,7 +74,7 @@ open class ITVScrollView: UIScrollView {
     
     /// Returns array of possible zoom scales.
     public var zoomScales: [CGFloat] {
-        return containerView.image != nil ? containerView.image!.zoomScales : [1]
+        return containerView.image?.zoomScales ?? [1]
     }
     
     open override var bounds: CGRect {
@@ -95,15 +95,13 @@ open class ITVScrollView: UIScrollView {
     fileprivate var url: String? {
         didSet {
             if url != nil {
-                // clear previous image's information
-                initVariables()
                 
                 var block: ((Data?, URLResponse?, Error?) -> Void)? = nil
                 if url!.contains(IIIFImageDescriptor.propertyFile) {
                     // IIIF
                     block = {(data, response, error) in
                         let code = (response as? HTTPURLResponse)?.statusCode
-                        if code == 200, data != nil , let serialization = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) {
+                        if code == 200, data != nil, let serialization = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) {
                             
                             let imageDescriptor = IIIFImageDescriptor.versionedDescriptor(serialization as! [String : Any])
                             DispatchQueue.main.async {
@@ -202,16 +200,14 @@ open class ITVScrollView: UIScrollView {
             case .IIIF:
                 if !imageUrl.contains(IIIFImageDescriptor.propertyFile) {
                     url = imageUrl + (imageUrl.characters.last != "/" ? "/" : "") + IIIFImageDescriptor.propertyFile
-                }
-                else {
+                } else {
                     url = imageUrl
                 }
                 
             case .Zoomify:
                 if !imageUrl.contains(ZoomifyImageDescriptor.propertyFile) {
                     url = imageUrl + (imageUrl.characters.last != "/" ? "/" : "") + ZoomifyImageDescriptor.propertyFile
-                }
-                else {
+                } else {
                     url = imageUrl
                 }
             
@@ -278,7 +274,7 @@ fileprivate extension ITVScrollView {
     
     // Resizing tiled view to fit in scroll view
     fileprivate func resizeTiledView(image: ITVImageDescriptor) {
-        var newSize = image.sizeToFit(size: frame.size)
+        let newSize = image.sizeToFit(size: frame.size)
         containerView.frame = CGRect(origin: CGPoint.zero, size: newSize)
         scrollViewDidZoom(self)
     }
@@ -313,11 +309,12 @@ fileprivate extension ITVScrollView {
     // Initializing tiled view and scroll view's zooming
     fileprivate func initWithDescriptor(_ imageDescriptor: ITVImageDescriptor?) {
         guard var image = imageDescriptor, image.error == nil else {
-            let error = imageDescriptor?.error != nil ? imageDescriptor!.error! : NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Error getting image information."])
+            let error = imageDescriptor?.error ?? NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Error getting image information."])
             itvDelegate?.didFinishLoading(error: error)
             return
         }
         
+        initVariables()
         resizeTiledView(image: image)
         setScaleLimits(image: image)
         zoomScale = minimumZoomScale
@@ -366,18 +363,15 @@ fileprivate extension ITVScrollView {
             imageUrl.contains(ZoomifyImageDescriptor.propertyFile) {
             // address is prepared for loading
             self.url = imageUrl
-        }
-        else if imageUrl.lowercased().contains("/full/full/0/default.jpg") {
+        } else if imageUrl.lowercased().contains("/full/full/0/default.jpg") {
             // IIIF image, but url needs to be modified in order to download image information first
             self.url = imageUrl.replacingOccurrences(of: "full/full/0/default.jpg", with: IIIFImageDescriptor.propertyFile, options: .caseInsensitive, range: imageUrl.startIndex..<imageUrl.endIndex)
-        }
-        else if imageUrl.contains("TileGroup") {
+        } else if imageUrl.contains("TileGroup") {
             // Zoomify image, but url needs to be modified in order to download image information first
             let endIndex = imageUrl.range(of: "TileGroup")!.lowerBound
             let startIndex = imageUrl.startIndex
             self.url = imageUrl.substring(with: startIndex..<endIndex) + ZoomifyImageDescriptor.propertyFile
-        }
-        else {
+        } else {
             // try one and decide by result
             var testUrl = imageUrl
             if testUrl.characters.last != "/" {
@@ -386,11 +380,9 @@ fileprivate extension ITVScrollView {
             
             if testUrlContent(testUrl + ZoomifyImageDescriptor.propertyFile) {
                 self.url = testUrl + ZoomifyImageDescriptor.propertyFile
-            }
-            else if testUrlContent(testUrl + IIIFImageDescriptor.propertyFile) {
+            } else if testUrlContent(testUrl + IIIFImageDescriptor.propertyFile) {
                 self.url = testUrl + IIIFImageDescriptor.propertyFile
-            }
-            else {
+            } else {
                 let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Url \(imageUrl) does not support IIIF or Zoomify API."])
                 itvDelegate?.didFinishLoading(error: error)
             }

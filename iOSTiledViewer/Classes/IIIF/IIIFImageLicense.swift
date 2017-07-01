@@ -21,7 +21,7 @@ class IIIFImageLicense: NSObject {
             
             // If there is no language associated value, return all values (single value or array)
             if self.attribution_dict == nil {
-                return (attribution_array != nil ? attribution_array!.joined(separator: "\n") : attribution_single)
+                return attribution_array?.joined(separator: "\n") ?? attribution_single
             }
             
             // Otherwise determine user's language or set a default one
