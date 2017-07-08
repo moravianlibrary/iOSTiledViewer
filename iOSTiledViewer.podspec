@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'iOSTiledViewer'
-  s.version          = '0.2.2'
+  s.version          = '0.2.3'
   s.summary          = 'High-resolution images Viewer.'
   s.description      = <<-DESC
                         The library can be used to display high-resolution images with usage of IIIFImage API or Zoomify standards.
