@@ -33,9 +33,7 @@ class IIIFImageDescriptor {
     fileprivate init() {}
     
     static func sizeToFit(size: CGSize, imageW width: Int, imageH height: Int) -> CGSize {
-        let imageSize = CGSize(width: width, height: height)
-        var aspectFitSize = imageSize
-        
+        var aspectFitSize = CGSize(width: width, height: height)
         let t = CGAffineTransform(scaleX: 0.5, y: 0.5)
         while aspectFitSize.width > size.width || aspectFitSize.height > size.height {
             // while the scaled image size doesn't fit in given size, continue reducing it

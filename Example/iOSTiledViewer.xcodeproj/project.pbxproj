@@ -449,7 +449,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F66A963237D1C2DF27BF00DB /* Pods-iOSTiledViewer_Example.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 873S4GA3KJ;
 				HEADER_SEARCH_PATHS = (
@@ -476,7 +476,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0724C4A134B7D5EBB114EDE7 /* Pods-iOSTiledViewer_Example.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 873S4GA3KJ;
