@@ -152,7 +152,7 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
             return _error
         }
         set {
-            _error = error
+            _error = newValue
         }
     }
     

@@ -9,13 +9,20 @@
 import UIKit
 
 /// Enum of supported image apis.
-public enum ITVImageAPI {
+@objc public enum ITVImageAPI: Int {
     /// IIIF Image API
     case IIIF
     /// Zoomify API
     case Zoomify
     /// Some other API
     case Unknown
+}
+
+/// Enum of supported gesture events.
+@objc public enum ITVGestureEventType: Int {
+    case singleTap
+    case doubleTap
+//    case rotation
 }
 
 /**
@@ -30,6 +37,12 @@ open class ITVScrollView: UIScrollView {
             containerView.itvDelegate = itvDelegate
         }
     }
+    
+    /// Delegate for receiving gesture events.
+    public var itvGestureDelegate: ITVScrollViewGestureDelegate?
+    
+    /// Events that ITVScrollView handles automatically. Default is all. Though there is currently no automatic operation for singleTap. Note that this does not prevent delegating about missing events.
+    public var handleGestureEvents: [ITVGestureEventType] = [.singleTap, .doubleTap]
     
     /// Returns true only if content is not scaled.
     public var isZoomedOut: Bool {
@@ -170,15 +183,21 @@ open class ITVScrollView: UIScrollView {
             ])
         
         // add double tap to zoom
-        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(ITVScrollView.didTap))
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(didDoubleTap))
         doubleTap.numberOfTapsRequired = 2
+        doubleTap.delegate = self
         addGestureRecognizer(doubleTap)
+        
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTap))
+        singleTap.delegate = self
+        singleTap.require(toFail: doubleTap)
+        addGestureRecognizer(singleTap)
     }
     
     /**
      Call this method to rotate an image.
      
-     - parameter angle: Number in range <-360, 360>
+     - parameter angle: Degrees in range <-360, 360>
      - note: Rotation has not been implemented yet.
      */
     public func rotateImage(angle: CGFloat) {
@@ -238,16 +257,37 @@ open class ITVScrollView: UIScrollView {
     
     fileprivate var lastZoomScale: CGFloat = 0
     fileprivate var doubleTapToZoom = true
-    // Listener on double tap gesture that changes zoom accordingly:
-    // - if last zoom was equal to minimal zoom, then zoom will be increased
-    // - if last zoom was equal to maximal zoom, then zoom will be necreased
-    // - if last zoom was in, then zoom will be increased
-    // - if last zoom was out, then zoom will be decreased
-    public func didTap() {
+    /** 
+     Method that changes zoom without user interaction accordingly:
+     - if current zoom is equal to minimal zoom, then zoom will be increased
+     - if current zoom is equal to maximal zoom, then zoom will be decreased
+     - if last zooming was increasing, then zoom will be increased as well
+     - if last zooming was decreasing, then zoom will be decreased as well
+     */
+    public func performDoubleTapZoom() {
         let level = lastLevel + (doubleTapToZoom ? 1 : -1)
         zoomToScale(pow(2.0, CGFloat(level)), animated: true)
     }
 }
+
+
+internal extension ITVScrollView {
+    
+    internal func didDoubleTap(recognizer: UITapGestureRecognizer) {
+        if handleGestureEvents.contains(.doubleTap) {
+            performDoubleTapZoom()
+        }
+        
+        let location = recognizer.location(in: self)
+        itvGestureDelegate?.didTap(type: .doubleTap, location: location)
+    }
+    
+    internal func didSingleTap(recognizer: UITapGestureRecognizer) {
+        let location = recognizer.location(in: self)
+        itvGestureDelegate?.didTap(type: .singleTap, location: location)
+    }
+}
+
 
 fileprivate extension ITVScrollView {
     
@@ -390,6 +430,7 @@ fileprivate extension ITVScrollView {
     }
 }
 
+
 /// MARK: UIScrollViewDelegate implementation
 extension ITVScrollView: UIScrollViewDelegate {
     
@@ -424,5 +465,14 @@ extension ITVScrollView: UIScrollViewDelegate {
     
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return containerView
+    }
+}
+
+
+/// MARK: UIGestureRecognizerDelegate implementation
+extension ITVScrollView: UIGestureRecognizerDelegate {
+    
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }

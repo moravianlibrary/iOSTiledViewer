@@ -28,6 +28,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         scrollView.itvDelegate = self
+        scrollView.itvGestureDelegate = self
         scrollView.loadImage(urlString, api: .Unknown)
         
         closeOptions()
@@ -95,6 +96,13 @@ extension ViewController: ITVScrollViewDelegate {
             self.alert = nil
         }))
         present(alert!, animated: true, completion: nil)
+    }
+}
+
+extension ViewController: ITVScrollViewGestureDelegate {
+    
+    func didTap(type: ITVGestureEventType, location: CGPoint) {
+        print(#function)
     }
 }
 
