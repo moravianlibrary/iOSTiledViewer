@@ -194,7 +194,12 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
         let fullSize = CGSize(width: _width, height: _height)
         
         // tile size
-        let tile = tileSize[level]
+        let tile: CGSize
+        if case 0..<tileSize.count = level {
+            tile = tileSize[level]
+        } else {
+            tile = tileSize.last!
+        }
         let s: CGFloat = pow(2.0, CGFloat(_maxLevel - level))
         
         let rotation = "0"
