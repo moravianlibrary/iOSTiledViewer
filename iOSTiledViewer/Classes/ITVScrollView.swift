@@ -167,6 +167,7 @@ open class ITVScrollView: UIScrollView {
         delegate = self
         showsVerticalScrollIndicator = false
         showsHorizontalScrollIndicator = false
+        bounces = false
         
         // add container view with tiled and background views
         addSubview(containerView)
