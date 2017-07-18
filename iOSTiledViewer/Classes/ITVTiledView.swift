@@ -20,8 +20,8 @@ class ITVTiledView: UIView {
                 refreshLayout()
             } else {
                 let l = layer as! CATiledLayer
-                if let size = try? image.tileSize[level] {
-                    l.tileSize = size
+                if case 0..<image.tileSize.count = level {
+                    l.tileSize = image.tileSize[level]
                 }
                 l.levelsOfDetail = image.zoomScales.count
                 

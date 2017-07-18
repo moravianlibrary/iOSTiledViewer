@@ -25,8 +25,8 @@ class IIIFImageDescriptorV1 {
     // Optional fields
     fileprivate var _complianceUrl: String?
     fileprivate var _canvasSize: CGSize!
-    fileprivate var _maxScale: CGFloat = 0
-    fileprivate var _minScale: CGFloat = 0
+    fileprivate var _maxScale: CGFloat = 1
+    fileprivate var _minScale: CGFloat = 1
     fileprivate var _maxLevel: Int = 0
     
     init(_ json: [String:Any]) {
@@ -84,15 +84,16 @@ extension IIIFImageDescriptorV1: ITVImageDescriptor {
     }
     
     var zoomScales: [CGFloat] {
+        var scales = [_minScale]
         if _scaleFactors != nil {
-            var scales = [_minScale]
             for s in _scaleFactors! where _minScale < s && s <= _maxScale {
                 scales.append(s)
             }
-            return scales
-        } else {
-            return [1]
         }
+        if !scales.contains(_maxScale) {
+            scales.append(_maxScale)
+        }
+        return scales
     }
     
     var formats: [String]? {
