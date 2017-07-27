@@ -104,6 +104,8 @@ open class ITVScrollView: UIScrollView {
     fileprivate var lastLevel: Int = -1
     fileprivate var minBounceScale: CGFloat = 0
     fileprivate var maxBounceScale: CGFloat = 0
+    fileprivate var singleTapRecognizer: UITapGestureRecognizer!
+    fileprivate var doubleTapRecognizer: UITapGestureRecognizer!
     
     fileprivate var url: String? {
         didSet {
@@ -184,15 +186,15 @@ open class ITVScrollView: UIScrollView {
             ])
         
         // add double tap to zoom
-        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(didDoubleTap))
-        doubleTap.numberOfTapsRequired = 2
-        doubleTap.delegate = self
-        addGestureRecognizer(doubleTap)
+        doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(didDoubleTap(recognizer:)))
+        doubleTapRecognizer.numberOfTapsRequired = 2
+        doubleTapRecognizer.delegate = self
+        addGestureRecognizer(doubleTapRecognizer)
         
-        let singleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTap))
-        singleTap.delegate = self
-        singleTap.require(toFail: doubleTap)
-        addGestureRecognizer(singleTap)
+        singleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(didSingleTap(recognizer:)))
+        singleTapRecognizer.delegate = self
+        singleTapRecognizer.require(toFail: doubleTapRecognizer)
+        addGestureRecognizer(singleTapRecognizer)
     }
     
     /**
@@ -474,6 +476,8 @@ extension ITVScrollView: UIScrollViewDelegate {
 extension ITVScrollView: UIGestureRecognizerDelegate {
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        let myGestures: Set = [singleTapRecognizer, doubleTapRecognizer]
+        let eventGestures: Set = [gestureRecognizer, otherGestureRecognizer]
+        return eventGestures.isSubset(of: myGestures)
     }
 }
