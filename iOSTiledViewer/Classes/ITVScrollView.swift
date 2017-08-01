@@ -357,6 +357,9 @@ fileprivate extension ITVScrollView {
             return
         }
         
+        image.format = currentFormat
+        image.quality = currentQuality
+        
         initVariables()
         resizeTiledView(image: image)
         setScaleLimits(image: image)
