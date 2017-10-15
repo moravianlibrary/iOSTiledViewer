@@ -40,7 +40,7 @@ class ViewController: UIViewController {
         scrollView.didRecieveMemoryWarning()
     }
     
-    func openOptions() {
+    @objc func openOptions() {
         optionsView.reloadData()
         navigationItem.hidesBackButton = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(ViewController.closeOptions))
@@ -48,7 +48,7 @@ class ViewController: UIViewController {
         optionsView.isHidden = false
     }
     
-    func closeOptions() {
+    @objc func closeOptions() {
         navigationItem.hidesBackButton = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Options", style: .plain, target: self, action: #selector(ViewController.openOptions))
         optionsView.isHidden = true

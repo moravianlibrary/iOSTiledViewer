@@ -88,15 +88,20 @@ class ITVTiledView: UIView {
         guard image != nil, let context = UIGraphicsGetCurrentContext(), !rect.isInfinite, !rect.isNull else {
             return
         }
-        
-        let viewScale = self.contentScaleFactor
-        
-        let tiledLayer = self.layer as! CATiledLayer
+
+        var viewScale: CGFloat = 0
+        var tiledLayer: CATiledLayer!
+        var level = 0
+        DispatchQueue.main.sync {
+            viewScale = self.contentScaleFactor
+            tiledLayer = self.layer as! CATiledLayer
+            level = self.level
+        }
+
         let tileSize = tiledLayer.tileSize
         
         let column = Int(rect.midX * viewScale / tileSize.width)
         let row = Int(rect.midY * viewScale / tileSize.height)
-        let level = self.level
         
         /// TODO: make borders setting modifiable to user as well
         let displayTileBorders = false

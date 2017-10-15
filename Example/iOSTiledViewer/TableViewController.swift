@@ -32,14 +32,18 @@ class TableViewController: UITableViewController {
     }
 
     // pull to refresh behavior
-    func refreshList() {
+    @objc func refreshList() {
         URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
             if data != nil, let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) {
                 DispatchQueue.main.async {
                     self.dataImages = json as? [String]
+                    self.refreshControl?.endRefreshing()
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.refreshControl?.endRefreshing()
                 }
             }
-            self.refreshControl?.endRefreshing()
         }).resume()
     }
     

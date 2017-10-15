@@ -276,7 +276,7 @@ open class ITVScrollView: UIScrollView {
 
 internal extension ITVScrollView {
     
-    internal func didDoubleTap(recognizer: UITapGestureRecognizer) {
+    @objc internal func didDoubleTap(recognizer: UITapGestureRecognizer) {
         if handleGestureEvents.contains(.doubleTap) {
             performDoubleTapZoom()
         }
@@ -285,7 +285,7 @@ internal extension ITVScrollView {
         itvGestureDelegate?.didTap(type: .doubleTap, location: location)
     }
     
-    internal func didSingleTap(recognizer: UITapGestureRecognizer) {
+    @objc internal func didSingleTap(recognizer: UITapGestureRecognizer) {
         let location = recognizer.location(in: self)
         itvGestureDelegate?.didTap(type: .singleTap, location: location)
     }

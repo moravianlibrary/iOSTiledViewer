@@ -33,7 +33,7 @@ class ITVLicenceView: UIView {
         var viewsArray: ContiguousArray<UIView> = [self]
         if let value = licence.attribution {
             let label = UILabel()
-            let attributedOptions: [String:Any] = [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: String.Encoding.utf8.rawValue]
+            let attributedOptions: [NSAttributedString.DocumentReadingOptionKey : Any] = [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue]
             label.attributedText = try? NSAttributedString(data: value.data(using: .utf8)!, options: attributedOptions, documentAttributes: nil)
             label.numberOfLines = 0
             insertStacked(view: label, stack: viewsArray)
