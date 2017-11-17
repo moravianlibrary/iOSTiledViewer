@@ -221,18 +221,18 @@ open class ITVScrollView: UIScrollView {
         switch api {
             case .IIIF:
                 if !imageUrl.contains(IIIFImageDescriptor.propertyFile) {
-                    url = imageUrl + (imageUrl.characters.last != "/" ? "/" : "") + IIIFImageDescriptor.propertyFile
+                    url = imageUrl + (imageUrl.last != "/" ? "/" : "") + IIIFImageDescriptor.propertyFile
                 } else {
                     url = imageUrl
                 }
-                
+
             case .Zoomify:
                 if !imageUrl.contains(ZoomifyImageDescriptor.propertyFile) {
-                    url = imageUrl + (imageUrl.characters.last != "/" ? "/" : "") + ZoomifyImageDescriptor.propertyFile
+                    url = imageUrl + (imageUrl.last != "/" ? "/" : "") + ZoomifyImageDescriptor.propertyFile
                 } else {
                     url = imageUrl
                 }
-            
+
             case .Unknown:
                 loadImage(imageUrl)
         }
@@ -404,7 +404,6 @@ fileprivate extension ITVScrollView {
      - parameter imageUrl: URL of image to load. Currently only IIIF and Zoomify images are supported. For IIIF images, pass in URL to property file or containing "/full/full/0/default.jpg". For Zoomify images, pass in URL to property file or url containing "TileGroup". All other urls won't be recognized and ITVErrorDelegate will be noticed.
      */
     fileprivate func loadImage(_ imageUrl: String) {
-        
         if imageUrl.contains(IIIFImageDescriptor.propertyFile) ||
             imageUrl.contains(ZoomifyImageDescriptor.propertyFile) {
             // address is prepared for loading
@@ -416,11 +415,11 @@ fileprivate extension ITVScrollView {
             // Zoomify image, but url needs to be modified in order to download image information first
             let endIndex = imageUrl.range(of: "TileGroup")!.lowerBound
             let startIndex = imageUrl.startIndex
-            self.url = imageUrl.substring(with: startIndex..<endIndex) + ZoomifyImageDescriptor.propertyFile
+            self.url = imageUrl[startIndex..<endIndex] + ZoomifyImageDescriptor.propertyFile
         } else {
             // try one and decide by result
             var testUrl = imageUrl
-            if testUrl.characters.last != "/" {
+            if testUrl.last != "/" {
                 testUrl += "/"
             }
             

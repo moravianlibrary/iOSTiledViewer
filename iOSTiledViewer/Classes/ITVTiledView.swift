@@ -23,8 +23,6 @@ class ITVTiledView: UIView {
                 if case 0..<image.tileSize.count = level {
                     l.tileSize = image.tileSize[level]
                 }
-                l.levelsOfDetail = image.zoomScales.count
-                
                 // must be on main thread
                 self.setNeedsLayout()
             }
@@ -84,8 +82,7 @@ class ITVTiledView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        
-        guard image != nil, let context = UIGraphicsGetCurrentContext(), !rect.isInfinite, !rect.isNull else {
+        guard image != nil, let _ = UIGraphicsGetCurrentContext(), !rect.isInfinite, !rect.isNull else {
             return
         }
 
@@ -103,14 +100,10 @@ class ITVTiledView: UIView {
         let column = Int(rect.midX * viewScale / tileSize.width)
         let row = Int(rect.midY * viewScale / tileSize.height)
         
-        /// TODO: make borders setting modifiable to user as well
-        let displayTileBorders = false
-        
         let cacheKey = "\(level)-\(column)-\(row)"
         if let image = imageCache[cacheKey] {
             image.draw(in: rect)
-        }
-        else if let requestURL = image.getUrl(x: column, y: row, level: level) {
+        } else if let requestURL = image.getUrl(x: column, y: row, level: level) {
             session.dataTask(with: requestURL, completionHandler: { (data, response, error) in
                 if data != nil {
                     if let img = UIImage(data: data!) {
@@ -141,12 +134,6 @@ class ITVTiledView: UIView {
         } else {
             // probably out of image's bounds
             print("Request for non-existing tile at \(level):[\(column),\(row)].")
-        }
-        
-        if displayTileBorders {
-            UIColor.green.set()
-            context.setLineWidth(1)
-            context.stroke(rect)
         }
     }
 }

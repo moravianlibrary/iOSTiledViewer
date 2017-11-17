@@ -160,11 +160,7 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
     
     // Methods
     func sizeToFit(size: CGSize) -> CGSize {
-        var tile = tileSize.first!
-//        while tile.width > size.width || tile.height > size.height {
-//            tile.width /= 2
-//            tile.height /= 2
-//        }
+        let tile = tileSize.first!
         _canvasSize = IIIFImageDescriptor.sizeToFit(size: tile, imageW: width, imageH: height)
         
         adjustToFit(size: size)

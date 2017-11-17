@@ -75,7 +75,7 @@ class ITVBackgroundView: UIView {
         var lvl = level - 1
         
         let allKeys = imageCache.keys.joined(separator: ",")
-        let allKeysRange = NSRange(location: 0, length: allKeys.characters.count)
+        let allKeysRange = NSRange(location: 0, length: allKeys.count)
         while lvl > 0 {
             if let regex = try? NSRegularExpression(pattern: "\(lvl)-[0-9]+-[0-9]+"),
                 regex.numberOfMatches(in: allKeys, range: allKeysRange) > 0 {
@@ -99,39 +99,27 @@ class ITVBackgroundView: UIView {
     }
 
     override func draw(_ rect: CGRect) {
-        guard image != nil, let context = UIGraphicsGetCurrentContext(), !rect.isInfinite, !rect.isNull else {
+        guard image != nil, let _ = UIGraphicsGetCurrentContext(), !rect.isInfinite, !rect.isNull else {
             return
         }
 
         var viewScale: CGFloat = 0
-        var viewSize: CGFloat = 0
         var tiledLayer: CATiledLayer!
         var level = 0
         DispatchQueue.main.sync {
             viewScale = self.contentScaleFactor
-            viewSize = bounds.width * contentScaleFactor
             tiledLayer = self.layer as! CATiledLayer
             level = self.level
         }
-        
-        let scale = CGFloat(image.width)/viewSize
 
         let tileSize = tiledLayer.tileSize
         
         let column = Int(rect.midX * viewScale / tileSize.width)
         let row = Int(rect.midY * viewScale / tileSize.height)
         
-        let displayTileBorders = false
-        
         let cacheKey = "\(level)-\(column)-\(row)"
         if let image = imageCache[cacheKey] {
             image.draw(in: rect)
-        }
-        
-        if displayTileBorders {
-            UIColor.green.set()
-            context.setLineWidth(1)
-            context.stroke(rect)
         }
     }
 }

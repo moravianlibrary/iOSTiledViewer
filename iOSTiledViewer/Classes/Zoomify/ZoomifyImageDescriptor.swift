@@ -152,8 +152,6 @@ extension ZoomifyImageDescriptor: ITVImageDescriptor {
             return nil
         }
         
-        let exponent = powf(2, Float(depth - level))
-        let tileWidth = Float(_tileSize.width)
         let indexY = zoomifyLevel.tilesX
         let index = x + y * indexY + tilesUpToLevel(level)
         
