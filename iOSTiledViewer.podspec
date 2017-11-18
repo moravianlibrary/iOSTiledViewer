@@ -22,6 +22,8 @@ Pod::Spec.new do |s|
   s.source_files     = 'iOSTiledViewer/Classes/**/*'
   s.frameworks       = 'UIKit', 'Foundation'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.0'
+
+  s.dependency 'SDWebImage/WebP'
   
 end

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class ITVTiledView: UIView {
 
@@ -106,7 +107,7 @@ class ITVTiledView: UIView {
         } else if let requestURL = image.getUrl(x: column, y: row, level: level) {
             session.dataTask(with: requestURL, completionHandler: { (data, response, error) in
                 if data != nil {
-                    if let img = UIImage(data: data!) {
+                    if let img = UIImage.sd_image(with: data) {
                         self.imageCache[cacheKey] = img
                         DispatchQueue.main.async {
                             self.setNeedsDisplay(rect)
