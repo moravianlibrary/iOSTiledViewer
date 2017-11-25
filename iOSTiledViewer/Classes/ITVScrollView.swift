@@ -29,7 +29,7 @@ import UIKit
 
 /**
  The main class of the iOSTiledViewer library. All communication is done throught this class. See example project to see how to set correctly the class. It has to be initialized through storyboard.
- Assign ITVErrorDelegate to receive errors related to displaying images. The assignment should be done before calling `loadImage(_:)` or `loadImage(_:api:)` method to ensure you receive all errors. Test link: `ITVScrollView.itvDelegate`
+ Assign ITVErrorDelegate to receive errors related to displaying images. The assignment should be done before calling `loadImage(_:)` or `loadImage(_:api:)` method to ensure you receive all errors.
  */
 open class ITVScrollView: UIScrollView {
     
