@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ITVScrollView Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/ITVScrollView" class="dashAnchor"></a>
+    <a title="ITVScrollView Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">iOSTiledViewer Docs</a> (100% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">iOSTiledViewer Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        ITVScrollView Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/ITVScrollView.html">ITVScrollView</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/ITVGestureEventType.html">ITVGestureEventType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ITVImageAPI.html">ITVImageAPI</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/ITVScrollViewDelegate.html">ITVScrollViewDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ITVScrollViewGestureDelegate.html">ITVScrollViewGestureDelegate</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>ITVScrollView</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">ITVScrollView</span><span class="p">:</span> <span class="kt">UIScrollView</span></code></pre>
+
+                </div>
+              </div>
+            <p>The main class of the iOSTiledViewer library. All communication is done throught this class. See example project to see how to set correctly the class. It has to be initialized through storyboard.
+Assign ITVErrorDelegate to receive errors related to displaying images. The assignment should be done before calling <code>loadImage(_:)</code> or <code>loadImage(_:api:)</code> method to ensure you receive all errors.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14iOSTiledViewer13ITVScrollViewC11itvDelegateAA0cdF0_pSgv"></a>
+                    <a name="//apple_ref/swift/Property/itvDelegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14iOSTiledViewer13ITVScrollViewC11itvDelegateAA0cdF0_pSgv">itvDelegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delegate for receiving errors and some important events.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">itvDelegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/ITVScrollViewDelegate.html">ITVScrollViewDelegate</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14iOSTiledViewer13ITVScrollViewC18itvGestureDelegateAA0cdfG0_pSgv"></a>
+                    <a name="//apple_ref/swift/Property/itvGestureDelegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14iOSTiledViewer13ITVScrollViewC18itvGestureDelegateAA0cdfG0_pSgv">itvGestureDelegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delegate for receiving gesture events.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">itvGestureDelegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/ITVScrollViewGestureDelegate.html">ITVScrollViewGestureDelegate</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14iOSTiledViewer13ITVScrollViewC19handleGestureEventsSayAA19ITVGestureEventTypeOGv"></a>
+                    <a name="//apple_ref/swift/Property/handleGestureEvents" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14iOSTiledViewer13ITVScrollViewC19handleGestureEventsSayAA19ITVGestureEventTypeOGv">handleGestureEvents</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Events that ITVScrollView handles automatically. Default is all. Though there is currently no automatic operation for singleTap. Note that this does not prevent delegating about missing events.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">handleGestureEvents</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/ITVGestureEventType.html">ITVGestureEventType</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">.</span><span class="n">singleTap</span><span class="p">,</span> <span class="o">.</span><span class="n">doubleTap</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14iOSTiledViewer13ITVScrollViewC11isZoomedOutSbv"></a>
+                    <a name="//apple_ref/swift/Property/isZoomedOut" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14iOSTiledViewer13ITVScrollViewC11isZoomedOutSbv">isZoomedOut</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns true only if content is not scaled.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isZoomedOut</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14iOSTiledViewer13ITVScrollViewC12imageFormatsSaySSGSgv"></a>
+                    <a name="//apple_ref/swift/Property/imageFormats" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14iOSTiledViewer13ITVScrollViewC12imageFormatsSaySSGSgv">imageFormats</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an array of possible image formats as Strings.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">imageFormats</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14iOSTiledViewer13ITVScrollViewC13currentFormatSSSgv"></a>
+                    <a name="//apple_ref/swift/Property/currentFormat" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14iOSTiledViewer13ITVScrollViewC13currentFormatSSSgv">currentFormat</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns and sets current image format</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">currentFormat</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14iOSTiledViewer13ITVScrollViewC14imageQualitiesSaySSGSgv"></a>
+                    <a name="//apple_ref/swift/Property/imageQualities" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14iOSTiledViewer13ITVScrollViewC14imageQualitiesSaySSGSgv">imageQualities</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an array of possible image qualities as Strings.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">imageQualities</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14iOSTiledViewer13ITVScrollViewC14currentQualitySSSgv"></a>
+                    <a name="//apple_ref/swift/Property/currentQuality" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14iOSTiledViewer13ITVScrollViewC14currentQualitySSSgv">currentQuality</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns and sets current image quality</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">currentQuality</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14iOSTiledViewer13ITVScrollViewC10zoomScalesSay12CoreGraphics7CGFloatVGv"></a>
+                    <a name="//apple_ref/swift/Property/zoomScales" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14iOSTiledViewer13ITVScrollViewC10zoomScalesSay12CoreGraphics7CGFloatVGv">zoomScales</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns array of possible zoom scales.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">zoomScales</span><span class="p">:</span> <span class="p">[</span><span class="kt">CGFloat</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@iOSTiledViewer@objc(cs)ITVScrollView(py)bounds"></a>
+                    <a name="//apple_ref/swift/Property/bounds" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@iOSTiledViewer@objc(cs)ITVScrollView(py)bounds">bounds</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">bounds</span><span class="p">:</span> <span class="kt">CGRect</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@iOSTiledViewer@objc(cs)ITVScrollView(im)awakeFromNib"></a>
+                    <a name="//apple_ref/swift/Method/awakeFromNib()" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@iOSTiledViewer@objc(cs)ITVScrollView(im)awakeFromNib">awakeFromNib()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">override</span> <span class="n">open</span> <span class="kd">func</span> <span class="nf">awakeFromNib</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14iOSTiledViewer13ITVScrollViewC11rotateImagey12CoreGraphics7CGFloatV5angle_tF"></a>
+                    <a name="//apple_ref/swift/Method/rotateImage(angle:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14iOSTiledViewer13ITVScrollViewC11rotateImagey12CoreGraphics7CGFloatV5angle_tF">rotateImage(angle:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Call this method to rotate an image.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Rotation has not been implemented yet.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">rotateImage</span><span class="p">(</span><span class="nv">angle</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>angle</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Degrees in range &lt;-360, 360&gt;</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14iOSTiledViewer13ITVScrollViewC9loadImageySS_AA11ITVImageAPIO3apitF"></a>
+                    <a name="//apple_ref/swift/Method/loadImage(_:api:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14iOSTiledViewer13ITVScrollViewC9loadImageySS_AA11ITVImageAPIO3apitF">loadImage(_:api:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Method for loading image.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">loadImage</span><span class="p">(</span><span class="n">_</span> <span class="nv">imageUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">api</span><span class="p">:</span> <span class="kt"><a href="../Enums/ITVImageAPI.html">ITVImageAPI</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>imageUrl</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>URL of image to load.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>api</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Specify image api. Currently can be of values IIIF, Zoomify and Unknown.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14iOSTiledViewer13ITVScrollViewC11zoomToScaley12CoreGraphics7CGFloatV_Sb8animatedtF"></a>
+                    <a name="//apple_ref/swift/Method/zoomToScale(_:animated:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14iOSTiledViewer13ITVScrollViewC11zoomToScaley12CoreGraphics7CGFloatV_Sb8animatedtF">zoomToScale(_:animated:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Method for zooming.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">zoomToScale</span><span class="p">(</span><span class="n">_</span> <span class="nv">scale</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>scale</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Scale to zoom.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>animated</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Animation flag.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14iOSTiledViewer13ITVScrollViewC23didRecieveMemoryWarningyyF"></a>
+                    <a name="//apple_ref/swift/Method/didRecieveMemoryWarning()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14iOSTiledViewer13ITVScrollViewC23didRecieveMemoryWarningyyF">didRecieveMemoryWarning()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Method for releasing cached images when device runs low on memory. Should be called by UIViewController when needed.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">didRecieveMemoryWarning</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14iOSTiledViewer13ITVScrollViewC12refreshTilesyyF"></a>
+                    <a name="//apple_ref/swift/Method/refreshTiles()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14iOSTiledViewer13ITVScrollViewC12refreshTilesyyF">refreshTiles()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Use to immediately refresh layout</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">refreshTiles</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14iOSTiledViewer13ITVScrollViewC20performDoubleTapZoomyyF"></a>
+                    <a name="//apple_ref/swift/Method/performDoubleTapZoom()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14iOSTiledViewer13ITVScrollViewC20performDoubleTapZoomyyF">performDoubleTapZoom()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Method that changes zoom without user interaction accordingly:</p>
+
+<ul>
+<li>if current zoom is equal to minimal zoom, then zoom will be increased</li>
+<li>if current zoom is equal to maximal zoom, then zoom will be decreased</li>
+<li>if last zooming was increasing, then zoom will be increased as well</li>
+<li>if last zooming was decreasing, then zoom will be decreased as well</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">performDoubleTapZoom</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@CM@iOSTiledViewer@objc(cs)ITVScrollView(im)scrollViewDidZoom:"></a>
+                    <a name="//apple_ref/swift/Method/scrollViewDidZoom(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@CM@iOSTiledViewer@objc(cs)ITVScrollView(im)scrollViewDidZoom:">scrollViewDidZoom(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollViewDidZoom</span><span class="p">(</span><span class="n">_</span> <span class="nv">scrollView</span><span class="p">:</span> <span class="kt">UIScrollView</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@CM@iOSTiledViewer@objc(cs)ITVScrollView(im)scrollViewDidEndZooming:withView:atScale:"></a>
+                    <a name="//apple_ref/swift/Method/scrollViewDidEndZooming(_:with:atScale:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@CM@iOSTiledViewer@objc(cs)ITVScrollView(im)scrollViewDidEndZooming:withView:atScale:">scrollViewDidEndZooming(_:with:atScale:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollViewDidEndZooming</span><span class="p">(</span><span class="n">_</span> <span class="nv">scrollView</span><span class="p">:</span> <span class="kt">UIScrollView</span><span class="p">,</span> <span class="n">with</span> <span class="nv">view</span><span class="p">:</span> <span class="kt">UIView</span><span class="p">?,</span> <span class="n">atScale</span> <span class="nv">scale</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@CM@iOSTiledViewer@objc(cs)ITVScrollView(im)viewForZoomingInScrollView:"></a>
+                    <a name="//apple_ref/swift/Method/viewForZooming(in:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@CM@iOSTiledViewer@objc(cs)ITVScrollView(im)viewForZoomingInScrollView:">viewForZooming(in:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">viewForZooming</span><span class="p">(</span><span class="k">in</span> <span class="nv">scrollView</span><span class="p">:</span> <span class="kt">UIScrollView</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UIView</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@CM@iOSTiledViewer@objc(cs)ITVScrollView(im)gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:"></a>
+                    <a name="//apple_ref/swift/Method/gestureRecognizer(_:shouldRecognizeSimultaneouslyWith:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@CM@iOSTiledViewer@objc(cs)ITVScrollView(im)gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:">gestureRecognizer(_:shouldRecognizeSimultaneouslyWith:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">gestureRecognizer</span><span class="p">(</span><span class="n">_</span> <span class="nv">gestureRecognizer</span><span class="p">:</span> <span class="kt">UIGestureRecognizer</span><span class="p">,</span> <span class="n">shouldRecognizeSimultaneouslyWith</span> <span class="nv">otherGestureRecognizer</span><span class="p">:</span> <span class="kt">UIGestureRecognizer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2017 <a class="link" href="https://github.com/moravianlibrary/iOSTiledViewer" target="_blank" rel="external">Jakub Fiser</a>. All rights reserved. (Last updated: 2017-11-25)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

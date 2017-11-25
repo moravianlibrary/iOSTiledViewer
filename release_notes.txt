@@ -1,0 +1,56 @@
+0.2.6:
+ - support for raw images
+ - support of format gif and webp
+ - fix for setting image quality and format before image is loaded
+
+0.2.5:
+ - fix of simultaneous gesture recognizing
+ - fix of zooming on some IIIF v1 documents
+ - fixed minimum zoom level
+
+0.2.4:
+ - ITVScrollViewGestureDelegate
+ - gesture delegates implemented inside of library with possibility to delegate
+ - possibility to turn off automatic handling of gesture events
+ - crash fix
+
+0.2.3:
+ - fix of incorrect sizing
+ - image clear on reuse
+
+0.2.2:
+ - introduced refreshTiles method
+ - introduced currentFormat and currentQuality properties
+ - improved image sizing and rotation handling
+ - double tap to zoom
+
+0.2.1:
+ - improved display Zoomify images
+ - fix of tiny padding of ITVScrollView
+ - sending additional errors to delegate
+
+0.2.0:
+ - improved background
+ - fix of stretched right/bottom edge of Zoomify image
+ - maximum zoom set
+ - sending additional errors to delegate
+ - introduced didRecieveMemoryWarning method
+
+0.1.5:
+ - fix for crash
+ - improved sizing of Zoomify images
+
+0.1.4:
+ - additional public properties on ITVScrollView
+ - support of IIIF v1
+ - image background
+
+0.1.3:
+ - support of Zoomify
+ - ITVErrorDelegate
+ - improved displaying of IIIF and Zoomify images
+ - base display of license for IIIF images if present
+
+0.1.2:
+ - initial somehow working version
+ - support of IIIF v2
