@@ -14,6 +14,8 @@ import UIKit
     case IIIF
     /// Zoomify API
     case Zoomify
+    /// Raw image which does not support any APIs above. Supported formats are jpg, png, gif and webp
+    case Raw
     /// Some other API
     case Unknown
 }
@@ -98,7 +100,8 @@ open class ITVScrollView: UIScrollView {
             }
         }
     }
-    
+
+    fileprivate let supportedImageFormats = ["jpg", "png", "gif", "webp"]
     fileprivate let containerView = ITVContainerView()
     fileprivate let licenseView = ITVLicenceView()
     fileprivate var lastLevel: Int = -1
@@ -134,7 +137,7 @@ open class ITVScrollView: UIScrollView {
                     // Zoomify
                     block = {(data, response, error) in
                         let code = (response as? HTTPURLResponse)?.statusCode
-                        if code == 200, data != nil , let json = SynchronousZoomifyXMLParser().parse(data!) {
+                        if code == 200, data != nil, let json = SynchronousZoomifyXMLParser().parse(data!) {
                             
                             let imageDescriptor = ZoomifyImageDescriptor(json, self.url!)
                             DispatchQueue.main.async {
@@ -142,6 +145,20 @@ open class ITVScrollView: UIScrollView {
                             }
                         } else {
                             let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Error loading Zoomify image information."])
+                            DispatchQueue.main.async {
+                                self.itvDelegate?.didFinishLoading(error: error)
+                            }
+                        }
+                    }
+                } else {
+                    block = {(data, response, error) in
+                        let code = (response as? HTTPURLResponse)?.statusCode
+                        if code == 200, data != nil, let imageDescriptor = RawImageDescriptor(data!, self.url!) {
+                            DispatchQueue.main.async {
+                                self.initWithDescriptor(imageDescriptor)
+                            }
+                        } else {
+                            let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Error loading raw image information."])
                             DispatchQueue.main.async {
                                 self.itvDelegate?.didFinishLoading(error: error)
                             }
@@ -232,6 +249,9 @@ open class ITVScrollView: UIScrollView {
                 } else {
                     url = imageUrl
                 }
+
+            case .Raw:
+                url = imageUrl
 
             case .Unknown:
                 loadImage(imageUrl)
@@ -392,7 +412,7 @@ fileprivate extension ITVScrollView {
     
     fileprivate func changeLevel(forScale scale: CGFloat) {
         // redraw image by setting contentScaleFactor on tiledView
-        let level = Int(round(log2(scale)))
+        let level = max(Int(round(log2(scale))), 0)
         if level != lastLevel {
             containerView.tiledView.contentScaleFactor = pow(2.0, CGFloat(level))
             lastLevel = level
@@ -416,6 +436,8 @@ fileprivate extension ITVScrollView {
             let endIndex = imageUrl.range(of: "TileGroup")!.lowerBound
             let startIndex = imageUrl.startIndex
             self.url = imageUrl[startIndex..<endIndex] + ZoomifyImageDescriptor.propertyFile
+        } else if supportedImageFormats.contains(imageUrl.components(separatedBy: ".").last!) {
+            self.url = imageUrl
         } else {
             // try one and decide by result
             var testUrl = imageUrl

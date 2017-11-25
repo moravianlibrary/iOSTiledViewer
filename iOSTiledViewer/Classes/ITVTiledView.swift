@@ -132,7 +132,7 @@ class ITVTiledView: UIView {
                     self.itvDelegate?.errorDidOccur(error: error)
                 }
             }).resume()
-        } else {
+        } else if !(image is RawImageDescriptor) {
             // probably out of image's bounds
             print("Request for non-existing tile at \(level):[\(column),\(row)].")
         }

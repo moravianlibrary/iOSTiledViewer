@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class ITVContainerView: UIView {
     
@@ -74,7 +75,7 @@ class ITVContainerView: UIView {
         clearBackground()
         if let url = image?.getBackgroundUrl() {
             backgroundTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
-                if data != nil, let image = UIImage(data: data!) {
+                if data != nil, let image = UIImage.sd_image(with: data!) {
                     DispatchQueue.main.async {
                         self.backgroundImage.image = image
                     }
