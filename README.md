@@ -1,8 +1,8 @@
 # iOSTiledViewer
 
-[Release Notes](https://www.fi.muni.cz/~xfiser1/mp/itv/notes.txt)
+[Release Notes](https://github.com/moravianlibrary/iOSTiledViewer/blob/master/release_notes.txt)
 
-[Documentation](https://www.fi.muni.cz/~xfiser1/mp/itv/docs/index.html)
+[Documentation](http://htmlpreview.github.io/?https://github.com/moravianlibrary/iOSTiledViewer/blob/master/docs/index.html)
 
 The library displays large image files effectively without quality loss. It can display files that support protocol IIIF or Zoomify as well as an ordinary image of format JPG, PNG, GIF and WebP.
 
