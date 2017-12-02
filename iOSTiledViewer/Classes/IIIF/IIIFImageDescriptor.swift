@@ -25,7 +25,7 @@ class IIIFImageDescriptor {
         }
         else {
             // TODO: return empty struct with error implementing ITVImageDescriptor protocol
-            let _error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Unsupported IIIF Image version."])
+//            let _error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Unsupported IIIF Image version."])
             return nil
         }
     }

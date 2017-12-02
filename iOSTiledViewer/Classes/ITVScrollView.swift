@@ -109,75 +109,9 @@ open class ITVScrollView: UIScrollView {
     fileprivate var maxBounceScale: CGFloat = 0
     fileprivate var singleTapRecognizer: UITapGestureRecognizer!
     fileprivate var doubleTapRecognizer: UITapGestureRecognizer!
-    
-    fileprivate var url: String? {
-        didSet {
-            if url != nil {
-                
-                var block: ((Data?, URLResponse?, Error?) -> Void)? = nil
-                if url!.contains(IIIFImageDescriptor.propertyFile) {
-                    // IIIF
-                    block = {(data, response, error) in
-                        let code = (response as? HTTPURLResponse)?.statusCode
-                        if code == 200, data != nil, let serialization = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) {
-                            
-                            let imageDescriptor = IIIFImageDescriptor.versionedDescriptor(serialization as! [String : Any])
-                            DispatchQueue.main.async {
-                                self.initWithDescriptor(imageDescriptor)
-                            }
-                        } else {
-                            let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Error loading IIIF image information."])
-                            DispatchQueue.main.async {
-                                self.itvDelegate?.didFinishLoading(error: error)
-                            }
-                        }
-                    }
-                }
-                else if url!.contains(ZoomifyImageDescriptor.propertyFile) {
-                    // Zoomify
-                    block = {(data, response, error) in
-                        let code = (response as? HTTPURLResponse)?.statusCode
-                        if code == 200, data != nil, let json = SynchronousZoomifyXMLParser().parse(data!) {
-                            
-                            let imageDescriptor = ZoomifyImageDescriptor(json, self.url!)
-                            DispatchQueue.main.async {
-                                self.initWithDescriptor(imageDescriptor)
-                            }
-                        } else {
-                            let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Error loading Zoomify image information."])
-                            DispatchQueue.main.async {
-                                self.itvDelegate?.didFinishLoading(error: error)
-                            }
-                        }
-                    }
-                } else {
-                    block = {(data, response, error) in
-                        let code = (response as? HTTPURLResponse)?.statusCode
-                        if code == 200, data != nil, let imageDescriptor = RawImageDescriptor(data!, self.url!) {
-                            DispatchQueue.main.async {
-                                self.initWithDescriptor(imageDescriptor)
-                            }
-                        } else {
-                            let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Error loading raw image information."])
-                            DispatchQueue.main.async {
-                                self.itvDelegate?.didFinishLoading(error: error)
-                            }
-                        }
-                    }
-                }
-                
-                guard block != nil else {
-                    // unsupported image API, should never happen here
-                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Unsupported image API."])
-                    itvDelegate?.didFinishLoading(error: error)
-                    return
-                }
-                
-                URLSession.shared.dataTask(with: URL(string: url!)!, completionHandler:
-                        block!).resume()
-            }
-        }
-    }
+
+    /// Property stores currently displayed file's url.
+    public fileprivate(set) var url: String?
     
     override open func awakeFromNib() {
         super.awakeFromNib()
@@ -229,33 +163,37 @@ open class ITVScrollView: UIScrollView {
     }
     
     /**
-     Method for loading image.
+     Method for loading image. If api 'Unknown' is passed then the method will try to automatically recognize the api. This could include synchronous network requests.
      
-     - parameter imageUrl: URL of image to load.
-     - parameter api: Specify image api. Currently can be of values IIIF, Zoomify and Unknown.
+     - parameter imageUrl: URL string of image to load.
+     - parameter api: Specify image api that should be used. Default is 'Unknown'
      */
-    public func loadImage(_ imageUrl: String, api: ITVImageAPI) {
+    public func loadImage(_ imageUrl: String, api: ITVImageAPI = .Unknown) {
+        self.url = imageUrl
+        var url: String?
         switch api {
-            case .IIIF:
-                if !imageUrl.contains(IIIFImageDescriptor.propertyFile) {
-                    url = imageUrl + (imageUrl.last != "/" ? "/" : "") + IIIFImageDescriptor.propertyFile
-                } else {
-                    url = imageUrl
-                }
-
-            case .Zoomify:
-                if !imageUrl.contains(ZoomifyImageDescriptor.propertyFile) {
-                    url = imageUrl + (imageUrl.last != "/" ? "/" : "") + ZoomifyImageDescriptor.propertyFile
-                } else {
-                    url = imageUrl
-                }
-
-            case .Raw:
+        case .IIIF:
+            if !imageUrl.contains(IIIFImageDescriptor.propertyFile) {
+                url = imageUrl + (imageUrl.last != "/" ? "/" : "") + IIIFImageDescriptor.propertyFile
+            } else {
                 url = imageUrl
+            }
 
-            case .Unknown:
-                loadImage(imageUrl)
+        case .Zoomify:
+            if !imageUrl.contains(ZoomifyImageDescriptor.propertyFile) {
+                url = imageUrl + (imageUrl.last != "/" ? "/" : "") + ZoomifyImageDescriptor.propertyFile
+            } else {
+                url = imageUrl
+            }
+
+        case .Raw:
+            url = imageUrl
+
+        case .Unknown:
+            loadImage(imageUrl)
+            return
         }
+        loadUrl(url, api: api)
     }
     
     /**
@@ -424,36 +362,124 @@ fileprivate extension ITVScrollView {
      - parameter imageUrl: URL of image to load. Currently only IIIF and Zoomify images are supported. For IIIF images, pass in URL to property file or containing "/full/full/0/default.jpg". For Zoomify images, pass in URL to property file or url containing "TileGroup". All other urls won't be recognized and ITVErrorDelegate will be noticed.
      */
     fileprivate func loadImage(_ imageUrl: String) {
+        var url: String?
+        var api = ITVImageAPI.Unknown
         if imageUrl.contains(IIIFImageDescriptor.propertyFile) ||
             imageUrl.contains(ZoomifyImageDescriptor.propertyFile) {
             // address is prepared for loading
-            self.url = imageUrl
+            url = imageUrl
+            api = imageUrl.contains(IIIFImageDescriptor.propertyFile) ? .IIIF : .Zoomify
         } else if imageUrl.lowercased().contains("/full/full/0/default.jpg") {
             // IIIF image, but url needs to be modified in order to download image information first
-            self.url = imageUrl.replacingOccurrences(of: "full/full/0/default.jpg", with: IIIFImageDescriptor.propertyFile, options: .caseInsensitive, range: imageUrl.startIndex..<imageUrl.endIndex)
+            url = imageUrl.replacingOccurrences(of: "full/full/0/default.jpg", with: IIIFImageDescriptor.propertyFile, options: .caseInsensitive, range: imageUrl.startIndex..<imageUrl.endIndex)
+            api = .IIIF
         } else if imageUrl.contains("TileGroup") {
             // Zoomify image, but url needs to be modified in order to download image information first
             let endIndex = imageUrl.range(of: "TileGroup")!.lowerBound
             let startIndex = imageUrl.startIndex
-            self.url = imageUrl[startIndex..<endIndex] + ZoomifyImageDescriptor.propertyFile
+            url = imageUrl[startIndex..<endIndex] + ZoomifyImageDescriptor.propertyFile
+            api = .Zoomify
         } else if supportedImageFormats.contains(imageUrl.components(separatedBy: ".").last!) {
-            self.url = imageUrl
+            url = imageUrl
+            api = .Raw
         } else {
             // try one and decide by result
             var testUrl = imageUrl
             if testUrl.last != "/" {
                 testUrl += "/"
             }
-            
-            if testUrlContent(testUrl + ZoomifyImageDescriptor.propertyFile) {
-                self.url = testUrl + ZoomifyImageDescriptor.propertyFile
-            } else if testUrlContent(testUrl + IIIFImageDescriptor.propertyFile) {
-                self.url = testUrl + IIIFImageDescriptor.propertyFile
-            } else {
-                let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Url \(imageUrl) does not support IIIF or Zoomify API."])
-                itvDelegate?.didFinishLoading(error: error)
+
+            DispatchQueue.global().async {
+                if self.testUrlContent(testUrl + ZoomifyImageDescriptor.propertyFile) {
+                    url = testUrl + ZoomifyImageDescriptor.propertyFile
+                    api = .Zoomify
+                } else if self.testUrlContent(testUrl + IIIFImageDescriptor.propertyFile) {
+                    url = testUrl + IIIFImageDescriptor.propertyFile
+                    api = .IIIF
+                } else {
+                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Url \(imageUrl) does not support IIIF or Zoomify API."])
+                    DispatchQueue.main.async {
+                        self.itvDelegate?.didFinishLoading(error: error)
+                    }
+                }
+                self.loadUrl(url, api: api)
             }
+            return
         }
+        loadUrl(url, api: api)
+    }
+
+    /**
+     Method for downloading image information data and initializing subviews.
+     - parameter url: URL string of image to load.
+     - parameter api: API
+     */
+    fileprivate func loadUrl(_ urlString: String?, api: ITVImageAPI) {
+        guard urlString != nil, let url = URL(string: urlString!) else {
+            return
+        }
+
+        self.url = urlString
+        var block: ((Data?, URLResponse?, Error?) -> Void)? = nil
+        switch api {
+        case .IIIF:
+            block = {(data, response, error) in
+                let code = (response as? HTTPURLResponse)?.statusCode
+                if code == 200, data != nil, let serialization = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) {
+
+                    let imageDescriptor = IIIFImageDescriptor.versionedDescriptor(serialization as! [String : Any])
+                    DispatchQueue.main.async {
+                        self.initWithDescriptor(imageDescriptor)
+                    }
+                } else {
+                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Error loading IIIF image information."])
+                    DispatchQueue.main.async {
+                        self.itvDelegate?.didFinishLoading(error: error)
+                    }
+                }
+            }
+        case .Zoomify:
+            block = {(data, response, error) in
+                let code = (response as? HTTPURLResponse)?.statusCode
+                if code == 200, data != nil, let json = SynchronousZoomifyXMLParser().parse(data!) {
+
+                    let imageDescriptor = ZoomifyImageDescriptor(json, self.url!)
+                    DispatchQueue.main.async {
+                        self.initWithDescriptor(imageDescriptor)
+                    }
+                } else {
+                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Error loading Zoomify image information."])
+                    DispatchQueue.main.async {
+                        self.itvDelegate?.didFinishLoading(error: error)
+                    }
+                }
+            }
+        case .Raw:
+            block = {(data, response, error) in
+                let code = (response as? HTTPURLResponse)?.statusCode
+                if code == 200, data != nil, let imageDescriptor = RawImageDescriptor(data!, self.url!) {
+                    DispatchQueue.main.async {
+                        self.initWithDescriptor(imageDescriptor)
+                    }
+                } else {
+                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Error loading raw image information."])
+                    DispatchQueue.main.async {
+                        self.itvDelegate?.didFinishLoading(error: error)
+                    }
+                }
+            }
+        default:
+            return
+        }
+
+        guard block != nil else {
+            // unsupported image API, should never happen here
+            let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Unsupported image API."])
+            itvDelegate?.didFinishLoading(error: error)
+            return
+        }
+
+        URLSession.shared.dataTask(with: url, completionHandler: block!).resume()
     }
 }
 
