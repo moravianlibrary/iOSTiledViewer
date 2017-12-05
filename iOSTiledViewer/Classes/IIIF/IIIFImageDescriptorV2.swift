@@ -9,13 +9,16 @@
 import UIKit
 
 class IIIFImageDescriptorV2 {
+
+    fileprivate let defaultFormat = "jpg"
+    fileprivate let defaultQuality = "default"
     
     fileprivate let _baseUrl: String
     fileprivate let _height: Int
     fileprivate let _width: Int
     fileprivate var _tiles: [IIIFImageTile]?
-    fileprivate var _currentFormat = "jpg"
-    fileprivate var _currentQuality = "default"
+    fileprivate var _currentFormat: String
+    fileprivate var _currentQuality: String
     fileprivate var _error: NSError?
     
     // Optional fields
@@ -28,7 +31,9 @@ class IIIFImageDescriptorV2 {
     var license: IIIFImageLicense?
     
     init(_ json: [String:Any]) {
-        
+        _currentFormat = defaultFormat
+        _currentQuality = defaultQuality
+
         // required fields
         _baseUrl = json["@id"] as! String
         _width = json["width"] as! Int
@@ -126,6 +131,8 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
         set {
             if newValue != nil && _profile.formats.contains(newValue!) {
                 _currentFormat = newValue!
+            } else {
+                _currentFormat = defaultFormat
             }
         }
         get {
@@ -141,6 +148,8 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
         set {
             if newValue != nil && _profile.qualities.contains(newValue!) {
                 _currentQuality = newValue!
+            } else {
+                _currentQuality = defaultQuality
             }
         }
         get {
@@ -204,8 +213,8 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
             return nil
         }
         
-//        print("USED ALGORITHM for [\(y),\(x)]*\(level)(\(s)):\n\(baseUrl)/\(region)/\(size)/\(rotation)/\(_currentQuality).\(_currentFormat)")
-        
+        print("USED ALGORITHM for [\(y),\(x)]*\(level)(\(s)):\n\(baseUrl)/\(region)/\(size)/\(rotation)/\(_currentQuality).\(_currentFormat)")
+
         return URL(string: "\(baseUrl)/\(region)/\(size)/\(rotation)/\(_currentQuality).\(_currentFormat)")
     }
 }

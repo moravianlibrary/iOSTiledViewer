@@ -9,6 +9,9 @@
 import UIKit
 
 class IIIFImageDescriptorV1 {
+
+    fileprivate let defaultFormat = "jpg"
+    fileprivate let defaultQuality = "native"
     
     fileprivate let _baseUrl: String
     fileprivate let _height: Int
@@ -17,9 +20,9 @@ class IIIFImageDescriptorV1 {
     fileprivate let _tileSize: CGSize
     fileprivate var _scaleFactors: [CGFloat]?
     fileprivate var _formats: Set<String> = ["jpg"]
-    fileprivate var _currentFormat = "jpg"
+    fileprivate var _currentFormat: String
     fileprivate var _qualities: Set<String> = ["native"]
-    fileprivate var _currentQuality = "native"
+    fileprivate var _currentQuality: String
     fileprivate var _error: NSError?
     
     // Optional fields
@@ -30,6 +33,8 @@ class IIIFImageDescriptorV1 {
     fileprivate var _maxLevel: Int = 0
     
     init(_ json: [String:Any]) {
+        _currentFormat = defaultFormat
+        _currentQuality = defaultQuality
         
         // required fields
         _baseUrl = json["@id"] as! String
@@ -104,6 +109,8 @@ extension IIIFImageDescriptorV1: ITVImageDescriptor {
         set {
             if newValue != nil && _formats.contains(newValue!) {
                 _currentFormat = newValue!
+            } else {
+                _currentFormat = defaultFormat
             }
         }
         get {
@@ -119,6 +126,8 @@ extension IIIFImageDescriptorV1: ITVImageDescriptor {
         set {
             if newValue != nil && _qualities.contains(newValue!) {
                 _currentQuality = newValue!
+            } else {
+                _currentQuality = defaultQuality
             }
         }
         get {
