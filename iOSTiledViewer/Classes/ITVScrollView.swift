@@ -8,6 +8,27 @@
 
 import UIKit
 
+/// Enum of error codes used by the ITVScrollView. Use rawValue for comparing with given error codes.
+@objc public enum ITVError: Int {
+    /// IIIF information file can't be downloaded
+    case unsupportedIIIF = 100
+    /// Zoomify information file can't be downloaded
+    case unsupportedZoomify
+    /// raw image can't be downloaded
+    case unsupportedRaw
+    /// implementation for the protocol has not been implemented yet
+    /// - note: should never occur
+    case unknownProtocol = 110
+    /// image information can't be parsed
+    case wrongInfoFormat
+    /// automatic image protocol recognition fails
+    case recognitionFail
+    /// unsupported tile data format
+    case imageDecoding = 120
+    /// tile data can't be downloaded
+    case imageDownloading
+}
+
 /// Enum of supported image apis.
 @objc public enum ITVImageAPI: Int {
     /// IIIF Image API
@@ -26,6 +47,7 @@ import UIKit
     case doubleTap
 //    case rotation
 }
+
 
 /**
  The main class of the iOSTiledViewer library. All communication is done throught this class. See example project to see how to set correctly the class. It has to be initialized through storyboard.
@@ -310,7 +332,7 @@ fileprivate extension ITVScrollView {
     // Initializing tiled view and scroll view's zooming
     fileprivate func initWithDescriptor(_ imageDescriptor: ITVImageDescriptor?) {
         guard var image = imageDescriptor, image.error == nil else {
-            let error = imageDescriptor?.error ?? NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Error getting image information."])
+            let error = imageDescriptor?.error ?? NSError.create(ITVError.wrongInfoFormat, "Error parsing image information.")
             itvDelegate?.didFinishLoading(error: error)
             return
         }
@@ -397,7 +419,7 @@ fileprivate extension ITVScrollView {
                     url = testUrl + IIIFImageDescriptor.propertyFile
                     api = .IIIF
                 } else {
-                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Url \(imageUrl) does not support IIIF or Zoomify API."])
+                    let error = NSError.create(ITVError.recognitionFail, "Url \(imageUrl) does not support any of library-known protocol.")
                     DispatchQueue.main.async {
                         self.itvDelegate?.didFinishLoading(error: error)
                     }
@@ -432,7 +454,7 @@ fileprivate extension ITVScrollView {
                         self.initWithDescriptor(imageDescriptor)
                     }
                 } else {
-                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Error loading IIIF image information."])
+                    let error = NSError.create(ITVError.unsupportedIIIF, "Image does not support IIIF protocol.")
                     DispatchQueue.main.async {
                         self.itvDelegate?.didFinishLoading(error: error)
                     }
@@ -448,7 +470,7 @@ fileprivate extension ITVScrollView {
                         self.initWithDescriptor(imageDescriptor)
                     }
                 } else {
-                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Error loading Zoomify image information."])
+                    let error = NSError.create(ITVError.unsupportedZoomify, "Error loading Zoomify image information.")
                     DispatchQueue.main.async {
                         self.itvDelegate?.didFinishLoading(error: error)
                     }
@@ -462,7 +484,7 @@ fileprivate extension ITVScrollView {
                         self.initWithDescriptor(imageDescriptor)
                     }
                 } else {
-                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Error loading raw image information."])
+                    let error = NSError.create(ITVError.unsupportedRaw, "Error loading raw image information.")
                     DispatchQueue.main.async {
                         self.itvDelegate?.didFinishLoading(error: error)
                     }
@@ -474,7 +496,7 @@ fileprivate extension ITVScrollView {
 
         guard block != nil else {
             // unsupported image API, should never happen here
-            let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY:"Unsupported image API."])
+            let error = NSError.create(ITVError.unknownProtocol, "Unsupported image API.")
             itvDelegate?.didFinishLoading(error: error)
             return
         }

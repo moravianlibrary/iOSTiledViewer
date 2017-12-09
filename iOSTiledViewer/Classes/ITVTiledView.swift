@@ -106,29 +106,25 @@ class ITVTiledView: UIView {
             image.draw(in: rect)
         } else if let requestURL = image.getUrl(x: column, y: row, level: level) {
             session.dataTask(with: requestURL, completionHandler: { (data, response, error) in
-                if data != nil {
+                if (error as NSError?)?.code == NSURLErrorCancelled {
+                    // task was cancelled
+                    return
+                } else if data != nil {
                     if let img = UIImage.sd_image(with: data) {
                         self.imageCache[cacheKey] = img
                         DispatchQueue.main.async {
                             self.setNeedsDisplay(rect)
                         }
                     } else {
-                        let msg = "Error decoding image from \(requestURL.absoluteString)."
-                        let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY: msg])
+                        let error = NSError.create(ITVError.imageDecoding, "Error decoding data from \(requestURL.absoluteString).")
                         self.itvDelegate?.errorDidOccur(error: error)
                     }
-                } else if (error as NSError?)?.code == NSURLErrorCancelled {
-                    // task was cancelled
-                    return
-                } else if let errorCode = (response as? HTTPURLResponse)?.statusCode {
-                    let msg = "Error \(errorCode) downloading image from \(requestURL.absoluteString)."
-                    let error = NSError(domain: Constants.TAG, code: errorCode, userInfo: [Constants.USERINFO_KEY: msg])
-                    self.itvDelegate?.errorDidOccur(error: error)
-                } else if let err = error as NSError? {
-                    self.itvDelegate?.errorDidOccur(error: err)
                 } else {
-                    let msg = "Unknown error while downloading image from \(requestURL.absoluteString)."
-                    let error = NSError(domain: Constants.TAG, code: 100, userInfo: [Constants.USERINFO_KEY: msg])
+                    var errorCode = ""
+                    if let code = (response as? HTTPURLResponse)?.statusCode {
+                        errorCode = "\(code) "
+                    }
+                    let error = NSError.create(ITVError.imageDownloading, "Error " + errorCode + "while downloading data from \(requestURL.absoluteString).")
                     self.itvDelegate?.errorDidOccur(error: error)
                 }
             }).resume()
