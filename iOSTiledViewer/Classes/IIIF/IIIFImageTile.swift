@@ -10,6 +10,7 @@ struct IIIFImageTile {
 
     var size: CGSize!
     var scaleFactors: [CGFloat]!
+
     
     init?(_ json: [String:Any]) {
         

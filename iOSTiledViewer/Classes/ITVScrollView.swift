@@ -85,9 +85,7 @@ open class ITVScrollView: UIScrollView {
         }
         set {
             containerView.image?.format = newValue
-            containerView.loadBackground()
-            containerView.clearCache()
-            containerView.refreshTiles()
+            containerView.refreshLayout()
         }
     }
     
@@ -103,9 +101,7 @@ open class ITVScrollView: UIScrollView {
         }
         set {
             containerView.image?.quality = newValue
-            containerView.loadBackground()
-            containerView.clearCache()
-            containerView.refreshTiles()
+            containerView.refreshLayout()
         }
     }
     
@@ -124,7 +120,7 @@ open class ITVScrollView: UIScrollView {
     }
 
     fileprivate let supportedImageFormats = ["jpg", "png", "gif", "webp"]
-    fileprivate let containerView = ITVContainerView()
+    fileprivate let containerView = ITVTiledView()
     fileprivate let licenseView = ITVLicenceView()
     fileprivate var lastLevel: Int = -1
     fileprivate var minBounceScale: CGFloat = 0
@@ -146,7 +142,6 @@ open class ITVScrollView: UIScrollView {
         
         // add container view with tiled and background views
         addSubview(containerView)
-        containerView.initTiledView()
         
         // add license view
         superview?.addSubview(licenseView)
@@ -235,7 +230,7 @@ open class ITVScrollView: UIScrollView {
     
     /// Use to immediately refresh layout
     public func refreshTiles() {
-        containerView.refreshTiles()
+        containerView.refreshLayout()
     }
     
     fileprivate var lastZoomScale: CGFloat = 0
@@ -291,7 +286,7 @@ fileprivate extension ITVScrollView {
         zoomScale = minimumZoomScale
         
         // clear container view
-        containerView.clearViews()
+        containerView.clearCache()
         containerView.frame = CGRect(origin: CGPoint.zero, size: frame.size)
     }
     
@@ -331,7 +326,7 @@ fileprivate extension ITVScrollView {
     
     // Initializing tiled view and scroll view's zooming
     fileprivate func initWithDescriptor(_ imageDescriptor: ITVImageDescriptor?) {
-        guard var image = imageDescriptor, image.error == nil else {
+        guard let image = imageDescriptor, image.error == nil else {
             let error = imageDescriptor?.error ?? NSError.create(ITVError.wrongInfoFormat, "Error parsing image information.")
             itvDelegate?.didFinishLoading(error: error)
             return
@@ -374,7 +369,7 @@ fileprivate extension ITVScrollView {
         // redraw image by setting contentScaleFactor on tiledView
         let level = max(Int(round(log2(scale))), 0)
         if level != lastLevel {
-            containerView.tiledView.contentScaleFactor = pow(2.0, CGFloat(level))
+            containerView.contentScaleFactor = pow(2.0, CGFloat(level))
             lastLevel = level
         }
     }

@@ -9,7 +9,7 @@
 /**
  Abstract class representing an image. It should contain all the required information to construct a request for a given zoom level and coordinates. It also contains methods for image related computations, such as initial size to fit screen, minimum and maximum zoom scale, etc.
  */
-protocol ITVImageDescriptor {
+protocol ITVImageDescriptor: class {
 
     // Required fields
     /// Base image url address. It is used to build an url for specific tile requests.

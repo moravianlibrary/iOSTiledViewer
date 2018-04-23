@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class IIIFImageProfileV2 {
     
     var maxArea: Int?
@@ -16,7 +17,8 @@ class IIIFImageProfileV2 {
     var formats: Set<String> = ["jpg"]
     var qualities: Set<String> = ["default"]
     var supports: Set<String>?
-    
+
+
     func append(json: [String: Any]) {
         if let value = json["maxArea"] as? Int {
             maxArea = value

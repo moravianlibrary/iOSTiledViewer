@@ -53,6 +53,7 @@ class IIIFImageLicense: NSObject {
     fileprivate var attribution_dict: [String: String]?
     fileprivate var attribution_array: [String]?
     fileprivate var attribution_single: String?
+
     
     init(_ json: [String:Any]) {
         

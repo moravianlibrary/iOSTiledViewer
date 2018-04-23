@@ -8,14 +8,15 @@
 
 import UIKit
 
+
 class IIIFImageDescriptorV1 {
 
     fileprivate let defaultFormat = "jpg"
     fileprivate let defaultQuality = "native"
     
-    fileprivate let _baseUrl: String
-    fileprivate let _height: Int
-    fileprivate let _width: Int
+    let baseUrl: String
+    let height: Int
+    let width: Int
     
     fileprivate let _tileSize: CGSize
     fileprivate var _scaleFactors: [CGFloat]?
@@ -23,7 +24,7 @@ class IIIFImageDescriptorV1 {
     fileprivate var _currentFormat: String
     fileprivate var _qualities: Set<String> = ["native"]
     fileprivate var _currentQuality: String
-    fileprivate var _error: NSError?
+    var error: NSError?
     
     // Optional fields
     fileprivate var _complianceUrl: String?
@@ -37,9 +38,9 @@ class IIIFImageDescriptorV1 {
         _currentQuality = defaultQuality
         
         // required fields
-        _baseUrl = json["@id"] as! String
-        _width = json["width"] as! Int
-        _height = json["height"] as! Int
+        baseUrl = json["@id"] as! String
+        self.width = json["width"] as! Int
+        self.height = json["height"] as! Int
         
         _complianceUrl = json["profile"] as? String
         
@@ -67,22 +68,11 @@ class IIIFImageDescriptorV1 {
     }
 }
 
+
 /// ITVImageDescriptor protocol implementation
 extension IIIFImageDescriptorV1: ITVImageDescriptor {
     
     // Properties
-    var baseUrl: String {
-        return _baseUrl
-    }
-    
-    var height: Int {
-        return _height
-    }
-    
-    var width: Int {
-        return _width
-    }
-    
     var tileSize: [CGSize] {
         let levelCount = _scaleFactors?.count ?? 1
         return Array<CGSize>(repeating: _tileSize, count: levelCount)
@@ -134,15 +124,6 @@ extension IIIFImageDescriptorV1: ITVImageDescriptor {
             return _currentQuality
         }
     }
-    
-    var error: NSError? {
-        get {
-            return _error
-        }
-        set {
-            _error = newValue
-        }
-    }
 
     
     // Methods
@@ -175,7 +156,7 @@ extension IIIFImageDescriptorV1: ITVImageDescriptor {
     
     func getUrl(x: Int, y: Int, level: Int) -> URL? {
         // size of full image content
-        let fullSize = CGSize(width: _width, height: _height)
+        let fullSize = CGSize(width: width, height: height)
         let s: CGFloat = pow(2.0, CGFloat(_maxLevel - level))
         
         let rotation = "0"

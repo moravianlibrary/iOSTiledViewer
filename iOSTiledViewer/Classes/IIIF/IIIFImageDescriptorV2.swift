@@ -8,18 +8,19 @@
 
 import UIKit
 
+
 class IIIFImageDescriptorV2 {
 
     fileprivate let defaultFormat = "jpg"
     fileprivate let defaultQuality = "default"
     
-    fileprivate let _baseUrl: String
-    fileprivate let _height: Int
-    fileprivate let _width: Int
+    let baseUrl: String
+    let height: Int
+    let width: Int
     fileprivate var _tiles: [IIIFImageTile]?
     fileprivate var _currentFormat: String
     fileprivate var _currentQuality: String
-    fileprivate var _error: NSError?
+    var error: NSError?
     
     // Optional fields
     fileprivate var _profile = IIIFImageProfileV2()
@@ -35,9 +36,9 @@ class IIIFImageDescriptorV2 {
         _currentQuality = defaultQuality
 
         // required fields
-        _baseUrl = json["@id"] as! String
-        _width = json["width"] as! Int
-        _height = json["height"] as! Int
+        baseUrl = json["@id"] as! String
+        width = json["width"] as! Int
+        height = json["height"] as! Int
         
         if let profile = json["profile"] as? [Any] {
             for profileItem in profile {
@@ -81,20 +82,9 @@ class IIIFImageDescriptorV2 {
     }
 }
 
+
 /// ITVImageDescriptor protocol implementation
 extension IIIFImageDescriptorV2: ITVImageDescriptor {
-    
-    var baseUrl: String {
-        return _baseUrl
-    }
-    
-    var height: Int {
-        return _height
-    }
-    
-    var width: Int {
-        return _width
-    }
     
     var tileSize: [CGSize] {
         if _tiles != nil {
@@ -157,15 +147,6 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
         }
     }
     
-    var error: NSError? {
-        get {
-            return _error
-        }
-        set {
-            _error = newValue
-        }
-    }
-    
     
     // Methods
     func sizeToFit(size: CGSize) -> CGSize {
@@ -197,7 +178,7 @@ extension IIIFImageDescriptorV2: ITVImageDescriptor {
     
     func getUrl(x: Int, y: Int, level: Int) -> URL? {
         // size of full image content
-        let fullSize = CGSize(width: _width, height: _height)
+        let fullSize = CGSize(width: width, height: height)
         
         // tile size
         let tile: CGSize

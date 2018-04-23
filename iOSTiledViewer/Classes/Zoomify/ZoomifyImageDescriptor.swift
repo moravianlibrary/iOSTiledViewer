@@ -8,16 +8,17 @@
 
 import UIKit
 
+
 class ZoomifyImageDescriptor {
     
     static let propertyFile = "ImageProperties.xml"
     
-    fileprivate let _baseUrl: String
-    fileprivate let _height: Int
-    fileprivate let _width: Int
+    let baseUrl: String
+    let height: Int
+    let width: Int
     fileprivate let _pyramid: [ZoomifyLevel]
-    fileprivate var _zoomScales: [CGFloat]!
-    fileprivate var _error: NSError?
+    var zoomScales: [CGFloat] = [1]
+    var error: NSError?
     
     fileprivate let _tileSize: CGSize
     fileprivate var _canvasSize: CGSize!
@@ -27,16 +28,16 @@ class ZoomifyImageDescriptor {
     
     init(_ json: [String:String], _ url: String) {
         
-        _baseUrl = url.replacingOccurrences(of: "/\(ZoomifyImageDescriptor.propertyFile)", with: "")
-        _height = Int(json["HEIGHT"]!)!
-        _width = Int(json["WIDTH"]!)!
+        baseUrl = url.replacingOccurrences(of: "/\(ZoomifyImageDescriptor.propertyFile)", with: "")
+        height = Int(json["HEIGHT"]!)!
+        width = Int(json["WIDTH"]!)!
         
         let tileW = Int(json["TILESIZE"]!)!
         _tileSize = CGSize(width: tileW, height: tileW)
         
         // pyramid
         var pyramid = [ZoomifyLevel]()
-        var level = ZoomifyLevel(_width, _height, tileW)
+        var level = ZoomifyLevel(width, height, tileW)
         while level.width > tileW || level.height > tileW {
             pyramid.append(level)
             level = ZoomifyLevel( level.width / 2, level.height / 2, tileW )
@@ -74,36 +75,21 @@ class ZoomifyImageDescriptor {
         let ratioW = originalSize.width / aspectFitSize.width
         let ratioH = originalSize.height / aspectFitSize.height
         let minimumScale = min(ratioW, ratioH)
-        _zoomScales = [minimumScale]
+        zoomScales = [minimumScale]
         for i in 1...depth-1 {
             let scale = CGFloat(powf(2, Float(i)))
             if scale > minimumScale {
-                _zoomScales.append(scale)
+                zoomScales.append(scale)
             }
         }
     }
 }
 
+
 extension ZoomifyImageDescriptor: ITVImageDescriptor {
-    
-    var baseUrl: String {
-        return _baseUrl
-    }
-    
-    var height: Int {
-        return _height
-    }
-    
-    var width: Int {
-        return _width
-    }
     
     var tileSize: [CGSize] {
         return Array(repeating: _tileSize, count: depth)
-    }
-    
-    var zoomScales: [CGFloat] {
-        return _zoomScales
     }
     
     var formats: [String]? {
@@ -127,15 +113,7 @@ extension ZoomifyImageDescriptor: ITVImageDescriptor {
         }
         set {}
     }
-    
-    var error: NSError? {
-        get {
-            return _error
-        }
-        set {
-            _error = error
-        }
-    }
+
     
     func getBackgroundUrl() -> URL? {
         return getUrl(x: 0, y: 0, level: 0)

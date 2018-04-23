@@ -1,5 +1,9 @@
 # iOSTiledViewer
 
+<!-- [![Pod Version](http://img.shields.io/cocoapods/v/CocoaLumberjack.svg?style=flat)](http://cocoadocs.org/docsets/iOSTiledViewer/) -->
+[![Dependency Status](https://www.versioneye.com/objective-c/sdwebimage/badge.svg?style=flat)](https://www.versioneye.com/objective-c/iostiledviewer)
+[![Reference Status](https://www.versioneye.com/objective-c/iostiledviewer/reference_badge.svg?style=flat-square)](https://www.versioneye.com/objective-c/iostiledviewer/references)
+
 [Release Notes](https://github.com/moravianlibrary/iOSTiledViewer/blob/master/release_notes.txt)
 
 [Documentation](http://htmlpreview.github.io/?https://github.com/moravianlibrary/iOSTiledViewer/blob/master/docs/index.html)
